@@ -285,7 +285,7 @@ and type
 
 Now you wait.
 
-**GravSphere** will deposit the output every 100 steps into the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Galaxy_1/* directory.
+**GravSphere** will deposit the output every 100 steps into the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Galaxy_1/* directory. You can monitor the progress / errors in the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/OutErr/* directory.
 
 ### If your job didn't finish on time
 
