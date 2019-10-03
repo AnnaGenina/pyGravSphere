@@ -96,11 +96,21 @@ Galaxy_2
 Galaxy_3
 ```
 
+Now run **GravSphere** for the first time inside your install directory.
+
+```
+gravsphere.py
+```
+
+This will generate all the necessary folders and files you need at this step. Quit **Gravsphere** by typing *q* or *quit*.
+
+Please deposit you new data files into the *KinPhotDat* directory that is now inside your working directory.
+
 ### Pre-processing your data
 
-Excellent! Now you're ready to to create your MCMC input files, that is binned velocity dispersion, surface brightness, half-light radius and two virial shape parameters. You might even have a different way of computing these, in which case I would advise to output your pre-processed data in the same format as we do here.
+Excellent! Now you're ready to create your MCMC input files. This includes binned velocity dispersion, surface brightness, half-light radius and two virial shape parameters. You might even have a different way of computing these, in which case I would advise to output your pre-processed data in the same format as we do here.
 
-*Note that after the pre-processing the positions of the stars are now in **kiloparsecs** .*
+*Note that, after the pre-processing, the positions of the stars are now in **kiloparsecs** .*
 
 Go to your working directory and type:
 
@@ -125,13 +135,43 @@ So pick *Specify* and type:
 ```
 Galaxy_3, Galaxy_1
 ```
-Bingo! Cogs are turning and your data will be pre-processed in no time.
+Bingo! Cogs are turning and your data will be pre-processed in no time. The output files will make their way to the *GalaxyData* directory inside your working directory.
+
+### Preparing submission scripts
+
+Ok, so this is the point where I re-iterate that your life will be easier if you have a few cores to run **GravSphere** on. Like, much easier. 
+
+#### If your institution has a cluster you can run GravSphere on
+
+In your working directory, open *sub_script.txt* file. Fill the file with what your batch system submission script looks like. For example, Durham uses *slurm* and my *sub_script.txt* file looks like:
+
+```
+#!/bin/bash -l
+#SBATCH --ntasks=CORENUM
+#SBATCH -J GALID
+#SBATCH -e GALID.err
+#SBATCH -o GALID.out
+#SBATCH -p cosma
+#SBATCH -A durham
+#SBATCH --time=TIME
+module purge
+module load python
+module load gnu_comp/7.3.0 openmpi/3.0.1
+module load gsl
+```
+
+For the name of the job, output file, error file, number of cores and time please keep the same names (i.e. CORENUM, GALID) so that **GravSphere** can replace those for you automatically. If your input scripts are vastly different to this, you might need to fiddle with the *gravsphere.py* **create_sub** and **create_ana_sub** functions. Let's hope it doesn't come to that.
+
+#### If you're running GravSphere on your laptop
+
+Leave the *sub_script.txt* file empty.
+
 
 ### Creating a project
 
 OK, we're definitely getting closer to the good stuff.
 
-So suppose now you want to run a model with the Zhao et al. (1996) dark matter distribution, a constant anisotropy profile and a 3-component Plummer fit. And, very conveniently, you have 8 cores to run it on.
+So suppose now you want to run a model with the Zhao et al. (1996) dark matter distribution, a constant anisotropy profile, 3-component Plummer fit and no virial shape parameters. And, very conveniently, you have 8 cores to run it on.
 
 Now run **GravSphere** 
 ```
@@ -163,9 +203,92 @@ mkdir /Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum
 Please write a short summary (or long if you want): This is an example with a Zhao, Constant Beta and three component Plummer for my tutorial. Yay!
 
 ```
-Think long and hard about how many walkers you want. One thousand is good number, just sayin'.
+Think long and hard about how many walkers you want. One thousand is good number, just saying.
 *Burn-in* is the number of steps for which you want to run each of your walkers before **GravSphere** starts outputting the chains.
 *Steps* is the total steps for which you want to run your walkers. So in the example above, you will get an output of the last 2500 steps per walker.
+
+## Priors
+
+Alright! Your project has been created and your jobs are ready for submission. Now if you go to:
+
+```
+/Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Submissions/
+```
+
+you will find your submission scripts as well as the *priors.txt* file. This is full of default **GravSphere** priors. Now you might want to change those. To do so, simply edit the lower and upper priors on each parameter. If you decide you want to keep any of the parameters constant, simply edit the last column. So, for example, if I want to keep the inner slope *gamma* at 1, I will edit the priors:
+
+```
+rhomin  rhomax  rhoconst                5.	10. False
+rsmin   rsmax   rsconst             np.log10(r_c)   1.5 False
+alphamin  alphamax  alphaconst        0.5     3. False
+betamin betamax betaconst               3 	7 False
+gammamin  gammamax  gammaconst       1.	1.  True
+beta0min  beta0max  beta0const      -1.	1.  False
+m1min   m1max  m1const            np.log10(0.5*lightpower[0])     np.log10(1.5*lightpower[0])  False
+a1min   a1max  a1const        0.5*lightpower[3]	1.5*lightpower[3] False
+m2min   m2max  m2const         np.log10(0.5*lightpower[1])     np.log10(1.5*lightpower[1])  False
+a2min   a2max  a2const          0.5*lightpower[4]	1.5*lightpower[4] False
+m3min   m3max  m3const          np.log10(0.5*lightpower[2])     np.log10(1.5*lightpower[2]) False
+a3min   a3max  a3const            0.5*lightpower[5]	1.5*lightpower[5] False
+mstarmin  mstarmax mstarconst       np.log10(0.75*stellar_mass)     np.log10(1.25*stellar_mass) False
+
+```
+
+Excellent!
+
+### Running the jobs
+
+#### On a cluster
+To run our imaginary *Galaxy_1* we can now go to
+
+```
+/Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Submissions/
+```
+
+and type, depending on you batch system, 
+
+```
+sbatch Galaxy_1.sh
+```
+
+or
+
+```
+qsub < Galaxy_1.sh
+```
+
+or 
+
+```
+bsub Galaxy_1.sh
+```
+
+Alternatively you can run **GravSphere** from your working directory. And select option 2 -- Submit jobs.
+
+#### On your laptop
+
+Go to 
+```
+/Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Submissions/
+```
+and type
+
+```
+./Galaxy1.sh
+
+```
+
+Now you wait.
+
+### If your job didn't finish on time
+
+Don't worry! Just modify the submission script *Galaxy_1.sh*, replacing *restart = False* to *restart = True* and your run will continue where it left off! Neat, eh?
+
+
+## Analysis
+
+Now that wasn't so bad, was it?
+
 
 
 ## Authors
