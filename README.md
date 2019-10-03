@@ -210,7 +210,7 @@ Think long and hard about how many walkers you want. One thousand is good number
 
 *Integration points* sets the accuracy of your integrator: how many logarithmic bins will the integrand be divided into? 100 is fine.
 
-Consider the amount of time you will need for the job to run. The above configuration runs in just under 1 hour on 8 cores. It will take X hours on two cores.
+Consider the amount of time you will need for the job to run. The above configuration runs in just under 1 hour on 8 cores. It will take 7-8 hours on two cores.
 
 ## Priors
 
