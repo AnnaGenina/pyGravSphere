@@ -205,7 +205,12 @@ Please write a short summary (or long if you want): This is an example with a Zh
 ```
 Think long and hard about how many walkers you want. One thousand is good number, just saying.
 *Burn-in* is the number of steps for which you want to run each of your walkers before **GravSphere** starts outputting the chains.
+
 *Steps* is the total steps for which you want to run your walkers. So in the example above, you will get an output of the last 2500 steps per walker.
+
+*Integration points* sets the accuracy of your integrator: how many logarithmic bins will the integrand be divided into? 100 is fine.
+
+Consider the amount of time you will need for the job to run. The above configuration runs in just under 1 hour on 8 cores. It will take X hours on two cores.
 
 ## Priors
 
@@ -274,28 +279,48 @@ Go to
 and type
 
 ```
-./Galaxy1.sh
+./Galaxy_1.sh
 
 ```
 
 Now you wait.
 
+**GravSphere** will deposit the output every 100 steps into the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Galaxy_1/* directory.
+
 ### If your job didn't finish on time
 
 Don't worry! Just modify the submission script *Galaxy_1.sh*, replacing *restart = False* to *restart = True* and your run will continue where it left off! Neat, eh?
 
+### If you want to run your chains for longer
+
+Repeat the step above, setting *restart = True* in the *Galaxy_1.sh* submission script.
+
 
 ## Analysis
 
-Now that wasn't so bad, was it?
+Now that wasn't so bad, was it? 
+
+**GravSphere** will now have output your chains into the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Galaxy_X/* directory.
+
+At this point you can do what you like with the output.
+
+**GravSphere** comes with some built-in functionality to get you started.
+
+
+### Corner plots
+
+For example, you might want to output a corner plot of your posteriors.
+
+
+### Plot the evolution of your chains
+
+This might be useful for visual evaluation of convergence.
+
+
+### Output the percentiles of your mass/density models
 
 
 
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## Publications using GravSphere 
 
@@ -315,3 +340,4 @@ This project is licensed under the GNU License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
+EmCee
