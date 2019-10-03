@@ -268,7 +268,7 @@ or
 bsub Galaxy_1.sh
 ```
 
-Alternatively you can run **GravSphere** from your working directory. And select option 2 -- Submit jobs.
+Alternatively you can run **GravSphere** from your working directory. Type *gravsphere.py* and select option 2 -- Submit jobs. Now pick if you want to run all of your galaxies, or specify which ones you'd like to run.
 
 #### On your laptop
 
