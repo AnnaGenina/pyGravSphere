@@ -10,8 +10,6 @@
 
 const double half_pi = PI/2.;
 
-
-
 double calc_sin(double x){
     int i = 1;
     double cur = x;
