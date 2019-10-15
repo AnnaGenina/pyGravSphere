@@ -8,8 +8,6 @@
 #define tol_beta                   (0.001)
 #define G                          (0.0000043009125)
 
-
-
 const double half_pi = PI/2.;
 
 
