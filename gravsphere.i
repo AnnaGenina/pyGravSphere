@@ -1,9 +1,9 @@
 /* simps.i */
-%module simps
+%module gravsphere
 
 %{
  #define SWIG_FILE_WITH_INIT
- #include "simps.h"
+ #include "gravsphere.h"
 %}
 
 

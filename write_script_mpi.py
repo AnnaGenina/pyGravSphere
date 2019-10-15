@@ -10,14 +10,15 @@ workdir = sys.argv[1]
 codedir = sys.argv[2]
 project_name = sys.argv[3]
 galaxy_number = str(sys.argv[4])
-num_walkers = int(sys.argv[5])
-burn_in = int(sys.argv[6])
-steps = int(sys.argv[7])
-bins = int(sys.argv[8])
-darkmatter = sys.argv[9]
-anisotropy = sys.argv[10]
-vsps = sys.argv[11]
-plummer = sys.argv[12]
+cores = int(sys.argv[5])
+num_walkers = int(sys.argv[6])
+burn_in = int(sys.argv[7])
+steps = int(sys.argv[8])
+bins = int(sys.argv[9])
+darkmatter = sys.argv[10]
+anisotropy = sys.argv[11]
+vsps = sys.argv[12]
+plummer = sys.argv[13]
 
 
 
@@ -34,6 +35,7 @@ import emcee
 import corner
 from scipy import special
 import time
+from schwimmbad import MPIPool
 """)
 	f.write(r'sys.path.append("%s")' %codedir + '\n')
 	f.write(r"""from GSpro import gal_input
@@ -85,9 +87,13 @@ gamsmooth = 1
 	const_var, = np.where(priors[:,6] == 'True')
 	noconst_var, = np.where(priors[:,6] == 'False')
 	f.write('priors = np.loadtxt(workdir + "/" + project_name + "/Submissions/priors.txt", dtype = "str")' + '\n')
-	f.write("const_var, = np.where(priors[:,6] == 'True')" + "\n")
-	f.write("noconst_var, = np.where(priors[:,6] == 'False')" + "\n")	
+	
+
+	
 	f.write(r"""data = (kindat, lightpower,vir_shape,r_c, surfden,stellar_mass)
+
+
+
 
 
 G = 4.302 * 10.**(-6.)
@@ -230,11 +236,6 @@ def plummer_proj_sum(args, x_data, n_comp):
 	f.write("\t" + params_dark + params_anis + params_plummer + params_mass + " = params" + '\n')
 	f.write("\t" + "kindat,lightpower,vir_shape,r_c,surfden,stellar_mass = data" + '\n')
 
-	f.write("""
-	min_vals = priors[noconst_var,1]
-	max_vals = priors[noconst_var,2]
-		""")
-
 	if darkmatter == 'PL':
 		f.write("\t" + "gammas = np.array([gamma0,gamma1,gamma2,gamma3,gamma4])" + '\n')
 		
@@ -248,13 +249,29 @@ def plummer_proj_sum(args, x_data, n_comp):
 
 
 	if darkmatter == 'PL':
-		prior_all = "all(minarr < thetau < maxarr for minarr,thetau,maxarr in zip({},{},{})):".format("min_vals","params","max_vals")
+		prior_dm = "(rho0min < rho0 < rho0max) and all(minarr < thetau < maxarr for minarr,thetau,maxarr in zip(min_gammas,gammas,max_gammas)) "
 
 
-	
+	elif darkmatter == 'Zhao':
+		prior_dm = "(rhomin < rhos < rhomax) and (rsmin < rs < rsmax) and (alphamin < alpha < alphamax ) and  (betamin < beta < betamax) and  (gammamin < gamma < gammamax) "
 
 
-	f.write("\t" + "if " + prior_all + ":" +  "\n")	
+	if anisotropy == 'Baes':
+		prior_anis = "(beta0min < beta_t0 < beta0max) and (betainfmin < beta_t1 < betainfmax) and (ramin < ra < ramax) and (etamin < eta < etamax) "
+	elif anisotropy	== 'Const':
+		prior_anis = "(beta0min < beta_t0 < beta0max) "
+
+
+	if plummer == 'Plummer3':
+		prior_plummer = "and (m1min < m1 < m1max)  and (m2min < m2 < m2max)  and (m3min < m3 < m3max) and (a1min < a1 < a1max) and (a2min < a2 < a2max) and (a3min < a3 < a3max) "
+		
+	elif plummer == 'Plummer':
+		prior_plummer = ""
+
+	prior_mass = " and (mstarmin < mstar < mstarmax)"
+
+
+	f.write("\t" + "if " + prior_dm + "and" + prior_anis + prior_plummer + prior_mass + ":" +  "\n")	
 	f.write("\t" + "\t" + "return 0.0" + "\n")
 	f.write("\t" + "return -np.inf" + '\n')
 
@@ -271,9 +288,14 @@ def plummer_proj_sum(args, x_data, n_comp):
 	return like + lp""" + '\n')
 
 	f.write("""
-runtime = True:
-while runtime == True:
-	
+with MPIPool() as pool:
+	if not pool.is_master():
+		pool.wait()
+		sys.exit(0)
+
+
+	size = pool.size
+	print size + 1
 
 
 	t_org = time.time()
@@ -364,7 +386,7 @@ while runtime == True:
 	
 	# log(ra/rc) = 0.1 ;  log(ra) - log(rc) = 0.1 ; 0.1 + log(rc)
 		
-	f.write("\t"+ """sampler = emcee.EnsembleSampler(nwalkers, ndim, logprob)
+	f.write("\t"+ """sampler = emcee.EnsembleSampler(nwalkers, ndim, logprob, pool = pool)
 
 	try:
 		pos = np.loadtxt(workdir  + project_name + '/%s' % galaxy_number +'/%s_LastWalkerPos' % galaxy_number + project_name + ".txt" )
@@ -454,13 +476,16 @@ while runtime == True:
 	dt = time.time() - t_org
 	print 'Finished running chains in %f seconds ' %(dt)
 
-	runtime = False	
+	
 
 """)
 
 t = time.time()
-mpi_time = os.system("python " + workdir + "/" + project_name + "/Submissions/" + "script_bin_%s" %project_name + "_%s" %(galaxy_number) +  ".py")
-
+mpi_time = os.system("mpiexec -n %d" %(cores) +  " python " + workdir + "/" + project_name + "/Submissions/" + "script_bin_%s" %project_name + "_%s" %(galaxy_number) +  ".py")
+#os.system("python " + "script_bin_%s" %volume + "_%d" %int(subhalo) + "_%d" %int(observer) +  ".py")
+mpi_time = time.time() - t
+print("MPI took {0:.1f} seconds".format(mpi_time))
+#print("{0:.1f} times faster than serial".format(serial_time / mpi_time))
 
 
 

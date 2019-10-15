@@ -24,7 +24,7 @@ yMhigh = 1e10
 
 
 
-def get_surfden_bins(R,ms,Nbin,maxdatrad,maxdatfitrad,p0in,p0in_min,p0in_max, Mstar_rlim, outdir, genina_gal_num): #photometric positions, photometric (number)masses as input, number of stars per bin, Returns bins.
+def get_surfden_bins(R,ms,Nbin,maxdatrad,maxdatfitrad,p0in,p0in_min,p0in_max, Mstar_rlim, outdir, gal_num): #photometric positions, photometric (number)masses as input, number of stars per bin, Returns bins.
     cnt = 0 #bin id
     jsum = 0.0 #stars in bin
     norm = np.zeros(len(R))
@@ -92,7 +92,7 @@ def get_surfden_bins(R,ms,Nbin,maxdatrad,maxdatfitrad,p0in,p0in_min,p0in_max, Ms
         Mstar_rad, Mstar_prof, Mstar_surf, Rhalf, pfits
 
 
-def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir, genina_gal_num):
+def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir, gal_num):
     #Improve estimator using fitted surfden:
     rint = np.logspace(np.log10(Rhalf/100.0),\
                        np.log10(Rhalf*1000.0),10000)
@@ -293,7 +293,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
                        fontsize=myfontsize)
         plt.ylabel(r'$\langle v_{\rm los}^4\rangle\,({\rm km}^4\,{\rm s}^{-4})$',\
                        fontsize=myfontsize)
-        plt.savefig(outdir+'Galaxy_%d_output_vlos4.pdf' % genina_gal_num,bbox_inches='tight')
+        plt.savefig(outdir+'Galaxy_%s_output_vlos4.pdf' % gal_num,bbox_inches='tight')
         plt.close()
         fig = plt.figure(figsize=(figx,figy))
         ax = fig.add_subplot(111)
@@ -314,7 +314,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
                        fontsize=myfontsize)
         plt.ylabel(r'$\sigma_{\rm LOS}\,({\rm km}\,{\rm s}^{-1})$',\
                        fontsize=myfontsize)
-        plt.savefig(outdir+'Galaxy_%d_output_vlos2.pdf' % genina_gal_num,bbox_inches='tight')
+        plt.savefig(outdir+'Galaxy_%s_output_vlos2.pdf' % gal_num,bbox_inches='tight')
         plt.close()
     #And calculate vs1 and vs2:
     tvl4 = fits.tvl4func(rint,rbin_tmp,vlos4med,\
@@ -392,7 +392,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
     plt.axvline(vs1bin + vs1err)
     plt.axvline(vs1bin - vs1err)
     plt.xlabel('v1', fontsize = 16)
-    plt.savefig(outdir+'Galaxy_%d_v1hist.pdf' % genina_gal_num,bbox_inches='tight')
+    plt.savefig(outdir+'Galaxy_%s_v1hist.pdf' % gal_num,bbox_inches='tight')
     plt.close()
 
     plt.figure(figsize = (5,5))	
@@ -401,9 +401,9 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
     plt.axvline(vs2bin + vs2err)
     plt.axvline(vs2bin - vs2err)
     plt.xlabel('v2', fontsize = 16)
-    plt.savefig(outdir+'Galaxy_%d_v2hist.pdf' % genina_gal_num,bbox_inches='tight')
+    plt.savefig(outdir+'Galaxy_%s_v2hist.pdf' % gal_num,bbox_inches='tight')
     plt.close()
-    print outdir+'Galaxy_%d_v2hist.pdf'	
+    	
     print 'Finished plotting'
 
     return rbin_kin, sigpmean, sigperr, \

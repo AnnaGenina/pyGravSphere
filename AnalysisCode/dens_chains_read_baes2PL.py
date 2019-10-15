@@ -36,8 +36,6 @@ diff_zhao_dist = huge_scale[1:] - huge_scale[:-1]
 
 
 
-#if rank == 0:
-#	os.system('mkdir ' + '/cosma5/data/dp004/dc-geni1/project/Jfactor4/EmCee/Samples/JAna/Read/' + chain_name + '/')
 
 
 for galaxy in galaxies:
@@ -101,26 +99,14 @@ for galaxy in galaxies:
 
 	c = 0
 
-#betat = beta/2-beta ;  betat(2-beta) = beta; 2betat - betat beta = beta ;2 betat = beta(1 + betat); beta = 2betat/ (1+betat) ;
+
 	for chain in chains:
 
-
-
 		b0,binf,ra,eta = chain
-		
 
-
-
-		#print rank,b0,binf,ra,eta
 		bet_prof = baes(r, b0,binf,ra,eta)
 
-
-		
-
-
 		for b in range(0, len(r)):
-
-
 
 			betas[b].append(float(bet_prof[b]))
 

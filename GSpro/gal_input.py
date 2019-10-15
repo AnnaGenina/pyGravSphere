@@ -4,21 +4,16 @@ import h5py
 import matplotlib.pyplot as plt
 import profiles
 
-def galaxy_data(genina_gal_num, outdir, data_loc):
+def galaxy_data(gal_num, outdir, data_loc):
 
     Nbinin_phot = 15
     Nbinin_kin = 15
     Mstar_rlim = 50.0
 
-    if (genina_gal_num in [25,26,27,28]):
-        p0in = np.array([100,100,100,0.25,0.5,0.75])
-        p0in_min = np.array([10,10,10,0.1,0.1,0.1])
-        p0in_max = np.array([1e4,1e4,1e4,20.0,20.0,20.0])
-
-    else:
-        p0in = np.array([100,100,100,0.1,0.5,0.75])
-        p0in_min = np.array([10,10,10,0.05,0.05,0.05])
-        p0in_max = np.array([1e4,1e4,1e4,2.0,2.0,2.0])
+    
+    p0in = np.array([100,100,100,0.1,0.5,0.75])
+    p0in_min = np.array([10,10,10,0.05,0.05,0.05])
+    p0in_max = np.array([1e4,1e4,1e4,2.0,2.0,2.0])
 
     tracertol = 0.5
     maxdatrad = 50.0
@@ -31,7 +26,7 @@ def galaxy_data(genina_gal_num, outdir, data_loc):
 
 
 
-    data = h5py.File(data_loc + "/Galaxy_%d.hdf5" %genina_gal_num, 'r')
+    data = h5py.File(data_loc + "/%s.hdf5" %gal_num, 'r')
     pos_kin = data['KinematicsPositions'].value
     R_kin = np.sqrt(np.sum(pos_kin**2, axis = 1))/1000.0 # in kpc
     vz_kin = data['KinematicsVelocities'].value
@@ -63,13 +58,9 @@ def galaxy_data(genina_gal_num, outdir, data_loc):
     rbin_phot, surfden, surfdenerr, \
             rbin_photfit, surfdenfit, surfdenerrfit, \
             Mstar_rad, Mstar_prof, Mstar_surf, Rhalf, pfits = \
-            funcs.get_surfden_bins(R_phot,ms_phot, Nbin,maxdatrad,maxdatfitrad,p0in,p0in_min,p0in_max, Mstar_rlim, outdir, genina_gal_num) # necessary?
+            funcs.get_surfden_bins(R_phot,ms_phot, Nbin,maxdatrad,maxdatfitrad,p0in,p0in_min,p0in_max, Mstar_rlim, outdir, gal_num) # necessary?
 
-    #plt.loglog()
-    #plt.errorbar(rbin_phot, surfden,surfdenerr, color = 'black')
-    #plt.errorbar(rbin_photfit, surfdenfit, surfdenerrfit, color = 'red')
-    #plt.plot(rbin_phot, profiles.multiplumsurf(rbin_phot,pfits))
-    #plt.show()
+ 
    # And calculate the velocity disperison profile, vs1 and vs2:
 
     if (Nbinin_kin < 0):
@@ -86,7 +77,7 @@ def galaxy_data(genina_gal_num, outdir, data_loc):
     rbin_kin, sigpmean, sigperr, \
         vs1bin, vs2bin, vs1err, vs2err = \
         funcs.calc_virial_moments(Rhalf,nmonte,R_kin,vz_kin,vzerr_kin,ms_kin,\
-                            pfits, maxdatrad,Nbin, outdir, genina_gal_num)
+                            pfits, maxdatrad,Nbin, outdir, gal_num)
 
     surfden_dat = np.zeros((len(surfden), 3))
     surfden_dat[:,0] = rbin_phot
@@ -98,22 +89,22 @@ def galaxy_data(genina_gal_num, outdir, data_loc):
     kin_dat[:,1] = sigpmean
     kin_dat[:,2] = sigperr
 
-    np.savetxt(outdir + "/Galaxy_%d_KinDat.txt" %genina_gal_num, kin_dat)
-    np.savetxt(outdir + "/Galaxy_%d_PlumParam.txt" %genina_gal_num, pfits)
-    np.savetxt(outdir + "/Galaxy_%d_VSPs.txt" %genina_gal_num, np.array([vs1bin,vs1err,vs2bin, vs2err]))
-    np.savetxt(outdir + "/Galaxy_%d_SurfDen.txt" %genina_gal_num, surfden_dat)
-    np.savetxt(outdir + "/Galaxy_%d_Rhalf.txt" %genina_gal_num, [Rhalf])
-    np.savetxt(outdir + "/Galaxy_%d_Mstar.txt" %genina_gal_num, Mstar)
+    np.savetxt(outdir + "/%s_KinDat.txt" %gal_num, kin_dat)
+    np.savetxt(outdir + "/%s_PlumParam.txt" %gal_num, pfits)
+    np.savetxt(outdir + "/%s_VSPs.txt" %gal_num, np.array([vs1bin,vs1err,vs2bin, vs2err]))
+    np.savetxt(outdir + "/%s_SurfDen.txt" %gal_num, surfden_dat)
+    np.savetxt(outdir + "/%s_Rhalf.txt" %gal_num, [Rhalf])
+    np.savetxt(outdir + "/%s_Mstar.txt" %gal_num, Mstar)
 
     return 0
 #galaxy =0
-def galaxy_data_read(genina_gal_num, outdir):
-    kin_dat = np.loadtxt(outdir + "/Galaxy_%d_KinDat.txt" %genina_gal_num)
-    pfits = np.loadtxt(outdir + "/Galaxy_%d_PlumParam.txt" %genina_gal_num)
-    vsps = np.loadtxt(outdir + "/Galaxy_%d_VSPs.txt" %genina_gal_num)
-    surfden_dat = np.loadtxt(outdir + "/Galaxy_%d_SurfDen.txt" %genina_gal_num)
-    Rhalf = np.loadtxt(outdir + "/Galaxy_%d_Rhalf.txt" %genina_gal_num)
-    Mstar = np.loadtxt(outdir + "/Galaxy_%d_Mstar.txt" %genina_gal_num)
+def galaxy_data_read(gal_num, outdir):
+    kin_dat = np.loadtxt(outdir + "/%s_KinDat.txt" %gal_num)
+    pfits = np.loadtxt(outdir + "/%s_PlumParam.txt" %gal_num)
+    vsps = np.loadtxt(outdir + "/%s_VSPs.txt" %gal_num)
+    surfden_dat = np.loadtxt(outdir + "/%s_SurfDen.txt" %gal_num)
+    Rhalf = np.loadtxt(outdir + "/%s_Rhalf.txt" %gal_num)
+    Mstar = np.loadtxt(outdir + "/%s_Mstar.txt" %gal_num)
 
     Rhalf = float(Rhalf)
     Mstar = float(Mstar)

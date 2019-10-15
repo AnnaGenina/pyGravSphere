@@ -1,23 +1,23 @@
-rho0min 	rho0max	5.	10.	
-gamma0min	gamma0max	0.	3.
-gamma1min	gamma1max	0.	3.
-gamma2min	gamma2max	0.	3.
-gamma3min	gamma3max	0.	3.
-gamma4min	gamma4max	0.	3.
-rhomin	rhomax	5	10
-rsmin	rsmax	np.log10(r_c)	1.5
-alphamin	alphamax	0.5	3
-betamin	betamax	3	7
-gammamin	gammamax	0	1.5
-beta0min	beta0max	-1	1
-betainfmin	betainfmax	-1	1
-ramin	ramax	np.log10(0.5*r_c)	np.log10(2*r_c)
-etamin	etamax	1	3
-m1min	m1max	np.log10(0.5*lightpower[0])	np.log10(1.5*lightpower[0])
-a1min	a1max	0.5*lightpower[3]	1.5*lightpower[3]
-m2min	m2max	np.log10(0.5*lightpower[1])	np.log10(1.5*lightpower[1])
-a2min	a2max	0.5*lightpower[4]	1.5*lightpower[4]
-m3min	m3max	np.log10(0.5*lightpower[2])	np.log10(1.5*lightpower[2])
-a3min	a3max	0.5*lightpower[5]	1.5*lightpower[5]
-mstarmin	mstarmax	np.log10(0.75*stellar_mass)	np.log10(1.25*stellar_mass)
+rho0 			rho0min 	rho0max		rho0const	5.	10.	False
+gamma0			gamma0min	gamma0max	gamma0const	0.	3.	False
+gamma1			gamma1min	gamma1max	gamma1const	0.	3.	False
+gamma2			gamma2min	gamma2max	gamam2const	0.	3.	False
+gamma3			gamma3min	gamma3max	gamma3const	0.	3.	False
+gamma4			gamma4min	gamma4max	gamma4const	0.	3.	False
+rhos 			rhosmin		rhosmax		rhosconst	5	10	False
+rs 			rsmin		rsmax		rsconst		np.log10(r_c)	1.5	False	
+alpha 			alphamin	alphamax	alphaconst	0.5	3	False
+beta 			betamin		betamax		betaconst	3	7	False
+gamma 			gammamin	gammamax	gammaconst	0	1.5	False
+beta0 			beta0min	beta0max	beta0const	-1	1	False
+betainf 		betainfmin	betainfmax	betainfconst	-1	1	False
+ra 			ramin		ramax		raconst		np.log10(0.5*r_c)	np.log10(2*r_c)	False
+eta 			etamin		etamax		etaconst	1	3	False
+m1 			m1min		m1max		m1const		np.log10(0.5*lightpower[0])	np.log10(1.5*lightpower[0])	False
+a1 			a1min		a1max		a1const		0.5*lightpower[3]	1.5*lightpower[3]	False
+m2 			m2min		m2max		m2const		np.log10(0.5*lightpower[1])	np.log10(1.5*lightpower[1])	False
+a2 			a2min		a2max		m2const		0.5*lightpower[4]	1.5*lightpower[4]	False
+m3			m3min		m3max		m3const		np.log10(0.5*lightpower[2])	np.log10(1.5*lightpower[2])	False
+a3 			a3min		a3max		a3const		0.5*lightpower[5]	1.5*lightpower[5]	False
+mstar 			mstarmin	mstarmax	mstarconst	np.log10(0.75*stellar_mass)	np.log10(1.25*stellar_mass)	False
 
