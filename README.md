@@ -32,7 +32,7 @@ Before you begin using **GravSphere** please make sure you have downloaded and i
 After installing you dependencies please go to the **GravSphere** main folder and type:
 
 ```
-python setup.py build
+python setup.py build_ext --inplace
 ```
 
 If you don't get any error messages, congratulations! **GravSphere** is ready to use. 
@@ -99,7 +99,7 @@ Galaxy_3
 Now run **GravSphere** for the first time inside your install directory.
 
 ```
-gravsphere.py
+pygravsphere.py
 ```
 
 This will generate all the necessary folders and files you need at this step. Quit **Gravsphere** by typing *q* or *quit*.
@@ -115,7 +115,7 @@ Excellent! Now you're ready to create your MCMC input files. This includes binne
 Go to your working directory and type:
 
 ```
-gravsphere.py
+pygravsphere.py
 ```
 You will see a list of your available options. We begin with pre-processing. Type:
 
@@ -143,7 +143,7 @@ Ok, so this is the point where I re-iterate that your life will be easier if you
 
 #### If your institution has a cluster you can run GravSphere on
 
-In your working directory, open *sub_script.txt* file. Fill the file with what your batch system submission script looks like. For example, Durham uses *slurm* and my *sub_script.txt* file looks like:
+In your working directory, open *sub_script.txt* file. Fill the file with what your batch system submission script looks like. For example, my institution uses *slurm* and my *sub_script.txt* file looks like:
 
 ```
 #!/bin/bash -l
@@ -160,7 +160,7 @@ module load gnu_comp/7.3.0 openmpi/3.0.1
 module load gsl
 ```
 
-For the name of the job, output file, error file, number of cores and time please keep the same names (i.e. CORENUM, GALID) so that **GravSphere** can replace those for you automatically. If your input scripts are vastly different to this, you might need to fiddle with the *gravsphere.py* **create_sub** and **create_ana_sub** functions. Let's hope it doesn't come to that.
+For the name of the job, output file, error file, number of cores and time please keep the same names (i.e. CORENUM, GALID) so that **GravSphere** can replace those for you automatically. If your input scripts are vastly different to this, you might need to fiddle with the *gsTools.py* **create_sub** and **create_ana_sub** functions. Let's hope it doesn't come to that.
 
 #### If you're running GravSphere on your laptop
 
@@ -175,7 +175,7 @@ So suppose now you want to run a model with the Zhao et al. (1996) dark matter d
 
 Now run **GravSphere** 
 ```
-python gravsphere.py
+python pygravsphere.py
 ```
 And here is your example selection:
 
