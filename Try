@@ -19,9 +19,9 @@ def checkdirs(workdir, codedir):
 	projects =  os.path.exists(workdir + "/projects.txt")
 	if projects == False:
 		os.system("touch " + workdir + "/projects.txt")	
-	code = os.path.exists(workdir + "/pygravsphere.py")
-	if code == False:		
-		os.system("cp " + codedir + "/pygravsphere.py " + workdir + "/pygravsphere.py")
+	code =  os.path.exists(workdir + "/pygravsphere.py")
+	if code == False:
+		os.system("cp " + codedir + "/pygravsphere.py " + workdir + " /pygravsphere.py")
 
 def get_cmap(n, name='hsv'):
    

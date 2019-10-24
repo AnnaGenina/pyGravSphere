@@ -3,9 +3,7 @@ import time
 import sys
 import numpy as np
 
-#Baes + PL + Plummer_Sum + VSP
 
-# Just removed the physical constraint on montonically decreasing density slopes
 workdir = sys.argv[1]
 codedir = sys.argv[2]
 project_name = sys.argv[3]
@@ -20,7 +18,9 @@ vsps = sys.argv[11]
 plummer = sys.argv[12]
 
 
-
+out_exists = os.path.isdir(workdir + '/' + project_name + '/%s' % galaxy_number)
+if out_exists == False:
+	os.system("mkdir {}/{}/{}".format(workdir, project_name, galaxy_number))
 
 with open(workdir + "/" + project_name + "/Submissions/" + "script_bin_%s" %project_name + "_%s" %(galaxy_number) +  ".py", "w") as f:
 	f.write(r"""import os
@@ -73,8 +73,10 @@ r_bins = np.array([0.25,0.5,1,2,4]) * r_c
 min_rad = np.log10(r_c/100)
 max_rad = np.log10(r_c*50)
 
-gamsmooth = 1
-
+gamsmooth = np.loadtxt(workdir + '/' + project_name + '/Submissions/gamsmooth.txt')
+if np.size(gamsmooth) not in [1,4]:
+	print "Gamsmooth needs to be either one fixed value or 4 diffent values. Quitting."
+	quit()
 
 
 """)
@@ -86,8 +88,18 @@ gamsmooth = 1
 	noconst_var, = np.where(priors[:,6] == 'False')
 	f.write('priors = np.loadtxt(workdir + "/" + project_name + "/Submissions/priors.txt", dtype = "str")' + '\n')
 	f.write("const_var, = np.where(priors[:,6] == 'True')" + "\n")
-	f.write("noconst_var, = np.where(priors[:,6] == 'False')" + "\n")	
+	f.write("noconst_var, = np.where(priors[:,6] == 'False')" + "\n" )	
+	f.write("noconst_gam, = np.where((noconst_var > 0) & (noconst_var < 6))" + "\n")
+	f.write("const_gam, = np.where((const_var > 0) & (const_var < 6))" + "\n")
+
+	if darkmatter == 'PL':
+		f.write("min_gammas0 = np.array([gamma0min,gamma1min,gamma2min,gamma3min,gamma4min])" + "\n")
+		f.write("max_gammas0 = np.array([gamma0max,gamma1max,gamma2max,gamma3max,gamma4max])" + "\n")
+
+
 	f.write(r"""data = (kindat, lightpower,vir_shape,r_c, surfden,stellar_mass)
+
+
 
 
 G = 4.302 * 10.**(-6.)
@@ -109,61 +121,64 @@ def plummer_proj_sum(args, x_data, n_comp):
 
 
 #gRho0,gGamma0,gGamma1,gGamma2,gGamma3,gGamma4,gBeta0, gBeta1,gRa, gEta,gM1,gA1,gM2,gA2,gM3,gA3
-
+	ptrack = 0
 	if darkmatter == 'PL':
-		priors_dark = priors[num_params:num_params+6]
+		priors_dark = priors[ptrack:ptrack+6]
 		notconst, = np.where(priors_dark[:,6] == 'False') 
 		params_dark = ''
 		for i in range(0, len(notconst)):
 			params_dark = params_dark + priors_dark[notconst[i],0] + ','
-		num_params = num_params + 6
-		
+			num_params = num_params + 1
+		ptrack = ptrack + 6	
 	elif darkmatter == 'Zhao':
-		priors_dark = priors[num_params:num_params+5]
+		priors_dark = priors[ptrack:ptrack+5]
 		notconst, = np.where(priors_dark[:,6] == 'False') 
 		params_dark = ''
 		for i in range(0, len(notconst)):
 			params_dark = params_dark + priors_dark[notconst[i],0] + ','
-		num_params = num_params + 5
-		
+			num_params = num_params + 1
+		ptrack = ptrack + 5
 	if anisotropy == 'Baes':
-		priors_anis = priors[num_params:num_params+4]
+		priors_anis = priors[ptrack:ptrack+4]
 		notconst, = np.where(priors_anis[:,6] == 'False') 
 		params_anis = ''
 		for i in range(0, len(notconst)):
 			params_anis = params_anis + priors_anis[notconst[i],0] + ','
-		num_params = num_params + 4
-		
+			num_params = num_params + 1
+		ptrack = ptrack + 4
 	elif anisotropy	== 'Const':
-		priors_anis = priors[num_params:num_params+1].reshape(6)
+		priors_anis = priors[ptrack:ptrack+1].reshape(7)
 		 
 		params_anis = ''
 		if priors_anis[6] == 'False':
 		
 			params_anis = params_anis + priors_anis[0] + ','
-		num_params = num_params + 1
-		
+			num_params = num_params + 1
+		ptrack = ptrack + 1
 	if plummer == 'Plummer':
 		params_plummer = ''
 
 	elif plummer == 'Plummer3':
-		priors_plummer = priors[num_params:num_params+6]
+		priors_plummer = priors[ptrack:ptrack+6]
 		notconst, = np.where(priors_plummer[:,6] == 'False') 
 		params_plummer = ''
 		for i in range(0, len(notconst)):
 			params_plummer = params_plummer + priors_plummer[notconst[i],0] + ','
-		num_params = num_params + 6
-		
+			num_params = num_params + 1
+		ptrack = ptrack + 6
 	if vsps == 'NOVSP':
 		f.write("vsps = np.zeros((4,))" + '\n')
 
-	if priors[-1,6] != 'True':
+	if priors[-1,6] == 'False':
+		
 		params_mass = 'mstar'
+		num_params = num_params + 1
 	else:
+		
 		params_mass = ''
 	
-	num_params = num_params + 1
-
+	ptrack = ptrack + 1
+	
 	
 	if plummer == 'Plummer':
 
@@ -173,22 +188,24 @@ def plummer_proj_sum(args, x_data, n_comp):
 		
 	f.write(r'def lnlike(params):' + '\n')
 	for i in range(0, len(const_var)):
-		f.write("\t" + priors[const_var,0] + '=' + priors[const_var,4] + '\n')
+		f.write("\t" + str(priors[const_var[i],0]) + '=' + str(priors[const_var[i],4]) + '\n')
 	f.write("\t" + params_dark + params_anis + params_plummer + params_mass +  " = params" + '\n')
 
 	if anisotropy == 'Const':
-		f.write("\t" + """beta_t0 = check_beta(beta_t0)
-
+		f.write("\t" + """beta_t0 = check_beta(beta0)
+	
 """)
+
+
 	else:
-		f.write("\t" + "beta_t0 = check_beta(beta_t0)" + '\n')
-		f.write("\t" + "beta_t1 = check_beta(beta_t1)" + '\n')
+		f.write("\t" + "beta_t0 = check_beta(beta0)" + '\n')
+		f.write("\t" + "beta_t1 = check_beta(betainf)" + '\n')
 
 
 	if anisotropy == 'Const':
-		f.write("\t" + "beta0 = (2. * beta_t0)/(1. + beta_t0)"  + '\n' + '\t' + "kindat,lightpower, vir_shape,r_c,surfden,stellar_mass = data" + '\n')
+		f.write("\t" + "beta_t0 = (2. * beta_t0)/(1. + beta_t0)"  + '\n')
 	else:
-		f.write("\t" + "beta0 = (2. * beta_t0)/(1. + beta_t0)" + '\n' + '\t' + "beta1 = (2. * beta_t1)/(1. + beta_t1)" + '\n' + '\t' + "kindat,lightpower, vir_shape,r_c,surfden,stellar_mass = data" + '\n')
+		f.write("\t" + "beta_t0 = (2. * beta_t0)/(1. + beta_t0)" + '\n' + '\t' + "beta_t1 = (2. * beta_t1)/(1. + beta_t1)" + '\n' )
 
 	if vsps == 'NOVSP':
 		f.write("\t" + "vir_shape = [0,1,0,1]" + "\n")
@@ -202,9 +219,9 @@ def plummer_proj_sum(args, x_data, n_comp):
 	else:
 		f.write("\t" + "plum_param = [10**m1,a1,10**m2,a2,10**m3,a3]" + "\n")
 	if anisotropy == 'Const':
-		f.write("\t" + "beta_param = [beta0,beta0,1,0]" + "\n")
+		f.write("\t" + "beta_param = [beta_t0,beta_t0,1,0]" + "\n")
 	else:	
-		f.write("\t" + "beta_param = [beta0,beta1,10**ra,eta]" + "\n")
+		f.write("\t" + "beta_param = [beta_t0,beta_t1,10**ra,eta]" + "\n")
 
 	if darkmatter == "PL":
 		if plummer == 'Plummer':
@@ -227,34 +244,36 @@ def plummer_proj_sum(args, x_data, n_comp):
 
 
 	f.write("def lnprior(params):" + '\n')
+	for i in range(0, len(const_var)):
+		f.write("\t" + str(priors[const_var[i],0]) + '=' + str(priors[const_var[i],4]) + '\n')
 	f.write("\t" + params_dark + params_anis + params_plummer + params_mass + " = params" + '\n')
-	f.write("\t" + "kindat,lightpower,vir_shape,r_c,surfden,stellar_mass = data" + '\n')
+	
 
-	f.write("""
+	
 	min_vals = priors[noconst_var,1]
+	f.write("\t" + "min_vals = np.array([" + "".join("{},".format(i) for i in min_vals) + "])" + "\n")
 	max_vals = priors[noconst_var,2]
-		""")
+	f.write("\t" + "max_vals = np.array([" + "".join("{},".format(i) for i in max_vals) + "])" + "\n")
+
 
 	if darkmatter == 'PL':
 		f.write("\t" + "gammas = np.array([gamma0,gamma1,gamma2,gamma3,gamma4])" + '\n')
-		
 		f.write("\t" + "min_gammas = np.array([gamma0min,gamma1min,gamma2min,gamma3min,gamma4min])" + '\n')
 		f.write("\t" + "max_gammas = np.array([gamma0max,gamma1max,gamma2max,gamma3max,gamma4max])" + '\n')
-		f.write("\t" + "min_gammas[1:] =  params[1:5] - 0.01" + "\n")
-		f.write("\t" + "max_gammas[1:] =  params[1:5] + gamsmooth" + "\n")
+		f.write("\t" + "min_gammas[1:] =  gammas[0:4] - 0.01" + "\n")
+		f.write("\t" + "max_gammas[1:] =  gammas[0:4] + gamsmooth" + "\n")
 		f.write("\t" + "min_gammas[min_gammas < min_gammas0] = min_gammas0[min_gammas < min_gammas0]" + "\n")
-		f.write("\t" + "max_gammas[max_gammas > max_gammas0] = max_gammas0[max_gammas > max_gammas0]" + "\n")
-
-
-
-	if darkmatter == 'PL':
-		prior_all = "all(minarr < thetau < maxarr for minarr,thetau,maxarr in zip({},{},{})):".format("min_vals","params","max_vals")
+		f.write("\t" + "max_gammas[max_gammas > max_gammas0] = max_gammas0[max_gammas > max_gammas0]" + "\n")	
+		f.write("\t" + "min_vals[noconst_gam] = min_gammas[priors[1:6, 6] == 'False']" + "\n")
+		f.write("\t" + "max_vals[noconst_gam] = max_gammas[priors[1:6, 6] == 'False']" + "\n")
 
 
 	
+	prior_all = "all(minarr < thetau < maxarr for minarr,thetau,maxarr in zip({},{},{}))".format("min_vals","params","max_vals")
+	
+	
 
-
-	f.write("\t" + "if " + prior_all + ":" +  "\n")	
+	f.write("\t" + "if " + prior_all  +  ":" + "\n")	
 	f.write("\t" + "\t" + "return 0.0" + "\n")
 	f.write("\t" + "return -np.inf" + '\n')
 
@@ -267,22 +286,22 @@ def plummer_proj_sum(args, x_data, n_comp):
 		return -np.inf
 	    
 	like = lnlike(params)
-
+	
 	return like + lp""" + '\n')
 
 	f.write("""
-runtime = True:
+runtime = True
 while runtime == True:
 	
-
+	print "Starting MCMC"
 
 	t_org = time.time()
 """)
 	all_params = params_dark + params_anis + params_plummer + params_mass
-	num_params = len([x.strip() for x in all_params.split(',')])
+	
 	f.write("\t" + "ndim, nwalkers = {:d}, {:d}".format(num_params, num_walkers) + '\n')
 
-	f.write("\t" + "pos = np.zeros((nwalkers,ndim))")
+	f.write("\t" + "pos = np.zeros((nwalkers,len(priors)))")
 	if darkmatter == 'PL':
 		f.write("""
 	partrack = 6
@@ -295,7 +314,7 @@ while runtime == True:
 	else:
 		f.write("""
 	partrack = 5
-	pos[:,0] = np.random.uniform(rhomin, rhomax, nwalkers)
+	pos[:,0] = np.random.uniform(rhosmin, rhosmax, nwalkers)
 	pos[:,1] = np.random.uniform(rsmin, rsmax, nwalkers)
 	pos[:,2] = np.random.uniform(alphamin ,alphamax, nwalkers)
 	pos[:,3] = np.random.uniform(betamin, betamax, nwalkers)
@@ -304,7 +323,8 @@ while runtime == True:
 
 		f.write("""
 	pos[:,partrack] = np.random.uniform(beta0min, beta0max, nwalkers)
-	partrack = partrack + 1""")
+	partrack = partrack + 1
+""")
 	else:
 		f.write("""
 	pos[:,partrack] = np.random.uniform(beta0min, beta0max, nwalkers)
@@ -320,27 +340,29 @@ while runtime == True:
 	pos[:,partrack + 3]= np.random.uniform(a2min, a2max, nwalkers)
 	pos[:,partrack + 4]= np.random.uniform(m3min, m3max, nwalkers)
 	pos[:,partrack + 5]= np.random.uniform(a3min, a3max, nwalkers)
-
-	partrack = partrack + 6""" + '\n' + '\n')
-
-
 	
+	partrack = partrack + 6
 
+	pos[:,-1] = np.random.uniform(mstarmin, mstarmax, nwalkers)
 
+	partrack = partrack + 1
 
-	f.write("\t" + "pos[:,-1] = np.random.uniform(mstarmin, mstarmax, nwalkers)" + "\n")
+	print 'Initialising positions' """ + '\n' + '\n')
+
+	else:
+		f.write("\t" + "pos[:,-1] = np.random.uniform(mstarmin, mstarmax, nwalkers)" + "\n" + "\t" + "partrack = partrack + 1" + "\n")	
 	
 
 	if darkmatter == 'PL':
 		f.write("""
-	vec_lnprior = np.apply_along_axis(lnprior, 1, pos)
+	vec_lnprior = np.apply_along_axis(lnprior, 1, pos[:,noconst_var])
 	junk, = np.where(np.isfinite(vec_lnprior) == False)
 	not_junk = nwalkers - np.size(junk)
 	
 
 	while not_junk != nwalkers:
 		
-
+		
 		pos[junk,0] = np.random.uniform(rho0min, rho0max, nwalkers - not_junk)
 		pos[junk,1] = np.random.uniform(gamma0min, 3, nwalkers - not_junk)
 		pos[junk,2] = np.random.uniform(gamma1min, 3, nwalkers - not_junk)
@@ -348,21 +370,24 @@ while runtime == True:
 		pos[junk,4] = np.random.uniform(gamma3min, 3, nwalkers - not_junk)
 		pos[junk,5] = np.random.uniform(gamma4min, 3, nwalkers - not_junk)
 		
-		vec_lnprior = np.apply_along_axis(lnprior, 1, pos)
+		vec_lnprior = np.apply_along_axis(lnprior, 1, pos[:,noconst_var])
 		junk, = np.where(np.isfinite(vec_lnprior) == False)
 		not_junk = nwalkers - np.size(junk)
 		
-		
-	f.write("\t" + "pos = pos[noconst_var]")
+""")	
+	f.write("""	
+	pos = pos[:,noconst_var]
+	
+	
+	print "Pos selected"
+	print pos	
+
+	print "Positions initialised"
+	print "Starting sampler"
+
 
 """)
-
-
-
 	
-
-	
-	# log(ra/rc) = 0.1 ;  log(ra) - log(rc) = 0.1 ; 0.1 + log(rc)
 		
 	f.write("\t"+ """sampler = emcee.EnsembleSampler(nwalkers, ndim, logprob)
 
@@ -402,8 +427,7 @@ while runtime == True:
 			f_chains = open(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt", "w")
 			f_chains.close()
 
-			#pos = [free_param_list + 1e-2 * np.random.randn(ndim) for i in range(nwalkers)]
-
+			
 			pos, prob,state = sampler.run_mcmc(pos, 1)
 		        tot_iter = steps
 			
@@ -411,8 +435,8 @@ while runtime == True:
 
 				
 		except IOError:
-			#pos = [free_param_list+ 1e-2 * np.random.randn(ndim) for i in range(nwalkers)]
-
+			
+			print "Begin starter run"
 			pos, prob,state = sampler.run_mcmc(pos, 1)
 			tot_iter = steps
 			
@@ -435,7 +459,7 @@ while runtime == True:
 		samples = sampler.flatchain
 		pp = sampler.lnprobability
 
-		if completed + i*100 > burn_in:
+		if completed + i*100 >= burn_in:
 			out = np.zeros((len(samples), ndim + 1))
 			out[:,0:ndim] = samples
 			out[:,ndim] = pp.reshape((len(samples)))

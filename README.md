@@ -11,7 +11,7 @@ We've tried our best to design a user-friendly interface for **GravSphere** and 
 To download **GravSphere**, please go to your preferred folder and type:
 
 ```
-git install GravSphere
+git clone pyGravSphere
 ```
 
 
@@ -32,11 +32,17 @@ Before you begin using **GravSphere** please make sure you have downloaded and i
 After installing you dependencies please go to the **GravSphere** main folder and type:
 
 ```
-python setup.py build
+python setup.py build_ext --inplace
 ```
 
-If you don't get any error messages, congratulations! **GravSphere** is ready to use. 
+If you don't get any error messages, congratulations! 
 
+Now go to your system's *.bashrc* file, or an equivalent, and define your GravSphere install directory
+
+```
+GravSpherePath=/Users/Nerd/Desktop/GravSphere/
+```
+Success!
 
 ## Practical
 
