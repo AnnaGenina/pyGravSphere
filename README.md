@@ -295,11 +295,11 @@ Now you wait.
 
 ### If your job didn't finish on time
 
-Don't worry! Just modify the submission script *Galaxy_1.sh*, replacing *restart = False* to *restart = True* and your run will continue where it left off! Neat, eh?
+Don't worry! Just modify the submission script *Galaxy_1.sh*, replacing *standard* to *restart* and your run will start from where it left off! Neat, eh?
 
 ### If you want to run your chains for longer
 
-Repeat the step above, setting *restart = True* in the *Galaxy_1.sh* submission script.
+Replace *standard* in the *Galaxy_1.sh* submission script to *continue*. Change the the number of steps to whatever you like it to be. Do not change the number of walkers!
 
 
 ## Analysis

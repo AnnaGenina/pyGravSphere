@@ -174,7 +174,7 @@ def create_sub(project_name, num_cores, timevar, workdir,codedir, anis, darkmatt
 			
 			with open(prestr1 + '%s.sh' %galaxy, "w") as f:
 				f.write(newText + '\n')
-				f.write("python " + codedir + '/write_script_mpi.py' + " %s"%(workdir) + " %s"%(codedir) + " %s" %(project_name) +  " %s"%(galaxy)  + " %s"%(core) + " %s"%(num_walkers) + " %s"%(burn_in) + " %s"%(steps)  + " %s"%(int_points) + " %s"%(darkmatter) + " %s"%(anis) +  " %s"%(vsps) + " %s"%(plummer)  )
+				f.write("python " + codedir + '/write_script_mpi.py' + " %s"%(workdir) + " %s"%(codedir) + " %s" %(project_name) +  " %s"%(galaxy)  + " %s"%(core) + " %s"%(num_walkers) + " %s"%(burn_in) + " %s"%(steps)  + " %s"%(int_points) + " %s"%(darkmatter) + " %s"%(anis) +  " %s"%(vsps) + " %s"%(plummer) + " standard" )
 				f.close()
 				
 
@@ -188,7 +188,7 @@ def create_sub(project_name, num_cores, timevar, workdir,codedir, anis, darkmatt
 		for galaxy in galaxies:
 			with open(prestr1 + '%s.sh' %galaxy, "w") as f:
 				f.write("#!/bin/sh" + '\n')
-				f.write("python " + codedir + '/write_script.py' + " %s"%(workdir) + " %s"%(codedir) + " %s" %(project_name) +  " %s"%(galaxy)  + " %s"%(num_walkers) + " %s"%(burn_in) + " %s"%(steps)  + " %s"%(int_points) + " %s"%(darkmatter) + " %s"%(anis) +  " %s"%(vsps) + " %s"%(plummer)  )
+				f.write("python " + codedir + '/write_script.py' + " %s"%(workdir) + " %s"%(codedir) + " %s" %(project_name) +  " %s"%(galaxy)  + " %s"%(num_walkers) + " %s"%(burn_in) + " %s"%(steps)  + " %s"%(int_points) + " %s"%(darkmatter) + " %s"%(anis) +  " %s"%(vsps) + " %s"%(plummer) + " standard" )
 				f.close()
 				
 				os.system("chmod u+x " + prestr1 + '%s.sh' % galaxy)
