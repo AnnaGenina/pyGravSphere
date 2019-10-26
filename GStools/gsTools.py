@@ -19,6 +19,7 @@ def checkdirs(workdir, codedir):
 	projects =  os.path.exists(workdir + "/projects.txt")
 	if projects == False:
 		os.system("touch " + workdir + "/projects.txt")	
+	
 	code = os.path.exists(workdir + "/pygravsphere.py")
 	if code == False:		
 		os.system("cp " + codedir + "/pygravsphere.py " + workdir + "/pygravsphere.py")
@@ -161,7 +162,7 @@ def create_sub(project_name, num_cores, timevar, workdir,codedir, anis, darkmatt
 		prestr2 = workdir + project_name + '/OutErr/'
 
 		for galaxy in galaxies:
-			with open("sub_script.txt") as forg:
+			with open(codedir + "/sub_script.txt") as forg:
 				newText=forg.read()
 				
 				newText = newText.replace('CORENUM', "%d" %core)
@@ -209,7 +210,7 @@ def create_ana_sub(project_name, workdir, codedir, dm_option, beta_option, plumm
 
 	if mpi_opt == 'y':
 		for galaxy in galaxies:
-			with open("sub_script.txt") as forg:
+			with open(codedir + "/sub_script.txt") as forg:
 				newText=forg.read()
 				newText = newText.replace('CORENUM', "%d" %core)
 				newText = newText.replace('-J GALID', '-J %s_' % galaxy  + '%s' % project_name)

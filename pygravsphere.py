@@ -12,6 +12,8 @@ try:
 	workdir = open(cwd + '/workdir.txt', 'r')
 	workdir = workdir.read()
 	workdir = workdir.strip()
+	
+		
 
 except IOError:
 	print 'workdir.txt file does not exist. Creating file.'
@@ -27,8 +29,13 @@ if not workdir:
 	workdir.close()
 	workdir = cwd
 
+if workdir[-1] != '/'
+		workdir  = workdir + '/'
+
 
 codedir = str(os.environ["GravSpherePath"])
+if codedir[-1] != '/'
+		codedir  = codedir + '/'
 	
 sys.path.append(codedir)
 from GStools import gsTools
@@ -49,7 +56,7 @@ while program == True:
 	print (banner)
 
 	try:
-		projects = np.loadtxt(workdir + '/projects.txt',dtype = 'str')
+		projects = np.loadtxt(workdir + '/projects.txt',dtype = 'str', ndmin = 0)
 		updated = []
 		for p in range(0, len(projects)):
 			exists = os.path.isdir(workdir + '/' + projects[p])
@@ -106,10 +113,17 @@ while program == True:
 			
 		print 'Current working directory is', workdir
 		print 'Which galaxies would you like to preprocess?'
+		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
+		if len(gal_list) == 0:
+			print "There are no galaxies, Quitting."
+			break
+		else:
+			for it in gal_list:
+				print it
 		print '1) All 	2) Specify'
 		opt = raw_input('Option: ')
 		if opt == '1':
-			all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+			all_gals = gal_list
 						
 						
 						
@@ -232,7 +246,7 @@ while program == True:
 		print 'Copying codes'
 		
 		os.system("cp " + codedir + '/priors.txt ' + workdir + project_name + '/Submissions/')
-		priors = np.loadtxt(workdir + project_name + '/Submissions/priors.txt', dtype = 'str')
+		priors = np.loadtxt(workdir + project_name + '/Submissions/priors.txt', dtype = 'str', ndmin = 1)
 		my_params = np.where(np.in1d(priors[:,0], np.array(param_list, dtype = 'str')))		
 		priors = np.savetxt(workdir + project_name + '/Submissions/priors.txt', priors[my_params], fmt = "%s")
 		np.savetxt(workdir + project_name + '/Submissions/gamsmooth.txt', np.array([1.]))
@@ -323,6 +337,13 @@ while program == True:
 						
 
 				print 'Which galaxies would you like to submit?'
+				gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
+				if len(gal_list) == 0:
+					print "There are no galaxies, Quitting."
+					break
+				else:
+					for it in gal_list:
+						print it
 				print '1) All 	2) Specify'
 				opt = raw_input('Option: ')
 				if opt == '1':
@@ -458,6 +479,15 @@ while program == True:
 			sub_command = open('sub_command.txt', 'r')
 			sub_com = sub_command.read()
 
+
+			gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
+			if len(gal_list) == 0:
+				print "There are no galaxies, Quitting."
+				break
+			else:
+				for it in gal_list:
+					print it
+
 			opt_gal = raw_input("Which galaxies?  1) Specify    2) All")
 			if opt_gal.strip() == '1':
 				print "Type galaxies, separated by commas"
@@ -534,6 +564,13 @@ while program == True:
 				valid = True
 
 		print 'Which galaxies would you like to plot?'
+		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
+		if len(gal_list) == 0:
+			print "There are no galaxies, Quitting."
+			break
+		else:
+			for it in gal_list:
+				print it
 		print '1) All 	2) Specify'
 		opt = raw_input('Option: ')
 		if opt == '1':
@@ -608,6 +645,13 @@ while program == True:
 				valid = True
 
 		print 'Which galaxies would you like to plot?'
+		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
+		if len(gal_list) == 0:
+			print "There are no galaxies, Quitting."
+			break
+		else:
+			for it in gal_list:
+				print it
 		print '1) All 	2) Specify'
 		opt = raw_input('Option: ')
 		if opt == '1':
