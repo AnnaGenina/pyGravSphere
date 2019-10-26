@@ -60,7 +60,7 @@ while program == True:
 	try:
 		with warnings.catch_warnings():
 			warnings.simplefilter("ignore")
-			projects = np.loadtxt(workdir + '/projects.txt',dtype = 'str', ndmin = 0)
+			projects = np.loadtxt(workdir + '/projects.txt',dtype = 'str', ndmin = 1)
 			updated = []
 			for p in range(0, len(projects)):
 				exists = os.path.isdir(workdir + '/' + projects[p])
@@ -117,7 +117,7 @@ while program == True:
 			
 		print 'Current working directory is', workdir
 		print 'Which galaxies would you like to preprocess?'
-		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
+		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,gal_dtype = 'str')
 		if not gal_list:
 			print "There are no galaxies, Quitting."
 			break
@@ -345,8 +345,8 @@ while program == True:
 						
 
 				print 'Which galaxies would you like to submit?'
-				gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
-				if len(gal_list) == 0:
+				gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+				if not gal_list:
 					print "There are no galaxies, Quitting."
 					break
 				else:
@@ -488,8 +488,8 @@ while program == True:
 			sub_com = sub_command.read()
 
 
-			gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
-			if len(gal_list) == 0:
+			gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+			if not gal_list:
 				print "There are no galaxies, Quitting."
 				break
 			else:
@@ -572,8 +572,8 @@ while program == True:
 				valid = True
 
 		print 'Which galaxies would you like to plot?'
-		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
-		if len(gal_list) == 0:
+		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if not gal_list == 0:
 			print "There are no galaxies, Quitting."
 			break
 		else:
@@ -653,8 +653,8 @@ while program == True:
 				valid = True
 
 		print 'Which galaxies would you like to plot?'
-		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
-		if len(gal_list) == 0:
+		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if not gal_list:
 			print "There are no galaxies, Quitting."
 			break
 		else:
