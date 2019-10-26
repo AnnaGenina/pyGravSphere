@@ -328,7 +328,8 @@ For example, you might want to output a corner plot of your posteriors.
 
 ### Plot the evolution of your chains
 
-This might be useful for visual evaluation of convergence.
+This might be useful for visual evaluation of convergence. 
+Note that you cannot use this when you've used multiprocessing, as the chains are not output in any particular order.
 
 
 ### Output the percentiles of your mass/density models
