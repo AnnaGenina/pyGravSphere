@@ -323,7 +323,7 @@ with MPIPool() as pool:
 	pos[:,2] = np.random.uniform(gamma1min, 3, nwalkers)
 	pos[:,3] = np.random.uniform(gamma2min, 3, nwalkers)
 	pos[:,4] = np.random.uniform(gamma3min, 3, nwalkers)
-	pos[:,5] = np.random.uniform(gamma4min, 3, nwalkers)""")
+	pos[:,5] = np.random.uniform(gamma4min, 3, nwalkers)""" + '\n')
 	else:
 		f.write("""
 	partrack = 5
@@ -331,7 +331,7 @@ with MPIPool() as pool:
 	pos[:,1] = np.random.uniform(rsmin, rsmax, nwalkers)
 	pos[:,2] = np.random.uniform(alphamin ,alphamax, nwalkers)
 	pos[:,3] = np.random.uniform(betamin, betamax, nwalkers)
-	pos[:,4] = np.random.uniform(gammamin , gammamax, nwalkers)""")
+	pos[:,4] = np.random.uniform(gammamin , gammamax, nwalkers)""" + '\n')
 	if anisotropy == 'Const':
 
 		f.write("""
@@ -344,7 +344,7 @@ with MPIPool() as pool:
 	pos[:,partrack + 1] = np.random.uniform(betainfmin, betainfmax, nwalkers)
 	pos[:,partrack + 2] = np.random.uniform(ramin, ramax, nwalkers)
 	pos[:,partrack + 3] = np.random.uniform(etamin, etamax, nwalkers)
-	partrack = partrack + 4""")
+	partrack = partrack + 4""" + '\n')
 	if plummer == 'Plummer3':
 		f.write("""
 	pos[:,partrack] = np.random.uniform(m1min, m1max, nwalkers)
