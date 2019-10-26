@@ -118,7 +118,7 @@ while program == True:
 		print 'Current working directory is', workdir
 		print 'Which galaxies would you like to preprocess?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 0,dtype = 'str')
-		if len(gal_list) == 0:
+		if not gal_list:
 			print "There are no galaxies, Quitting."
 			break
 		else:
