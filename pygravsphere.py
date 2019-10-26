@@ -30,12 +30,12 @@ if not workdir:
 	workdir.close()
 	workdir = cwd
 
-if workdir[-1] != '/'
+if workdir[-1] != '/':
 		workdir  = workdir + '/'
 
 
 codedir = str(os.environ["GravSpherePath"])
-if codedir[-1] != '/'
+if codedir[-1] != '/':
 		codedir  = codedir + '/'
 	
 sys.path.append(codedir)
