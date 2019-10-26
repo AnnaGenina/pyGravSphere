@@ -459,12 +459,7 @@ while program == True:
 		burn_in = int(input_opt[4])
 		nwalkers = int(input_opt[5])
 		
-		mpi_opt = raw_input("Running on a batch system y or n? " )
-		if mpi_opt == 'y':
-			timevar = int(raw_input("How much time do you need? (in hours)"))
-			timevar = str(datetime.timedelta(hours = timevar))
-		else:
-			timevar = None	
+		
 
 		print "Do you need to cut chains? "
 		print "It looks like you ran %d" %steps
@@ -477,11 +472,19 @@ while program == True:
 		points = raw_input("How many log-spaced intervals? ")
 		samples = raw_input("How many samples out of ~ %d that you ran? " %((int(steps-burn_in) - int(cut_off))*int(nwalkers)))
 
-
+		mpi_opt = raw_input("Running on a batch system y or n? " )
+		if mpi_opt == 'y':
+			timevar = int(raw_input("How much time do you need? (in hours)"))
+			timevar = str(datetime.timedelta(hours = timevar))
+		else:
+			timevar = None	
 		
 		gsTools.create_ana_sub(project_name, workdir, codedir, dm_option, beta_option, plummer_option, samples, mpi_opt, cut_off, chi_cut, min_rad, max_rad, points,timevar)		
 
-		opt_sub = raw_input('Would you like to submit a job? y or n?')
+
+		
+
+		opt_sub = raw_input('Would you like to submit a job now? y or n?')
 		if opt_sub.strip() == 'y':
 
 			sub_command = open('sub_command.txt', 'r')
