@@ -1,21 +1,21 @@
-# GravSphere
+# pyGravSphere
 
-**GravSphere** is a non-parametric spherical Jeans analysis code, ideal for applications to dwarf spheroidal kinematic data.
+**pyGravSphere** is a non-parametric spherical Jeans analysis code, ideal for applications to dwarf spheroidal kinematic data.
 
-We've tried our best to design a user-friendly interface for **GravSphere** and below we include a full tutorial, however, if any questions or suggestions arise, do feel free to contact *anna.genina@durham.ac.uk*.
+We've tried our best to design a user-friendly interface for **pyGravSphere** and below we include a full tutorial, however, if any questions or suggestions arise, do feel free to contact *anna.genina@durham.ac.uk*.
 
 
 
 ## Getting Started
 
-To download **GravSphere**, please go to your preferred folder and type:
+To download **pyGravSphere**, please go to your preferred folder and type:
 
 ```
-git clone pyGravSphere
+git clone git@github.com:AnnaGenina/pyGravSphere.git
 ```
 
 
-Before you begin using **GravSphere** please make sure you have downloaded and installed the following dependencies ...and their dependencies.
+Before you begin using **pyGravSphere** please make sure you have downloaded and installed the following dependencies ...and their dependencies.
 
 * gcc compiler
 * numpy (duh)
@@ -35,7 +35,7 @@ If you will be using multiple processor
 
 ## Installing
 
-After installing you dependencies please go to the **GravSphere** main folder and type:
+After installing you dependencies please go to the **pyGravSphere** install folder and type:
 
 ```
 python setup.py build_ext --inplace
@@ -62,21 +62,21 @@ This is a good time to decide where you want to keep all of your **GravSphere** 
 
 Good job!
 
-Now run **GravSphere** for the first time inside your install directory.
+Now run **pyGravSphere** for the first time inside your install directory.
 
 ```
 pygravsphere.py
 ```
 
-This will generate all the necessary folders and files you need at this step. Quit **Gravsphere** by typing *q* or *quit*.
+This will generate all the necessary folders and files you need at this step. Quit **pyGravSphere** by typing *q* or *quit*.
 
 ### Preparing a data file
 
-**GravSpere** currently pre-processes input data in *.hdf5* format. In just a few short steps *.hd5* files will become your new best friends! 
+**pyGravSpere** currently pre-processes input data in *.hdf5* format. In just a few short steps *.hd5* files will become your new best friends! 
 
 You may have two data sets: one for photometry (positions) of the stars and one for kinematics (positions and velocities). In the following we'll assume that these are the same two datasets.
 
-So suppose you have a 3-column data file with x,y positions (***in parsecs***) on the sky and line-of-sight velocities. To create a **GravSphere**-compatible *.hdf5* file use the following Python code:
+So suppose you have a 3-column data file with x,y positions (***in parsecs***) on the sky and line-of-sight velocities. To create a **pyGravSphere**-compatible *.hdf5* file use the following Python code:
 
 ```
 import numpy as np
@@ -108,7 +108,7 @@ dset5[...] = total_mass
 f_new.close()
 
 ```
-Obviously, change the contents of each data set as appropriate. The *Photometry* dataset will be used exclusively for calculating the best fit 3-component Plummer profile. The *Kinematics* dataset will be used for calculation of the binned velocity dispersion profile and the virial shape parameters. If the mass in stars is assumed to significantly contribute to your system, put in your best estimate of mass **in solar masses** in to *[StellarMass3R]* set. In the above example, each star contributes equal weight to your system. This is a good approximation for real-life galaxies. If you're applying GravSphere to a cosmological simulation and you know the masses of your stellar particles, you can use those. This will be useful in the **Pre-processing** step, where **GravSphere** calculates the binned velocity dispersion and stellar density profiles. If you calculate those things using your own method, then don't worry about this.
+Obviously, change the contents of each data set as appropriate. The *Photometry* dataset will be used exclusively for calculating the best fit 3-component Plummer profile. The *Kinematics* dataset will be used for calculation of the binned velocity dispersion profile and the virial shape parameters. If the mass in stars is assumed to significantly contribute to your system, put in your best estimate of mass **in solar masses** in to *[StellarMass3R]* set. In the above example, each star contributes equal weight to your system. This is a good approximation for real-life galaxies. If you're applying GravSphere to a cosmological simulation and you know the masses of your stellar particles, you can use those. This will be useful in the **Pre-processing** step, where **pyGravSphere** calculates the binned velocity dispersion and stellar density profiles. If you calculate those things using your own method, then don't worry about this.
 
 Now you have an *NewDataFile.hdf5* dataset. Perhaps you want to name it as something more identifiable, let's say *Galaxy_1.hdf5*, or you might even have three data sets: *Galaxy_1.hdf5*, *Galaxy_2.hdf5* and *Galaxy_3.hdf5*. At this point, please open the *galaxy_list.txt* file in your working directory and type in: 
 
@@ -153,7 +153,7 @@ Bingo! Cogs are turning and your data will be pre-processed in no time. The outp
 
 ### Preparing submission scripts
 
-Ok, so this is the point where I re-iterate that your life will be easier if you have a few cores to run **GravSphere** on. Like, much easier. 
+Ok, so this is the point where I re-iterate that your life will be easier if you have a few cores to run **pyGravSphere** on. Like, much easier. 
 
 #### If your institution has a cluster you can run GravSphere on
 
@@ -174,7 +174,7 @@ module load gnu_comp/7.3.0 openmpi/3.0.1
 module load gsl
 ```
 
-For the name of the job, output file, error file, number of cores and time please keep the same names (i.e. CORENUM, GALID) so that **GravSphere** can replace those for you automatically. If your input scripts are vastly different to this, you might need to fiddle with the *gsTools.py* **create_sub** and **create_ana_sub** functions. Let's hope it doesn't come to that.
+For the name of the job, output file, error file, number of cores and time please keep the same names (i.e. CORENUM, GALID) so that **pyGravSphere** can replace those for you automatically. If your input scripts are vastly different to this, you might need to fiddle with the *gsTools.py* **create_sub** and **create_ana_sub** functions. Let's hope it doesn't come to that.
 
 #### If you're running GravSphere on your laptop
 
@@ -187,7 +187,7 @@ OK, we're definitely getting closer to the good stuff.
 
 So suppose now you want to run a model with the Zhao et al. (1996) dark matter distribution, a constant anisotropy profile, 3-component Plummer fit and no virial shape parameters. And, very conveniently, you have 8 cores to run it on.
 
-Now run **GravSphere** 
+Now run **pyGravSphere** 
 ```
 python pygravsphere.py
 ```
@@ -218,7 +218,7 @@ Please write a short summary (or long if you want): This is an example with a Zh
 
 ```
 Think long and hard about how many walkers you want. One thousand is good number, just saying.
-*Burn-in* is the number of steps for which you want to run each of your walkers before **GravSphere** starts outputting the chains.
+*Burn-in* is the number of steps for which you want to run each of your walkers before **pyGravSphere** starts outputting the chains.
 
 *Steps* is the total steps for which you want to run your walkers. So in the example above, you will get an output of the last 2500 steps per walker.
 
@@ -234,7 +234,7 @@ Alright! Your project has been created and your jobs are ready for submission. N
 /Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Submissions/
 ```
 
-you will find your submission scripts as well as the *priors.txt* file. This is full of default **GravSphere** priors. Now you might want to change those. To do so, simply edit the lower and upper priors on each parameter. If you decide you want to keep any of the parameters constant, simply edit the last column. So, for example, if I want to keep the inner slope *gamma* at 1, I will edit the priors:
+you will find your submission scripts as well as the *priors.txt* file. This is full of default **pyGravSphere** priors. Now you might want to change those. To do so, simply edit the lower and upper priors on each parameter. If you decide you want to keep any of the parameters constant, simply edit the last column. So, for example, if I want to keep the inner slope *gamma* at 1, I will edit the priors:
 
 ```
 rhomin  rhomax  rhoconst                5.	10. False
@@ -282,7 +282,7 @@ or
 bsub Galaxy_1.sh
 ```
 
-Alternatively you can run **GravSphere** from your working directory. Type *gravsphere.py* and select option 2 -- Submit jobs. Now pick if you want to run all of your galaxies, or specify which ones you'd like to run.
+Alternatively you can run **pyGravSphere** from your working directory. Type *pygravsphere.py* and select option 2 -- Submit jobs. Now pick if you want to run all of your galaxies, or specify which ones you'd like to run.
 
 #### On your laptop
 
@@ -299,7 +299,7 @@ and type
 
 Now you wait.
 
-**GravSphere** will deposit the output every 100 steps into the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Galaxy_1/* directory. You can monitor the progress / errors in the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/OutErr/* directory.
+**pyGravSphere** will deposit the output every 100 steps into the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Galaxy_1/* directory. You can monitor the progress / errors in the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/OutErr/* directory.
 
 ### If your job didn't finish on time
 
@@ -314,11 +314,11 @@ Replace *standard* in the *Galaxy_1.sh* submission script to *continue*. Change 
 
 Now that wasn't so bad, was it? 
 
-**GravSphere** will now have output your chains into the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Galaxy_X/* directory.
+**pyGravSphere** will now have output your chains into the */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Galaxy_X/* directory.
 
 At this point you can do what you like with the output.
 
-**GravSphere** comes with some built-in functionality to get you started.
+**pyGravSphere** comes with some built-in functionality to get you started.
 
 
 ### Corner plots
