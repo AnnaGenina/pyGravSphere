@@ -27,11 +27,10 @@ Before you begin using **pyGravSphere** please make sure you have downloaded and
 * h5py https://pypi.org/project/h5py/
 * lmfit https://lmfit.github.io/lmfit-py/
 
-If you will be using multiple processor
+If you will be using multiple processors
 
-* mpi4py https://pypi.org/project/mpi4py/  
 * schwimmbad https://github.com/adrn/schwimmbad  
-* OpenMP (if you're running pyGravSphere on your laptop)
+* OpenMP (if you're using a cluster)
 
 ## Installing
 
