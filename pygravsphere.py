@@ -340,7 +340,7 @@ while program == True:
 
 				
 				
-				sub_command = open('sub_command.txt', 'r')
+				sub_command = open(codedir + '/sub_command.txt', 'r')
 				sub_com = sub_command.read()
 						
 
@@ -487,7 +487,7 @@ while program == True:
 		opt_sub = raw_input('Would you like to submit a job now? y or n?')
 		if opt_sub.strip() == 'y':
 
-			sub_command = open('sub_command.txt', 'r')
+			sub_command = open(codedir + '/sub_command.txt', 'r')
 			sub_com = sub_command.read()
 
 
