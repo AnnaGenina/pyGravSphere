@@ -74,7 +74,7 @@ def check_beta(beta):
 	f.write(r"project_name = '%s'" % project_name + "\n")
 	f.write(r"completed = 0" +  "\n")
 	f.write(r"processes = %d" % num_cores + "\n")
-	f.write("restart = %s" %restart + "\n")
+	f.write("restart = '%s'" %restart + "\n")
         f.write(r"""kindat,lightpower,vir_shape,surfden,r_c, stellar_mass = gal_input.galaxy_data_read(galaxy_number, workdir + '/GalaxyData/')
 
 
@@ -402,7 +402,10 @@ try:
 
 	try:
 		pos = np.loadtxt(workdir  + project_name + '/%s' % galaxy_number +'/%s_LastWalkerPos' % galaxy_number + project_name + ".txt" )
-		print 'Got pos'
+		print 'Got last walker positions'
+		if len(pos) != nwalkers:
+			print "This is a different number of walkers to before! Quitting!"
+			sys.exit(0)
 		pos,prob,state =  sampler.run_mcmc(pos, 1)
 
 
@@ -422,6 +425,11 @@ try:
 			chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
 			last_chains = chains[-nwalkers*100:]
 			split_ch = np.array_split(last_chains, nwalkers)
+			options = np.loadtxt(workdir + '/' + project_name + '/options.txt')
+			walk_org = int(options[5])
+			if walk_org != nwalkers:
+				print "This is a different number of walkers to before! Quitting!"
+				sys.exit(0)
 			pos = np.zeros((nwalkers,ndim))
 			for c in range(0, nwalkers):
 				pos[c] = split_ch[c][-1,0:ndim]

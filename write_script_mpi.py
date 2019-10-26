@@ -71,7 +71,7 @@ def check_beta(beta):
 	f.write(r"bins = %d" %bins + "\n")
 	f.write(r"workdir = '%s'" % workdir + "\n")
 	f.write(r"project_name = '%s'" % project_name + "\n")
-	f.write("restart = %s" %restart + "\n")
+	f.write("restart = '%s'" %restart + "\n")
 	f.write(r"completed = 0" +  "\n")
         f.write(r"""kindat,lightpower,vir_shape,surfden,r_c, stellar_mass = gal_input.galaxy_data_read(galaxy_number, workdir + '/GalaxyData/')
 
@@ -406,7 +406,7 @@ with MPIPool() as pool:
 
 	try:
 		pos = np.loadtxt(workdir  + project_name + '/%s' % galaxy_number +'/%s_LastWalkerPos' % galaxy_number + project_name + ".txt" )
-		print 'Got pos'
+		print 'Got last walker positions'
 		if len(pos) != nwalkers:
 			print "This is a different number of walkers to before! Quitting!"
 			sys.exit(0)
