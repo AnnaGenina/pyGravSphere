@@ -18,8 +18,8 @@ galaxy = sys.argv[4]
 samples = int(sys.argv[5])
 cut_off = int(sys.argv[6])
 chi_cut = float(sys.argv[7])
-min_rad = float(sys.argv[8])
-max_rad = float(sys.argv[9])
+min_r = float(sys.argv[8])
+max_r = float(sys.argv[9])
 points = int(sys.argv[10])
 
 
@@ -28,8 +28,8 @@ input_opt = (foptions.readline()).split()
 dm_option = input_opt[0] 
 beta_option = input_opt[1]
 plummer_option = input_opt[2]
-nsteps = input_opt[3]
-nwalkers = input_opts[4]
+nsteps = int(input_opt[3])
+nwalkers = int(input_opt[4])
 options = [dm_option, beta_option, plummer_option]
 
 priors = np.loadtxt(workdir + project_name + '/Submissions/priors.txt', dtype = 'str')
@@ -37,7 +37,7 @@ priors = np.loadtxt(workdir + project_name + '/Submissions/priors.txt', dtype = 
 print 'Reading output chains. This might take a while.'
 
 try:
-	chains = np.loadtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_Chains' %galaxy_number + project_name + ".txt")
+	chains = np.loadtxt(workdir + '/' + project_name + '/%s' % galaxy +'/%s_Chains' %galaxy + project_name + ".txt")
 except IOError:
 	print "Chains were not found. Quitting."
 	quit()
@@ -48,7 +48,7 @@ print 'Finished reading chains'
 print 'Leaving the last %d iterations' % cut_off
 chains = chains[cut_off*nwalkers:]
 
-rhdat = np.loadtxt(workdir + '/GalaxyData/Galaxy_%s_Rhalf.txt' %galaxy)
+rhdat = np.loadtxt(workdir + '/GalaxyData/%s_Rhalf.txt' %galaxy)
 rh = float(rhdat)
 
 print 'Selecting better chi squared chains'
@@ -73,13 +73,13 @@ chains = chains[num_ch]
 ch_org = len(chains)
 
 print 'Running beta'
-analysis_func.return_beta(chains, options, priors, min_r, max_r, points,rh,codedir,workdir)
+analysis_func.return_beta(chains, options, priors, min_r, max_r, points,rh,codedir,workdir,project_name, galaxy)
 print 'Running Mass/Density/Slope'
-analysis_func.return_mass(chains, options, priors, min_r, max_r, points,rh,codedir,workdir)
+analysis_func.return_mass(chains, options, priors, min_r, max_r, points,rh,codedir,workdir,project_name,galaxy)
 print 'Running Plummer'
-analysis_func.return_plummer(chains, options, priors, min_r, max_r, points,rh,codedir,workdir)
+analysis_func.return_plummer(chains, options, priors, min_r, max_r, points,rh,codedir,workdir,project_name,galaxy)
 print 'Running sigR and VSPs'
-analysis_func.return_sigma_vsp(chains, options, priors, min_r, max_r, points,rh,codedir,workdir)
+analysis_func.return_sigma_vsp(chains, options, priors, min_r, max_r, points,rh,codedir,workdir,project_name,galaxy)
 print 'Finished, hurray!'
 
 
