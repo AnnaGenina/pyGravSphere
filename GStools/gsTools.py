@@ -153,11 +153,9 @@ def get_lims_sig(data, workir, galaxy):
 	return out
 
 def create_sub(project_name, num_cores, timevar, workdir,codedir, anis, darkmatter, vsps, plummer, num_walkers, burn_in, steps, int_points, mpi_opt):
-	if mpi_opt == 'y':
+	if mpi_opt == '3':
 		core = int(num_cores)
-		galaxies = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-		
-		
+		galaxies = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')		
 		prestr1 = workdir + project_name + '/Submissions/'
 		prestr2 = workdir + project_name + '/OutErr/'
 
@@ -177,13 +175,23 @@ def create_sub(project_name, num_cores, timevar, workdir,codedir, anis, darkmatt
 				f.write(newText + '\n')
 				f.write("python " + codedir + '/write_script_mpi.py' + " %s"%(workdir) + " %s"%(codedir) + " %s" %(project_name) +  " %s"%(galaxy)  + " %s"%(core) + " %s"%(num_walkers) + " %s"%(burn_in) + " %s"%(steps)  + " %s"%(int_points) + " %s"%(darkmatter) + " %s"%(anis) +  " %s"%(vsps) + " %s"%(plummer) + " standard" )
 				f.close()
-				
+				os.system("chmod u+x " + prestr1 + '%s.sh' % galaxy)
+
+	elif mpi_opt == '2':
+		core = int(num_cores)
+		galaxies = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')		
+		prestr1 = workdir + project_name + '/Submissions/'
+		prestr2 = workdir + project_name + '/OutErr/'
+		for galaxy in galaxies:			
+			with open(prestr1 + '%s.sh' %galaxy, "w") as f:				
+				f.write("python " + codedir + '/write_script_multi.py' + " %s"%(workdir) + " %s"%(codedir) + " %s" %(project_name) +  " %s"%(galaxy)  + " %s"%(core) + " %s"%(num_walkers) + " %s"%(burn_in) + " %s"%(steps)  + " %s"%(int_points) + " %s"%(darkmatter) + " %s"%(anis) +  " %s"%(vsps) + " %s"%(plummer) + " standard" )
+				f.close()
+				os.system("chmod u+x " + prestr1 + '%s.sh' % galaxy)			
 
 
 		
 	else:
 		galaxies = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-
 		prestr1 = workdir + project_name + '/Submissions/'
 		prestr2 = workdir + project_name + '/OutErr/'
 		for galaxy in galaxies:
@@ -191,12 +199,9 @@ def create_sub(project_name, num_cores, timevar, workdir,codedir, anis, darkmatt
 				f.write("#!/bin/sh" + '\n')
 				f.write("python " + codedir + '/write_script.py' + " %s"%(workdir) + " %s"%(codedir) + " %s" %(project_name) +  " %s"%(galaxy)  + " %s"%(num_walkers) + " %s"%(burn_in) + " %s"%(steps)  + " %s"%(int_points) + " %s"%(darkmatter) + " %s"%(anis) +  " %s"%(vsps) + " %s"%(plummer) + " standard" )
 				f.close()
-				
 				os.system("chmod u+x " + prestr1 + '%s.sh' % galaxy)
 	
 	
-
-
 def create_ana_sub(project_name, workdir, codedir, dm_option, beta_option, plummer_option, samples, mpi_opt, cut_off, chi_cut, min_rad, max_rad, points,timevar):
 
 	

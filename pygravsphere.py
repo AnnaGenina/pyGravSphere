@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import corner
 import glob
 import datetime
+from multiprocessing import cpu_count
 
 cwd = str(os.getcwd())
 
@@ -182,14 +183,18 @@ while program == True:
 		print 'Creating project directory'
 		
 		print 'Creating Submission files'
-		mpi_opt = raw_input('Using multiple cores? y or n?')
-		if mpi_opt == 'y':
+		print 'How would you like to run MCMC?'
+				
+		mpi_opt = raw_input("1) Serial 	2) Multiprocessing  3) MPI (if you're running on a cluster)")
+		if mpi_opt == '3':
 			num_cores = int(raw_input('How many cores? '))
 			timevar = float(raw_input('How much time do you need (in hours)? '))
 			timevar = str(datetime.timedelta(hours = timevar))
-
+		elif mpi_opt == '2':
+			ncpu = cpu_count()
+			num_cores = int(raw_input('How many processes out of %d that you have?' %ncpu))
+			timevar = None
 			
-
 
 		else:
 			num_cores = None
