@@ -11,7 +11,7 @@ We've tried our best to design a user-friendly interface for **GravSphere** and 
 To download **GravSphere**, please go to your preferred folder and type:
 
 ```
-git clone pyGravSphere
+git clone git@github.com:AnnaGenina/pyGravSphere.git
 ```
 
 
