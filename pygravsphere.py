@@ -6,6 +6,7 @@ import corner
 import glob
 import datetime
 from multiprocessing import cpu_count
+import warnings
 
 cwd = str(os.getcwd())
 
@@ -57,14 +58,16 @@ while program == True:
 	print (banner)
 
 	try:
-		projects = np.loadtxt(workdir + '/projects.txt',dtype = 'str', ndmin = 0)
-		updated = []
-		for p in range(0, len(projects)):
-			exists = os.path.isdir(workdir + '/' + projects[p])
-			if exists == True:
-				updated.append(str(projects[p]))
-		projects = updated
-		np.savetxt(workdir + '/projects.txt',updated, fmt = "%s")
+		with warnings.catch_warnings():
+			warnings.simplefilter("ignore")
+			projects = np.loadtxt(workdir + '/projects.txt',dtype = 'str', ndmin = 0)
+			updated = []
+			for p in range(0, len(projects)):
+				exists = os.path.isdir(workdir + '/' + projects[p])
+				if exists == True:
+					updated.append(str(projects[p]))
+			projects = updated
+			np.savetxt(workdir + '/projects.txt',updated, fmt = "%s")
 				
 	except IOError:	
 		print "There are no current projects"
