@@ -24,9 +24,14 @@ Before you begin using **GravSphere** please make sure you have downloaded and i
 * EmCee https://emcee.readthedocs.io/en/latest/user/install/
 * corner https://corner.readthedocs.io/en/latest/ (corner plot making code)
 * SWIG http://www.swig.org/download.html
-* mpi4py https://pypi.org/project/mpi4py/   (optional, but *STRONGLY* advised if you have some cores available)
 * h5py https://pypi.org/project/h5py/
+* lmfit https://lmfit.github.io/lmfit-py/
 
+If you will be using multiple processor
+
+* mpi4py https://pypi.org/project/mpi4py/  
+* schwimmbad https://github.com/adrn/schwimmbad  
+* OpenMP (if you're running pyGravSphere on your laptop)
 
 ## Installing
 
