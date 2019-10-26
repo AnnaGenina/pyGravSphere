@@ -475,7 +475,7 @@ while program == True:
 		min_rad = raw_input("Minimum radius = ")
 		max_rad = raw_input("Maximum radius = ")
 		points = raw_input("How many log-spaced intervals? ")
-		samples = raw_input("How many samples out of ~ %d that you ran? " %int((steps-burn_in -cut_off)*nwalkers))
+		samples = raw_input("How many samples out of ~ %d that you ran? " %((int(steps-burn_in) - int(cut_off))*int(nwalkers)))
 
 
 		
