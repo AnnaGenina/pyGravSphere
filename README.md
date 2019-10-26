@@ -22,6 +22,7 @@ Before you begin using **GravSphere** please make sure you have downloaded and i
 * scipy
 * matplotlib
 * EmCee https://emcee.readthedocs.io/en/latest/user/install/
+* corner https://corner.readthedocs.io/en/latest/ (corner plot making code)
 * SWIG http://www.swig.org/download.html
 * mpi4py https://pypi.org/project/mpi4py/   (optional, but *STRONGLY* advised if you have some cores available)
 * h5py https://pypi.org/project/h5py/
@@ -44,15 +45,25 @@ GravSpherePath=/Users/Nerd/Desktop/GravSphere/
 ```
 Success!
 
+Now start a new terminal window for the changes to take place.
+
 ## Practical
 
-This is a good time to decide where you want to keep all of your **GravSphere** input data and outputs. Time to pick a working directory. To select a woking directory, please update *workdir.txt* inside the main folder with your working directory path i.e. something like
+This is a good time to decide where you want to keep all of your **GravSphere** input data and outputs. Time to pick a working directory. To select a woking directory, please update *workdir.txt* inside the install folder with your working directory path i.e. something like
 
 ```
 /Users/Nerd/Desktop/MyWorkDir/
 ```
 
 Good job!
+
+Now run **GravSphere** for the first time inside your install directory.
+
+```
+pygravsphere.py
+```
+
+This will generate all the necessary folders and files you need at this step. Quit **Gravsphere** by typing *q* or *quit*.
 
 ### Preparing a data file
 
@@ -101,14 +112,6 @@ Galaxy_1
 Galaxy_2
 Galaxy_3
 ```
-
-Now run **GravSphere** for the first time inside your install directory.
-
-```
-pygravsphere.py
-```
-
-This will generate all the necessary folders and files you need at this step. Quit **Gravsphere** by typing *q* or *quit*.
 
 Please deposit you new data files into the *KinPhotDat* directory that is now inside your working directory.
 
