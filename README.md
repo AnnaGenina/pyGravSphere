@@ -41,7 +41,7 @@ If you don't get any error messages, congratulations!
 Now go to your system's *.bashrc* file, or an equivalent, and define your GravSphere install directory
 
 ```
-GravSpherePath=/Users/Nerd/Desktop/GravSphere/
+export GravSpherePath=/Users/Nerd/Desktop/GravSphere/
 ```
 Success!
 
