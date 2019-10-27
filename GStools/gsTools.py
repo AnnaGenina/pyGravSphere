@@ -137,7 +137,7 @@ def get_lims_loglog(data, tot_bins):
 	return out
 
 
-def get_lims_sig(data, workir, galaxy):
+def get_lims_sig(data, workdir, galaxy):
 	pos = np.loadtxt(workdir + '/GalaxyData/%s_KinDat'% (galaxy) + '.txt')
 	pos = pos[:,0]
 

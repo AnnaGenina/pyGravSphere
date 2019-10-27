@@ -48,8 +48,6 @@ print 'Finished reading chains'
 print 'Leaving the last %d iterations' % cut_off
 chains = chains[cut_off*nwalkers:]
 
-rhdat = np.loadtxt(workdir + '/GalaxyData/%s_Rhalf.txt' %galaxy)
-rh = float(rhdat)
 
 print 'Selecting better chi squared chains'
 min_chisq = np.max(chains[:,-1])
@@ -73,13 +71,13 @@ chains = chains[num_ch]
 ch_org = len(chains)
 
 print 'Running beta'
-analysis_func.return_beta(chains, options, priors, min_r, max_r, points,rh,codedir,workdir,project_name, galaxy)
+analysis_func.return_beta(chains, options, priors, min_r, max_r, points,codedir,workdir,project_name, galaxy)
 print 'Running Mass/Density/Slope'
-analysis_func.return_mass(chains, options, priors, min_r, max_r, points,rh,codedir,workdir,project_name,galaxy)
+analysis_func.return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,project_name,galaxy)
 print 'Running Plummer'
-analysis_func.return_plummer(chains, options, priors, min_r, max_r, points,rh,codedir,workdir,project_name,galaxy)
+analysis_func.return_plummer(chains, options, priors, min_r, max_r, points,codedir,workdir,project_name,galaxy)
 print 'Running sigR and VSPs'
-analysis_func.return_sigma_vsp(chains, options, priors, min_r, max_r, points,rh,codedir,workdir,project_name,galaxy)
+analysis_func.return_sigma_vsp(chains, options, priors, min_r, max_r, points,codedir,workdir,project_name,galaxy)
 print 'Finished, hurray!'
 
 

@@ -43,9 +43,9 @@ def zhao(x, rhos, rs,alpha,beta,gamma):
 def mass_zhao(x,rhos, rs,alpha,beta,gamma):
 	return 4. * np.pi * x**2. * zhao(x,rhos, rs,alpha,beta,gamma)
 
-def dens(r,rho0, bins, gammas,rh):
+def dens(r,rho0, bins, gammas,r_c):
     output = np.zeros_like(r)
-    bins = bins*rh
+    bins = bins*r_c
     rho0 = float(10**rho0)
 
     x1 = [(r < bins[0])]
@@ -72,11 +72,11 @@ def dens(r,rho0, bins, gammas,rh):
     return output
 
 
-def mass_dens(x,rho0, bins, gammas,rh):
+def mass_dens(x,rho0, bins, gammas,r_c):
 
     output = np.empty_like(x)
 
-    bins = bins*rh
+    bins = bins*r_c
 
     rho0 = pow(10, rho0)* 4 * np.pi
 
@@ -155,7 +155,7 @@ def return_beta(chains, options, priors, min_r, max_r, points,codedir,workdir, p
 
 		samples[:,0] = 2.*samples[:,0] / (1. + samples[:,0]) #convert to actual values
 		samples[:,1] = 2.*samples[:,1] / (1. + samples[:,1])
-		samples[:,2] = 10**(np.log10(samples[:,2]))
+		samples[:,2] = 10**(samples[:,2])
 
 
 		for sample in samples:
@@ -241,7 +241,7 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 
 		bins = np.array([0.25,0.5,1.0,2.0,4.0])
 
-		bin_edges = np.array([0.125, 0.25, 0.50, 1, 2 , 4 ])*r_h
+		bin_edges = np.array([0.125, 0.25, 0.50, 1, 2 , 4 ])*r_c
 		mid_bin = (np.log10(bin_edges[1:]) + np.log10(bin_edges[:-1]))/2.
 		mid_bin = 10**mid_bin
 
@@ -257,12 +257,12 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 
 			rho0,gamma0,gamma1,gamma2,gamma3,gamma4= sample
 		    	gammas = [gamma0,gamma1,gamma2,gamma3,gamma4]
-		    	big_j = dens(r, rho0, bins, gammas,rh)
+		    	big_j = dens(r, rho0, bins, gammas,r_c)
 			big_j = np.log10(big_j)
 
 			for b in range(0, len(big_j)):
 
-				mass_try = mass_dens(np.array([r[b]]),rho0, bins, gammas,rh)
+				mass_try = mass_dens(np.array([r[b]]),rho0, bins, gammas,r_c)
 				js[b].append(float(big_j[b]))
 				masses[b].append(float(np.log10(mass_try)))
 			    	count = 0
@@ -576,7 +576,7 @@ def return_sigma_vsp(chains, options, priors, min_r, max_r, points,codedir,workd
 
 			
 
-			rho_params = np.array([r_c, rho0, rs, alpha, beta, gamma ])
+			rho_params = np.array([r_c, rho0, gamma0,gamma1,gamma2,gamma3,gamma4])
 			beta_params = np.array([ 2*beta0/(1+beta0), 2*betainf/(1+betainf)  ,10**ra, eta])
 			plum_params = np.array([10**m1,a1,10**m2,a2,10**m3,a3])
 
