@@ -261,9 +261,17 @@ def plummer_proj_sum(args, x_data, n_comp):
 	
 
 	
-	min_vals = priors[noconst_var,1]
+	
+	min_vals = []
+	
+	for m in range(0, len(noconst_var)):		
+		min_vals.append(priors[noconst_var[m],7].replace('VAR', priors[noconst_var[m],1]))
+		
 	f.write("\t" + "min_vals = np.array([" + "".join("{},".format(i) for i in min_vals) + "])" + "\n")
-	max_vals = priors[noconst_var,2]
+	max_vals = []
+	for m in range(0, len(noconst_var)):
+		max_vals.append(priors[noconst_var[m],7].replace('VAR', priors[noconst_var[m],2]))
+	
 	f.write("\t" + "max_vals = np.array([" + "".join("{},".format(i) for i in max_vals) + "])" + "\n")
 
 

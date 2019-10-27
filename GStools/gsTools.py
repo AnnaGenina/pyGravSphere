@@ -29,12 +29,12 @@ def get_cmap(n, name='hsv'):
 	return plt.cm.get_cmap(name, n)
 
 def plot_chains(samples, workdir, project_name, galaxy):
-	script = open(workdir +'/'+ project_name + '/Submissions/%s.sh'%galaxy, 'r')
-	line = script.readline()
-	while line:
-		line = script.readline()
-	pars = line.split()
-	nwalkers = int(pars[-8])
+	foptions = open(workdir + project_name + '/options.txt', 'r')
+	input_opt = (foptions.readline()).split()
+	
+	steps = int(input_opt[3])
+	burn_in = int(input_opt[4])
+	nwalkers = int(input_opt[5])
 
 	ll = len(samples)/(100*nwalkers)
 	sample_split = np.array_split(samples, ll)			

@@ -576,7 +576,7 @@ while program == True:
 
 		print 'Which galaxies would you like to plot?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-		if not gal_list == 0:
+		if not gal_list:
 			print "There are no galaxies, Quitting."
 			break
 		else:
