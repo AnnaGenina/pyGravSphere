@@ -21,7 +21,7 @@ Before you begin using **pyGravSphere** please make sure you have downloaded and
 * numpy (duh)
 * scipy
 * matplotlib
-* EmCee https://emcee.readthedocs.io/en/latest/user/install/
+* EmCee https://emcee.readthedocs.io/en/latest/user/install/   (version 2.2.1 had been used)
 * corner https://corner.readthedocs.io/en/latest/ (corner plot making code)
 * SWIG http://www.swig.org/download.html
 * h5py https://pypi.org/project/h5py/

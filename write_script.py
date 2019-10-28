@@ -426,7 +426,12 @@ while runtime == True:
 		elif restart == 'continue':	
 			completed = 0
 		else:
-			completed = int(float(len(chains))/float(nwalkers))
+			exists = os.path.isfile(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
+			if exists == False:
+				completed = 0
+			else:
+				print "File already exists! Either configure pyGravSphere to continue or start a new project."
+				sys.exit(0)
 
 		tot_iter = steps -  completed	
 
@@ -451,7 +456,12 @@ while runtime == True:
 			elif restart == 'continue':	
 				completed = 0
 			else:
-				completed = int(float(len(chains))/float(nwalkers))
+				exists = os.path.isfile(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
+				if exists == False:
+					completed = 0
+				else:
+					print "File already exists! Either configure pyGravSphere to continue or start a new project."
+					sys.exit(0)
 
 
 			tot_iter = steps -  completed	

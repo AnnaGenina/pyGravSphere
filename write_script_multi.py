@@ -306,102 +306,99 @@ def plummer_proj_sum(args, x_data, n_comp):
 	return like + lp""" + '\n')
 
 
-	f.write("""
-original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
-pool =  Pool(processes)
-signal.signal(signal.SIGINT, original_sigint_handler)
-try:
-	t_org = time.time()
-""")
+
 	all_params = params_dark + params_anis + params_plummer + params_mass
 
-	f.write("\t" + "ndim, nwalkers = {:d}, {:d}".format(num_params, num_walkers) + '\n')
+	f.write("ndim, nwalkers = {:d}, {:d}".format(num_params, num_walkers) + '\n')
 
-	f.write("\t" + "pos = np.zeros((nwalkers,len(priors)))")
+	f.write("pos = np.zeros((nwalkers,len(priors)))")
 	if darkmatter == 'PL':
 		f.write("""
-	partrack = 6
-	pos[:,0] = np.random.uniform(rho0min, rho0max, nwalkers)
-	pos[:,1] = np.random.uniform(gamma0min,3, nwalkers)
-	pos[:,2] = np.random.uniform(gamma1min, 3, nwalkers)
-	pos[:,3] = np.random.uniform(gamma2min, 3, nwalkers)
-	pos[:,4] = np.random.uniform(gamma3min, 3, nwalkers)
-	pos[:,5] = np.random.uniform(gamma4min, 3, nwalkers)""" + '\n')
+partrack = 6
+pos[:,0] = np.random.uniform(rho0min, rho0max, nwalkers)
+pos[:,1] = np.random.uniform(gamma0min,3, nwalkers)
+pos[:,2] = np.random.uniform(gamma1min, 3, nwalkers)
+pos[:,3] = np.random.uniform(gamma2min, 3, nwalkers)
+pos[:,4] = np.random.uniform(gamma3min, 3, nwalkers)
+pos[:,5] = np.random.uniform(gamma4min, 3, nwalkers)""" + '\n')
 	else:
 		f.write("""
-	partrack = 5
-	pos[:,0] = np.random.uniform(rhosmin, rhosmax, nwalkers)
-	pos[:,1] = np.random.uniform(rsmin, rsmax, nwalkers)
-	pos[:,2] = np.random.uniform(alphamin ,alphamax, nwalkers)
-	pos[:,3] = np.random.uniform(betamin, betamax, nwalkers)
-	pos[:,4] = np.random.uniform(gammamin , gammamax, nwalkers)""" + '\n')
+partrack = 5
+pos[:,0] = np.random.uniform(rhosmin, rhosmax, nwalkers)
+pos[:,1] = np.random.uniform(rsmin, rsmax, nwalkers)
+pos[:,2] = np.random.uniform(alphamin ,alphamax, nwalkers)
+pos[:,3] = np.random.uniform(betamin, betamax, nwalkers)
+pos[:,4] = np.random.uniform(gammamin , gammamax, nwalkers)""" + '\n')
 	if anisotropy == 'Const':
 
 		f.write("""
-	pos[:,partrack] = np.random.uniform(beta0min, beta0max, nwalkers)
-	partrack = partrack + 1
+pos[:,partrack] = np.random.uniform(beta0min, beta0max, nwalkers)
+partrack = partrack + 1
 """)
 	else:
 		f.write("""
-	pos[:,partrack] = np.random.uniform(beta0min, beta0max, nwalkers)
-	pos[:,partrack + 1] = np.random.uniform(betainfmin, betainfmax, nwalkers)
-	pos[:,partrack + 2] = np.random.uniform(np.log10(ramin*r_c), np.log10(ramax*r_c), nwalkers)
-	pos[:,partrack + 3] = np.random.uniform(etamin, etamax, nwalkers)
-	partrack = partrack + 4""" + '\n')
+pos[:,partrack] = np.random.uniform(beta0min, beta0max, nwalkers)
+pos[:,partrack + 1] = np.random.uniform(betainfmin, betainfmax, nwalkers)
+pos[:,partrack + 2] = np.random.uniform(np.log10(ramin*r_c), np.log10(ramax*r_c), nwalkers)
+pos[:,partrack + 3] = np.random.uniform(etamin, etamax, nwalkers)
+partrack = partrack + 4""" + '\n')
 	if plummer == 'Plummer3':
 		f.write("""
-	pos[:,partrack] = np.random.uniform(np.log10(m1min * lightpower[0]), np.log10(m1max * lightpower[0]), nwalkers)
-	pos[:,partrack + 1]= np.random.uniform(a1min*lightpower[3], a1max*lightpower[3], nwalkers)
-	pos[:,partrack + 2]= np.random.uniform(np.log10(m2min*lightpower[1]), np.log10(m2max*lightpower[1]), nwalkers)
-	pos[:,partrack + 3]= np.random.uniform(a2min*lightpower[4], a2max*lightpower[4], nwalkers)
-	pos[:,partrack + 4]= np.random.uniform(np.log10(m3min * lightpower[2]), np.log10(m3max * lightpower[2]), nwalkers)
-	pos[:,partrack + 5]= np.random.uniform(a3min*lightpower[5], a3max*lightpower[5], nwalkers)
-	
-	partrack = partrack + 6
+pos[:,partrack] = np.random.uniform(np.log10(m1min * lightpower[0]), np.log10(m1max * lightpower[0]), nwalkers)
+pos[:,partrack + 1]= np.random.uniform(a1min*lightpower[3], a1max*lightpower[3], nwalkers)
+pos[:,partrack + 2]= np.random.uniform(np.log10(m2min*lightpower[1]), np.log10(m2max*lightpower[1]), nwalkers)
+pos[:,partrack + 3]= np.random.uniform(a2min*lightpower[4], a2max*lightpower[4], nwalkers)
+pos[:,partrack + 4]= np.random.uniform(np.log10(m3min * lightpower[2]), np.log10(m3max * lightpower[2]), nwalkers)
+pos[:,partrack + 5]= np.random.uniform(a3min*lightpower[5], a3max*lightpower[5], nwalkers)
 
-	pos[:,-1] = np.random.uniform(np.log10(mstarmin*stellar_mass), np.log10(mstarmax*stellar_mass), nwalkers)
+partrack = partrack + 6
 
-	partrack = partrack + 1
+pos[:,-1] = np.random.uniform(np.log10(mstarmin*stellar_mass), np.log10(mstarmax*stellar_mass), nwalkers)
 
-	print 'Initialising positions' """ + '\n' + '\n')
+partrack = partrack + 1
+
+print 'Initialising positions' """ + '\n' + '\n')
 
 	else:
-		f.write("\t" + "pos[:,-1] = np.random.uniform(np.log10(mstarmin*stellar_mass), np.log10(mstarmax*stellar_mass), nwalkers)" + "\n" + "\t" + "partrack = partrack + 1" + "\n")
+		f.write("pos[:,-1] = np.random.uniform(np.log10(mstarmin*stellar_mass), np.log10(mstarmax*stellar_mass), nwalkers)" + "\n"  + "partrack = partrack + 1" + "\n")
 
 
 	if darkmatter == 'PL':
 		f.write("""
+vec_lnprior = np.apply_along_axis(lnprior, 1, pos[:,noconst_var])
+junk, = np.where(np.isfinite(vec_lnprior) == False)
+not_junk = nwalkers - np.size(junk)
+
+
+while not_junk != nwalkers:
+
+
+	pos[junk,0] = np.random.uniform(rho0min, rho0max, nwalkers - not_junk)
+	pos[junk,1] = np.random.uniform(gamma0min, 3, nwalkers - not_junk)
+	pos[junk,2] = np.random.uniform(gamma1min, 3, nwalkers - not_junk)
+	pos[junk,3] = np.random.uniform(gamma2min, 3, nwalkers - not_junk)
+	pos[junk,4] = np.random.uniform(gamma3min, 3, nwalkers - not_junk)
+	pos[junk,5] = np.random.uniform(gamma4min, 3, nwalkers - not_junk)
+
 	vec_lnprior = np.apply_along_axis(lnprior, 1, pos[:,noconst_var])
 	junk, = np.where(np.isfinite(vec_lnprior) == False)
 	not_junk = nwalkers - np.size(junk)
 
-
-	while not_junk != nwalkers:
-
-
-		pos[junk,0] = np.random.uniform(rho0min, rho0max, nwalkers - not_junk)
-		pos[junk,1] = np.random.uniform(gamma0min, 3, nwalkers - not_junk)
-		pos[junk,2] = np.random.uniform(gamma1min, 3, nwalkers - not_junk)
-		pos[junk,3] = np.random.uniform(gamma2min, 3, nwalkers - not_junk)
-		pos[junk,4] = np.random.uniform(gamma3min, 3, nwalkers - not_junk)
-		pos[junk,5] = np.random.uniform(gamma4min, 3, nwalkers - not_junk)
-
-		vec_lnprior = np.apply_along_axis(lnprior, 1, pos[:,noconst_var])
-		junk, = np.where(np.isfinite(vec_lnprior) == False)
-		not_junk = nwalkers - np.size(junk)
-
 """)
 	f.write("""
-	pos = pos[:,noconst_var]
+pos = pos[:,noconst_var]
 
 
-	print "Pos selected"
-	print pos
+print "Pos selected"
+print pos
 
-	print "Positions initialised"
-	print "Starting sampler"
+print "Positions initialised"
+print "Starting sampler"
 
-
+original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
+pool =  Pool(processes)
+signal.signal(signal.SIGINT, original_sigint_handler)
+try:
 """)
 
 
@@ -423,7 +420,12 @@ try:
 		elif restart == 'continue':	
 			completed = 0
 		else:
-			completed = int(float(len(chains))/float(nwalkers))
+			exists = os.path.isfile(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
+			if exists == False:
+				completed = 0
+			else:
+				print "File already exists! Either configure pyGravSphere to continue or start a new project."
+				sys.exit(0)
 		tot_iter = steps -  completed
 
 
@@ -448,7 +450,12 @@ try:
 			elif restart == 'continue':	
 				completed = 0
 			else:
-				completed = int(float(len(chains))/float(nwalkers))
+				exists = os.path.isfile(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
+				if exists == False:
+					completed = 0
+				else:
+					print "File already exists! Either configure pyGravSphere to continue or start a new project."
+					sys.exit(0)
 			tot_iter = steps -  completed
 
 
@@ -474,7 +481,7 @@ try:
 
 	sampler.reset()
 
-
+	t_org = time.time()
 
 	for i in range(0, (tot_iter)/100):
 		print 'Starting', i
