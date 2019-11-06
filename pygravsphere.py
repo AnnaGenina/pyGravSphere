@@ -92,11 +92,11 @@ while program == True:
 		print 'Would you like to change that?  y or n?'
 		yon = raw_input("y or n : ")
 		if (yon.strip() == 'y') or (yon.strip() == 'Y') or (yon.strip() == 'yes'):
-			workdir = raw_input("Enter new name : ")
+			workdir = raw_input("Enter new name : ").strip()
 			exists = os.path.isdir(workdir)
 			while exists == False:
 				print "Directory does not exist, please type again"
-				workdir = raw_input("Enter new name : ")
+				workdir = raw_input("Enter new name : ").strip()
 				exists = os.path.isdir(workdir)
 
 				
@@ -157,11 +157,11 @@ while program == True:
 		print 'Would you like to change that?  y or n?'
 		yon = raw_input("y or n : ")
 		if (yon.strip() == 'y') or (yon.strip() == 'Y') or (yon.strip() == 'yes'):
-			workdir = raw_input("Enter new name : ")
+			workdir = raw_input("Enter new name : ").strip()
 			exists = os.path.isdir(workdir)
 			while exists == False:
 				print "Directory does not exist, please type again"
-				workdir = raw_input("Enter new name : ")
+				workdir = raw_input("Enter new name : ").strip()
 				exists = os.path.isdir(workdir)
 			f = open(workdir + "/workdir.txt", 'w')
 			f.write(workdir + '\n')
@@ -284,7 +284,7 @@ while program == True:
 		print 'Would you like to change that?  y or n?'
 		yon = raw_input("y or n : ")
 		if (yon.strip() == 'y') or (yon.strip() == 'Y') or (yon.strip() == 'yes'):
-			workdir = raw_input("Enter new name : ")
+			workdir = raw_input("Enter new name : ").strip()
 			f = open(workdir + "/workdir.txt", 'w')
 			f.write(workdir + '\n')
 			f.close()
@@ -390,7 +390,7 @@ while program == True:
 		print 'Would you like to change that?  y or n?'
 		yon = raw_input("y or n : ")
 		if (yon.strip() == 'y') or (yon.strip() == 'Y') or (yon.strip() == 'yes'):
-			workdir = raw_input("Enter new name : ")
+			workdir = raw_input("Enter new name : ").strip()
 			f = open(workdir + "/workdir.txt", 'w')
 			f.write(workdir + '\n')
 			f.close()
@@ -704,7 +704,7 @@ while program == True:
 		print 'Would you like to change that?  y or n?'
 		yon = raw_input("y or n : ")
 		if (yon.strip() == 'y') or (yon.strip() == 'Y') or (yon.strip() == 'yes'):
-			workdir = raw_input("Enter new name : ")
+			workdir = raw_input("Enter new name : ").strip()
 							
 			f = open(workdir + "/workdir.txt", 'w')
 			f.write(workdir + '\n')
