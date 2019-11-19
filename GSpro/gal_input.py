@@ -30,7 +30,11 @@ def galaxy_data(gal_num, outdir, data_loc):
     pos_kin = data['KinematicsPositions'].value
     R_kin = np.sqrt(np.sum(pos_kin**2, axis = 1))/1000.0 # in kpc
     vz_kin = data['KinematicsVelocities'].value
-    vzerr_kin = np.zeros(len(vz_kin))+2.0  # errors are all 2 km/s
+    try:
+	    vzerr_kin = data['KinVelErr'].value  # errors are all 2 km/s
+    except KeyError:
+            print 'Velocity error dataset does not exist :('
+            print 'I will assume 2 km/s errors'
     ms_kin = data['KinematicsMasses'].value
     ms_kin = (ms_kin / np.sum(ms_kin) ) * len(ms_kin) # number relative contribution  ni/mi ~ ntot/mtot
 
