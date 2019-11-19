@@ -75,17 +75,18 @@ This will generate all the necessary folders and files you need at this step. Qu
 
 You may have two data sets: one for photometry (positions) of the stars and one for kinematics (positions and velocities). In the following we'll assume that these are the same two datasets.
 
-So suppose you have a 3-column data file with x,y positions (***in parsecs***) on the sky and line-of-sight velocities. To create a **pyGravSphere**-compatible *.hdf5* file use the following Python code:
+So suppose you have a 3-column data file with x,y positions (***in parsecs***) on the sky and line-of-sight velocities with their errors. To create a **pyGravSphere**-compatible *.hdf5* file use the following Python code:
 
 ```
 import numpy as np
 import h5py
 
-f_old = np.loadtxt("OldDataFile.txt") # x y vz
+f_old = np.loadtxt("OldDataFile.txt") # x y vz vzerr
 n_stars = len(f_old)
 
 xy = f_old[:,[0,1]]
 vz = f_old[:,2]
+vzerr = f_old[:,3]
 weights = np.ones((n_stars,))  # Change to actual stellar masses or luminosities if needed (not magnitudes)
 total_mass = 1  # Change to mass within 3 half-light radii / total mass if appropriate
 
@@ -99,10 +100,12 @@ dset3 = output.create_dataset('KinematicsPositions', (nstars,2), dtype = xy.dtyp
 dset3[...] = xy #parsecs!!!
 dset4 = output.create_dataset('KinematicsVelocities', (nstars,), dtype = xy.dtype)
 dset4[...] = vz
+dset5 = output.create_dataset('KinVelErr', (nstars,), dtype = xy.dtype)
+dset5[...] = vzerr
 dset6 = output.create_dataset('KinematicsMasses', (nstars,), dtype = xy.dtype)
 dset6[...] = weights
-dset5 = output.create_dataset('StellarMass3R', (1,), dtype = xy.dtype)
-dset5[...] = total_mass
+dset7 = output.create_dataset('StellarMass3R', (1,), dtype = xy.dtype)
+dset7[...] = total_mass
 
 f_new.close()
 
