@@ -64,7 +64,7 @@ Good job!
 Now run **pyGravSphere** for the first time inside your install directory.
 
 ```
-pygravsphere.py
+python pygravsphere.py
 ```
 
 This will generate all the necessary folders and files you need at this step. Quit **pyGravSphere** by typing *q* or *quit*.
