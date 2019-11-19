@@ -75,39 +75,44 @@ This will generate all the necessary folders and files you need at this step. Qu
 
 You may have two data sets: one for photometry (positions) of the stars and one for kinematics (positions and velocities). In the following we'll assume that these are the same two datasets.
 
-So suppose you have a 3-column data file with x,y positions (***in parsecs***) on the sky and line-of-sight velocities with their errors. To create a **pyGravSphere**-compatible *.hdf5* file use the following Python code:
+So suppose you have a 3-column data file with x,y positions (***in parsecs***) on the sky and line-of-sight velocities with their errors. 
+
+For the purposes of testing, we recommend you try out one of the Gaia Challenge datasets http://astrowiki.ph.surrey.ac.uk/dokuwiki/doku.php?id=tests:sphtri:spherical
+
+To create a **pyGravSphere**-compatible *.hdf5* file use the following Python code:
 
 ```
 import numpy as np
 import h5py
 
-f_old = np.loadtxt("OldDataFile.txt") # x y vz vzerr
-n_stars = len(f_old)
+f_old = np.loadtxt("gaiachallengedata.txt") # x y vz vzerr
+nstars = len(f_old)
 
-xy = f_old[:,[0,1]]
-vz = f_old[:,2]
-vzerr = f_old[:,3]
-weights = np.ones((n_stars,))  # Change to actual stellar masses or luminosities if needed (not magnitudes)
+xy = f_old[:,[0,1]]*1000  #convert to parsecs if needed
+vz = f_old[:,5]
+vzerr = 2.
+weights = np.ones((nstars,))  # Change to actual stellar masses or luminosities if needed (not magnitudes)
 total_mass = 1  # Change to mass within 3 half-light radii / total mass if appropriate
 
-f_new = h5py.File("NewDataFile.hdf5", 'w')
+f_new = h5py.File("GaiaPlumCuspIso.hdf5", 'w')
 
-dset1 = output.create_dataset('PhotometryPositions',(nstars,2), dtype = xy.dtype)
+dset1 = f_new.create_dataset('PhotometryPositions',(nstars,2), dtype = xy.dtype)
 dset1[...] = xy  #parsecs!!!
-dset2 = output.create_dataset('PhotometryMasses', (nstars,), dtype = xy.dtype)
+dset2 = f_new.create_dataset('PhotometryMasses', (nstars,), dtype = xy.dtype)
 dset2[...] = weights
-dset3 = output.create_dataset('KinematicsPositions', (nstars,2), dtype = xy.dtype)
+dset3 = f_new.create_dataset('KinematicsPositions', (nstars,2), dtype = xy.dtype)
 dset3[...] = xy #parsecs!!!
-dset4 = output.create_dataset('KinematicsVelocities', (nstars,), dtype = xy.dtype)
+dset4 = f_new.create_dataset('KinematicsVelocities', (nstars,), dtype = xy.dtype)
 dset4[...] = vz
-dset5 = output.create_dataset('KinVelErr', (nstars,), dtype = xy.dtype)
+dset5 = f_new.create_dataset('KinVelErr', (nstars,), dtype = xy.dtype)
 dset5[...] = vzerr
-dset6 = output.create_dataset('KinematicsMasses', (nstars,), dtype = xy.dtype)
+dset6 = f_new.create_dataset('KinematicsMasses', (nstars,), dtype = xy.dtype)
 dset6[...] = weights
-dset7 = output.create_dataset('StellarMass3R', (1,), dtype = xy.dtype)
+dset7 = f_new.create_dataset('StellarMass3R', (1,), dtype = xy.dtype)
 dset7[...] = total_mass
 
 f_new.close()
+
 
 ```
 Obviously, change the contents of each data set as appropriate. The *Photometry* dataset will be used exclusively for calculating the best fit 3-component Plummer profile. The *Kinematics* dataset will be used for calculation of the binned velocity dispersion profile and the virial shape parameters. If the mass in stars is assumed to significantly contribute to your system, put in your best estimate of mass **in solar masses** in to *[StellarMass3R]* set. In the above example, each star contributes equal weight to your system. This is a good approximation for real-life galaxies. If you're applying GravSphere to a cosmological simulation and you know the masses of your stellar particles, you can use those. This will be useful in the **Pre-processing** step, where **pyGravSphere** calculates the binned velocity dispersion and stellar density profiles. If you calculate those things using your own method, then don't worry about this.
