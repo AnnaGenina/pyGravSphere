@@ -188,7 +188,7 @@ while program == True:
 		print 'Creating Submission files'
 		print 'How would you like to run MCMC?'
 				
-		mpi_opt = raw_input("1) Serial 	2) Multiprocessing  3) MPI (if you're running on a cluster)")
+		mpi_opt = raw_input("1) Serial 	2) Multiprocessing  3) MPI (if you're running on a cluster) ")
 		if mpi_opt == '3':
 			num_cores = int(raw_input('How many cores? '))
 			timevar = float(raw_input('How much time do you need (in hours)? '))
@@ -205,8 +205,8 @@ while program == True:
 
 		plzh = raw_input('1) PowerLaw or 2) Zhao ? ')
 		anis = raw_input('1) Baes or 2) Const ? ')
-		vsps = raw_input('VSP ? y or n?')
-		plummer = raw_input('1) Plummer Single  2) Plummer Components ')
+		vsps = raw_input('VSP ? y or n? ')
+		plummer = raw_input('1) Plummer Single  2) 3 Plummer Components ')
 		num_walkers = raw_input('How many walkers? ')
 		burn_in = raw_input('Burn-in? ')
 		steps = raw_input('Steps? ')

@@ -13,11 +13,11 @@ beta0 			beta0min	beta0max	beta0const	-1.	1.	False	VAR
 betainf 		betainfmin	betainfmax	betainfconst	-1.	1.	False	VAR
 ra 			ramin		ramax		raconst		0.5	2	False	np.log10(VAR*r_c)
 eta 			etamin		etamax		etaconst	1.	3.	False	VAR
-m1 			m1min		m1max		m1const		0.5	1.5	False	np.log10(VAR * lightpower[0])
-a1 			a1min		a1max		a1const		0.5	1.5	False	VAR * lightpower[3]
-m2 			m2min		m2max		m2const		0.5	1.5	False	np.log10(VAR * lightpower[1])
-a2 			a2min		a2max		m2const		0.5	1.5	False	VAR * lightpower[4]
-m3			m3min		m3max		m3const		0.5	1.5	False	np.log10(VAR * lightpower[2])
-a3 			a3min		a3max		a3const		0.5	1.5	False	VAR * lightpower[5]
-mstar 			mstarmin	mstarmax	mstarconst	0.75	1.25	False	np.log10(VAR * stellar_mass)
+m1 			m1min		m1max		m1const		0.5	1.5	False	np.log10(VAR*lightpower[0])
+a1 			a1min		a1max		a1const		0.5	1.5	False	VAR*lightpower[3]
+m2 			m2min		m2max		m2const		0.5	1.5	False	np.log10(VAR*lightpower[1])
+a2 			a2min		a2max		m2const		0.5	1.5	False	VAR*lightpower[4]
+m3			m3min		m3max		m3const		0.5	1.5	False	np.log10(VAR*lightpower[2])
+a3 			a3min		a3max		a3const		0.5	1.5	False	VAR*lightpower[5]
+mstar 			mstarmin	mstarmax	mstarconst	0.75	1.25	False	np.log10(VAR*stellar_mass)
 
