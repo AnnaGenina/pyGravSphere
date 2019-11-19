@@ -136,7 +136,7 @@ Excellent! Now you're ready to create your MCMC input files. This includes binne
 Go to your working directory and type:
 
 ```
-pygravsphere.py
+python pygravsphere.py
 ```
 You will see a list of your available options. We begin with pre-processing. Type:
 
