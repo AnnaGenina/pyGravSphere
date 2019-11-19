@@ -358,6 +358,7 @@ The era of *Python 2* is coming to an end and we will be soon upgrading to *Pyth
 
 In terms of the functionality, the updates will include:
 
+* Flexible number of power law bins
 * Multiple tracer populations
 * Proper motions data
 * Accounting for rotation
