@@ -141,7 +141,11 @@ while program == True:
 			all_gals2 = res.split(',')
 			all_gals = []
 			for g in all_gals2:
-				all_gals.append(g)
+				if g in gal_list:
+					all_gals.append(g)
+				else:
+					print g, "This galaxy does not exist. Did you add it to gal_list.txt?"
+					sys.exit()
 
 		print 'Generating input files'
 
@@ -315,6 +319,7 @@ while program == True:
 				try:
 					d_file = open(workdir + pl + '/ReadMe.txt', 'r')
 					description = d_file.read()
+					print '\n'
 					print pl
 					print description
 				except IOError:
@@ -324,65 +329,81 @@ while program == True:
 			#print (contents)
 			
 			
-			project_name = raw_input("What's the name of the project? " )
-		
-			if not os.listdir(workdir + project_name + '/Submissions'):
-				print 'Submission directory is empty.'
-				dec = raw_input("Try again? y or n? ")
-				if dec == 'y':
-					valid = False
+			
+			valid_directory = False
+			while valid_directory == False:
+				project_name = raw_input("What's the name of the project? " )
+				if not os.path.isdir(workdir + project_name + '/Submissions'):
+					print "This directory does not exist"
+					dec = raw_input("Try again? y or n? ")
+					if dec == 'y':
+						valid_directory = False
+					else:
+						print 'Quitting'
+						program = False
+						sys.exit()	
 				else:
+					valid_directory = True
+			valid_dirlist = False	
+			while valid_dirlist == False:
+				if not os.listdir(workdir + project_name + '/Submissions'):
+					print 'Submission directory is empty.'
 					print 'Quitting'
 					program = False
-					break 	
+					sys.exit()	
+				else:
+					valid_dirlist = True
+
+				
+			valid = True
+	
+			sub_command = open(codedir + '/sub_command.txt', 'r')
+			sub_com = sub_command.read()
+					
+
+			print 'Which galaxies would you like to submit?'
+			gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+			if not gal_list:
+				print "There are no galaxies, Quitting."
+				break
 			else:
-				valid = True
-
+				for it in gal_list:
+					print it
+			print '1) All 	2) Specify'
+			opt = raw_input('Option: ')
+			if opt == '1':
+				all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
+				for gal in all_gals:
+					exists = os.path.isdir(workdir  + project_name + '/%s/' %gal)
+					if exists == False:
+						os.system("mkdir " + workdir  + project_name + '/%s/' %gal)
+				gsTools.submit_jobs(workdir, project_name, all_gals, sub_com)
 				
-				
-				sub_command = open(codedir + '/sub_command.txt', 'r')
-				sub_com = sub_command.read()
-						
-
-				print 'Which galaxies would you like to submit?'
-				gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-				if not gal_list:
-					print "There are no galaxies, Quitting."
-					break
-				else:
-					for it in gal_list:
-						print it
-				print '1) All 	2) Specify'
-				opt = raw_input('Option: ')
-				if opt == '1':
-					all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
-					for gal in all_gals:
-						exists = os.path.isdir(workdir  + project_name + '/%s/' %gal)
-						if exists == False:
-							os.system("mkdir " + workdir  + project_name + '/%s/' %gal)
-					gsTools.submit_jobs(workdir, project_name, all_gals, sub_com)
-					
-					program = False
-				elif opt == '2':
-					print 'Please type galaxies, separated by commas'
-					res = raw_input('Type here: ')
-					all_gals2 = res.split(',')
-					all_gals = []
-					for g in all_gals2:
+				program = False
+			elif opt == '2':
+				print 'Please type galaxies, separated by commas'
+				res = raw_input('Type here: ')
+				all_gals2 = res.split(',')
+				all_gals = []
+				for g in all_gals2:
+					if g in gal_list:
 						all_gals.append(g)
-					
-					for gal in all_gals:
-						exists = os.path.isdir(workdir  + project_name + '/%s/' %gal)
-						if exists == False:
-							os.system("mkdir " + workdir  + project_name + '/%s/' %gal)
+					else:
+						print g, "This galaxy does not exist."
+						sys.exit()
+				
+				for gal in all_gals:
+					exists = os.path.isdir(workdir  + project_name + '/%s/' %gal)
+					if exists == False:
+						os.system("mkdir " + workdir  + project_name + '/%s/' %gal)
 
-					gsTools.submit_jobs(workdir, project_name, all_gals, sub_com)
-					
-					program = False
-				else:
-					print "What's that???"
-					
-					program = False
+				gsTools.submit_jobs(workdir, project_name, all_gals, sub_com)
+				
+				program = False
+			else:
+				print "What's that???"
+				
+				program = False
 		
 		
 	elif option.strip() == "3":
@@ -422,20 +443,23 @@ while program == True:
 					print "Something weird with project ", pl
 				
 				print "********************************************"
-			project_name = raw_input("What's the name of the project? " )
+			
 		
-			if not os.listdir(workdir + project_name + '/Submissions'):
-				print 'Submission directory is empty.'
-				dec = raw_input("Try again? y or n? ")
-				if dec == 'y':
-					valid = False
+			valid_directory = False
+			while valid_directory == False:
+				project_name = raw_input("What's the name of the project? " )
+				if not os.path.isdir(workdir + project_name + '/Submissions'):
+					print "This directory does not exist"
+					dec = raw_input("Try again? y or n? ")
+					if dec == 'y':
+						valid_directory = False
+					else:
+						print 'Quitting'
+						program = False
+						sys.exit()	
 				else:
-					print 'Quitting'
-					program = False
-					break 	
-			else:
-				valid = True
-
+					valid_directory = True
+			valid = True
 		
 
 		if os.path.isdir(workdir+project_name + '/Analysis') == False:
@@ -506,8 +530,11 @@ while program == True:
 				all_gals2 = res.split(',')
 				all_gals = []
 				for g in all_gals2:
-					all_gals.append(g)
-				
+					if g in gal_list:
+						all_gals.append(g)
+					else:
+						print g, "This galaxy does not exist."
+						sys.exit()
 				for galaxy in all_gals:
 					if sub_com == False:
 						os.system('./' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
@@ -560,19 +587,24 @@ while program == True:
 				
 				print "********************************************"
 			
-			project_name = raw_input("What's the name of the project? " )
+			
 		
-			if not os.listdir(workdir + project_name + '/Submissions'):
-				print 'Submission directory is empty.'
-				dec = raw_input("Try again? y or n? ")
-				if dec == 'y':
-					valid = False
+			valid_directory = False
+			while valid_directory == False:
+				project_name = raw_input("What's the name of the project? " )
+				if not os.path.isdir(workdir + project_name + '/Submissions'):
+					print "This directory does not exist"
+					dec = raw_input("Try again? y or n? ")
+					if dec == 'y':
+						valid_directory = False
+					else:
+						print 'Quitting'
+						program = False
+						sys.exit()	
 				else:
-					print 'Quitting'
-					program = False
-					break 	
-			else:
-				valid = True
+					valid_directory = True
+
+			valid= True
 
 		print 'Which galaxies would you like to plot?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
@@ -599,9 +631,11 @@ while program == True:
 			all_gals2 = res.split(',')
 			all_gals = []
 			for g in all_gals2:
-				all_gals.append(g)
-		
-
+				if g in gal_list:
+					all_gals.append(g)
+				else:
+					print g, "This galaxy does not exist."
+					sys.exit()
 		prestr1 = workdir + project_name + '/Submissions/'	
 		foptions = open(workdir + project_name + '/options.txt', 'r')
 		input_opt = (foptions.readline()).split()
@@ -641,20 +675,25 @@ while program == True:
 				
 				print "********************************************"
 			
-			project_name = raw_input("What's the name of the project? " )
+			
 		
-			if not os.listdir(workdir + project_name + '/Submissions'):
-				print 'Submission directory is empty.'
-				dec = raw_input("Try again? y or n? ")
-				if dec == 'y':
-					valid = False
+			valid_directory = False
+			while valid_directory == False:
+				project_name = raw_input("What's the name of the project? " )
+				if not os.path.isdir(workdir + project_name + '/Submissions'):
+					print "This directory does not exist"
+					dec = raw_input("Try again? y or n? ")
+					if dec == 'y':
+						valid_directory = False
+					else:
+						print 'Quitting'
+						program = False
+						sys.exit()	
 				else:
-					print 'Quitting'
-					program = False
-					break 	
-			else:
-				valid = True
+					valid_directory = True
+			valid = True
 
+			
 		print 'Which galaxies would you like to plot?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
 		if not gal_list:
@@ -671,14 +710,15 @@ while program == True:
 		elif opt == '2':
 			print 'Please type galaxies, separated by commas'
 			res = raw_input('Type here: ')
-
-
 		
 			all_gals2 = res.split(',')
 			all_gals = []
 			for g in all_gals2:
-				all_gals.append(g)
-
+				if g in gal_list:
+					all_gals.append(g)
+				else:
+					print g, "This galaxy does not exist."
+					sys.exit()
 		prestr1 = workdir + project_name + '/Submissions/'	
 		foptions = open(workdir + project_name + '/options.txt', 'r')
 		input_opt = (foptions.readline()).split()
@@ -740,21 +780,22 @@ while program == True:
 				
 				print "********************************************"
 			
-			project_name = raw_input("What's the name of the project? " )
-		
-			if not os.listdir(workdir + project_name + '/Submissions'):
-				print 'Submission directory is empty.'
-				dec = raw_input("Try again? y or n? ")
-				if dec == 'y':
-					valid = False
-					#continue
+			valid_directory = False
+			while valid_directory == False:
+				project_name = raw_input("What's the name of the project? " )
+				if not os.path.isdir(workdir + project_name + '/Submissions'):
+					print "This directory does not exist"
+					dec = raw_input("Try again? y or n? ")
+					if dec == 'y':
+						valid_directory = False
+					else:
+						print 'Quitting'
+						program = False
+						sys.exit()	
 				else:
-					print 'Quitting'
-					program = False
-					valid = True
-					#continue 	
-			else:
-				valid = True
+					valid_directory = True
+
+			valid = True
 
 		if program == False:
 			break 
@@ -776,7 +817,11 @@ while program == True:
 			all_gals2 = res.split(',')
 			all_gals = []
 			for g in all_gals2:
-				all_gals.append(g)
+				if g in gal_list:
+					all_gals.append(g)
+				else:
+					print g, "This galaxy does not exist."
+					sys.exit()
 			all_gals = np.array(all_gals)
 		
 		prestr1 = workdir + project_name + '/Submissions/'	
