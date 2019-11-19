@@ -77,7 +77,7 @@ def plot_triangle(samples, workdir, project_name, galaxy):
 	valid, = np.where(params[:,6] == 'False')
 	param_names = params[valid, 0]
 
-	print np.vectorize(paramname.get)(param_names)
+	#print np.vectorize(paramname.get)(param_names)
 		
 	fig = corner.corner(samples[:,:-1], labels=np.vectorize(paramname.get)(param_names), quantiles=[0.16, 0.5, 0.84],title_kwargs={"fontsize": 14})
 	fig.savefig(workdir + project_name + '/%s/' % galaxy + 'Triangle.png')

@@ -199,7 +199,7 @@ while program == True:
 			timevar = str(datetime.timedelta(hours = timevar))
 		elif mpi_opt == '2':
 			ncpu = cpu_count()
-			num_cores = int(raw_input('How many processes out of %d that you have?' %ncpu))
+			num_cores = int(raw_input('How many processes out of %d that you have? ' %ncpu))
 			timevar = None
 			
 

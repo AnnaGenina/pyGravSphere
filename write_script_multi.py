@@ -162,7 +162,7 @@ def plummer_proj_sum(args, x_data, n_comp):
 			num_params = num_params + 1
 		ptrack = ptrack + 4
 	elif anisotropy	== 'Const':
-		priors_anis = priors[ptrack:ptrack+1].reshape(7)
+		priors_anis = priors[ptrack:ptrack+1].reshape(8)
 
 		params_anis = ''
 		if priors_anis[6] == 'False':
@@ -494,7 +494,7 @@ try:
 		t0 = time.time()
 		pos, prob, state = sampler.run_mcmc(pos, 100, lnprob0 = prob, rstate0 = state)
 		print 'Finished', i
-		print time.time() - t0
+		
 		samples = sampler.flatchain
 		pp = sampler.lnprobability
 
