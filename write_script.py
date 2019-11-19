@@ -99,6 +99,12 @@ if np.size(gamsmooth) not in [1,4]:
 	noconst_var, = np.where(priors[:,6] == 'False')
 	f.write('priors = np.loadtxt(workdir + "/" + project_name + "/Submissions/priors.txt", dtype = "str")' + '\n')
 	f.write("const_var, = np.where(priors[:,6] == 'True')" + "\n")
+	f.write("""
+for i in range(0, len(const_var)):
+	if priors[const_var[i],4] != priors[const_var[i],5]:
+		print "Min must be equal to Max for the fixed parameter %s" %priors[const_var[i], 0]
+""")
+
 	f.write("noconst_var, = np.where(priors[:,6] == 'False')" + "\n" )	
 	f.write("noconst_gam, = np.where((noconst_var > 0) & (noconst_var < 6))" + "\n")
 	f.write("const_gam, = np.where((const_var > 0) & (const_var < 6))" + "\n")
