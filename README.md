@@ -233,7 +233,7 @@ Alright! Your project has been created and your jobs are ready for submission. N
 /Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Submissions/
 ```
 
-you will find your submission scripts as well as the *priors.txt* file. This is full of default **pyGravSphere** priors. Now you might want to change those. To do so, simply edit the lower and upper priors on each parameter. If you decide you want to keep any of the parameters constant, simply edit the last column. So, for example, if I want to keep the inner slope *gamma* at 1, I will edit the priors:
+you will find your submission scripts as well as the *priors.txt* file. This is full of default **pyGravSphere** priors. Now you might want to change those. To do so, simply edit the lower and upper priors on each parameter. If you decide you want to keep any of the parameters constant, simply edit the last column and make sure "min" and "max" values are the same. So, for example, if I want to keep the inner slope *gamma* at 1, I will edit the priors:
 
 ```
 rhomin  rhomax  rhoconst                5.	10. False
@@ -352,6 +352,18 @@ Thanks!
 
 This project is licensed under the GNU License - see the [LICENSE.md](LICENSE.md) file for details
 
+## Future developments
+
+The era of *Python 2* is coming to an end and we will be soon upgrading to *Python 3* as well as the latest version of **EmCee**.
+
+In terms of the functionality, the updates will include:
+
+* Multiple tracer populations
+* Proper motions data
+* Accounting for rotation
+
 ## Acknowledgments
 
-EmCee
+**pyGravSphere** relies heavily on the **EmCee** code. Make sure you are familiar with how it works! Don't forget to cite:
+
+**https://ui.adsabs.harvard.edu/abs/2013PASP..125..306F/abstract**
