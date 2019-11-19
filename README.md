@@ -206,28 +206,29 @@ Option : 1
 The current working directory is /Users/Nerd/Desktop/MyWorkDir/
 Would you like to change that?  y or n?
 y or n : n
+Alright then
 Please name your new project: ZhaoConst3Plum
-MPI? y or n?
-y or n: y
+Please write a short summary (or long if you want): Tutorial
+Creating project directory
+Creating Submission files
+How would you like to run MCMC?
+1) Serial 	2) Multiprocessing  3) MPI (if you're running on a cluster) 3
 How many cores? 8
-How much time do you need (hours only)? 5
+How much time do you need (in hours)? 2.5
 1) PowerLaw or 2) Zhao ? 2
 1) Baes or 2) Const ? 2
 VSP ? y or n? n
 1) Plummer Single  2) Plummer Components 2
-How many walkers? 1000
-Burn-in? 2500
-Steps? 5000
+How many walkers? 500 
+Burn-in? 5000
+Steps? 10000
 Integration points? 100
-Creating project directory
-mkdir /Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum
-Please write a short summary (or long if you want): This is an example with a Zhao, Constant Beta and three component Plummer for my tutorial. Yay!
-
 ```
+
 Think long and hard about how many walkers you want. One thousand is good number, just saying.
 *Burn-in* is the number of steps for which you want to run each of your walkers before **pyGravSphere** starts outputting the chains.
 
-*Steps* is the total steps for which you want to run your walkers. So in the example above, you will get an output of the last 2500 steps per walker.
+*Steps* is the total steps for which you want to run your walkers. So in the example above, you will get an output of the last 5000 steps per walker.
 
 *Integration points* sets the accuracy of your integrator: how many logarithmic bins will the integrand be divided into? 100 is fine.
 
