@@ -217,6 +217,17 @@ while program == True:
 			num_cores = None
 			timevar = None
 
+		sub_scripts = open(codedir + "/sub_script.txt", 'r')
+		sub_script = sub_scripts.read()
+		sub_scripts.close()
+		if (not sub_script) and (mpi_opt == '3'):
+			print "You submission script template is empty. Cannot submit to the queue."
+			print "Edit ", codedir + "/sub_script.txt and come back."
+			print "Exiting now"
+			program = True
+			continue
+
+
 		valid_params = False
 		while valid_params == False:
 
@@ -313,6 +324,8 @@ while program == True:
 				os.system("mkdir {}/{}/{}".format(workdir, project_name, gal))
 
 		print 'Generating submission scripts'
+		
+
 		gsTools.create_sub(project_name, num_cores, timevar, workdir,codedir,  anis, plzh, vsps, plummer, num_walkers, burn_in, steps, int_points, mpi_opt)		
 
 		p_list = open(workdir + '/projects.txt', 'a+')
@@ -327,7 +340,7 @@ while program == True:
 
 	elif option.strip() == "2":
 		print "You are about to submit jobs through the batch system."
-		print "If you haven't specified the MPI option for you project previously this will become messy."
+		print "If you haven't specified the MPI option for you project previously you can only submit one job at a time to run on your desktop."
 		
 		quitnow = raw_input("Would you like to continue? y or n? ")
 		if quitnow == 'n':
@@ -349,143 +362,149 @@ while program == True:
 			f = open(workdir + "/workdir.txt", 'w')
 			f.write(workdir + '\n')
 			f.close()
-			valid = False
+			
 		elif (yon.strip() == 'n') or (yon.strip() == 'N') or (yon.strip() == 'no'):
 			print 'Alright then!'
-			valid = False
+			
 		else:
 			print "What was that???"
+			program = True
+			continue
+		
+		
+
+
+
+		
+		print "Current projects:"
+		try:
+			project_list = np.genfromtxt(workdir + '/projects.txt', dtype = 'str')
+		except IOError:
+			print 'There are no projects. Lazy!'
+			valid = True
 			break
-		
-		
-
-
-
-		while valid == False:
-			print "Current projects:"
+			
+		if np.size(project_list) == 1:
+			project_list = np.array([project_list], dtype = 'str')
+		for pl in project_list:
 			try:
-				project_list = np.genfromtxt(workdir + '/projects.txt', dtype = 'str')
+				d_file = open(workdir + pl + '/ReadMe.txt', 'r')
+				description = d_file.read()
+				print pl
+				print description
 			except IOError:
-				print 'There are no projects. Lazy!'
-				valid = True
-				break
-				
-			if np.size(project_list) == 1:
-				project_list = np.array([project_list], dtype = 'str')
-			for pl in project_list:
-				try:
-					d_file = open(workdir + pl + '/ReadMe.txt', 'r')
-					description = d_file.read()
-					print '\n'
-					print pl
-					print description
-				except IOError:
-					print "Something weird with project ", pl
-				
-				print "********************************************"
-			#print (contents)
+				print "Something weird with project ", pl
 			
-			
-			
-			valid_directory = False
-			while valid_directory == False:
-				project_name = raw_input("What's the name of the project? " )
-				if not os.path.isdir(workdir + project_name + '/Submissions'):
-					print "This directory does not exist"
-					dec = raw_input("Try again? y or n? ")
-					if dec == 'y':
-						valid_directory = False
-					elif dec == 'n':
-						print 'Quitting'
-						program = False
-						sys.exit()
-					else:
-						print "What's that?"
-						valid_directory = False	
-				else:
-					valid_directory = True
-			valid_dirlist = False	
-			while valid_dirlist == False:
-				if not os.listdir(workdir + project_name + '/Submissions'):
-					print 'Submission directory is empty.'
+			print "********************************************"
+		#print (contents)
+		
+		
+		
+		valid_directory = False
+		while valid_directory == False:
+			project_name = raw_input("What's the name of the project? " )
+			if not os.path.isdir(workdir + project_name + '/Submissions'):
+				print "This directory does not exist"
+				dec = raw_input("Try again? y or n? ")
+				if dec == 'y':
+					valid_directory = False
+				elif dec == 'n':
 					print 'Quitting'
 					program = False
-					sys.exit()	
+					sys.exit()
 				else:
-					valid_dirlist = True
-
-				
-			valid = True
-	
-			sub_command = open(codedir + '/sub_command.txt', 'r')
-			sub_com = sub_command.read()
-			if (mpi_opt == 'y') and (sub_com == False):
-				print "You have not specified the submission command in the ", codedir,"/sub_command.txt file."
-				print "Specify the command now? (e.g. sbatch)"
-				sub_com = raw_input("Enter script submission command or leave blank: ") 
-					
-
-			print 'Which galaxies would you like to submit?'
-			gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-			if not gal_list:
-				print "There are no galaxies, Quitting."
-				break
+					print "What's that?"
+					valid_directory = False	
 			else:
-				for it in gal_list:
-					print it
-			print '1) All 	2) Specify'
-			opt = raw_input('Option: ')
-			if opt == '1':
+				valid_directory = True
+		valid_dirlist = False	
+		while valid_dirlist == False:
+			if not os.listdir(workdir + project_name + '/Submissions'):
+				print 'Submission directory is empty.'
+				print 'Quitting'
+				program = False
+				sys.exit()	
+			else:
+				valid_dirlist = True
+
+			
 		
-				all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
-				if (sub_com == False) and (len(all_gals) > 1):
-					print "You have not specified the submission command."
-					print "If you are not submitting scripts to the system you may only run one galaxy at a time."
-					print "Start again."
-					program = True
-					continue
-				for gal in all_gals:
-					exists = os.path.isdir(workdir  + project_name + '/%s/' %gal)
-					if exists == False:
-						os.system("mkdir " + workdir  + project_name + '/%s/' %gal)
-				gsTools.submit_jobs(workdir, project_name, all_gals, sub_com)
-				
-				program = True
-			elif opt == '2':
-				print 'Please type galaxies, separated by commas'
-				res = raw_input('Type here: ')
-				all_gals2 = res.split(',')
-				all_gals = []
-				for g in all_gals2:
-					if g in gal_list:
-						all_gals.append(g)
-					else:
-						print g, "This galaxy does not exist. Did you add it to gal_list.txt?"
-						valid_galname = False
-						while valid_galname == False:
-							retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
-							retype = retype.strip()
-							if (retype in gal_list) or retype == "":
-								valid_galname = True
-							else:
-								valid_galname = False
-						
-				
-				for gal in all_gals:
-					exists = os.path.isdir(workdir  + project_name + '/%s/' %gal)
-					if exists == False:
-						os.system("mkdir " + workdir  + project_name + '/%s/' %gal)
 
-				if len(all_gals) != 0:
-					gsTools.submit_jobs(workdir, project_name, all_gals, sub_com)
+		sub_command = open(codedir + '/sub_command.txt', 'r')
+		sub_com = sub_command.read()
+		if not sub_com:
+			print "You have not specified the submission command in the ", codedir,"/sub_command.txt file."
+			print "Specify the command now? (e.g. sbatch)"
+			sub_com = raw_input("Enter script submission command or leave blank to run a single job on desktop: ") 
 				
-				program = True
-				continue
-			else:
-				print "What's that??? Try again."
-				
-				program = True
-				continue
+
+		print 'Which galaxies would you like to submit?'
+		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if not gal_list:
+			print "There are no galaxies, Quitting."
+			break
+		else:
+			for it in gal_list:
+				print it
+		print '1) All 	2) Specify'
+		opt = raw_input('Option: ')
+		if opt == '1':
+	
+			all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
+			if (not sub_com) and (len(all_gals) > 1):
+				print "You have not specified the submission command."
+				print "If you are not submitting scripts to the system you may only run one galaxy at a time."
+				print "I will submit your first galaxy."
+				all_gals = [all_gals[0]]
+			for gal in all_gals:
+				exists = os.path.isdir(workdir  + project_name + '/%s/' %gal)
+				if exists == False:
+					os.system("mkdir " + workdir  + project_name + '/%s/' %gal)
+			if len(all_gals) != 0:
+				gsTools.submit_jobs(workdir, project_name, all_gals, sub_com)
+			
+			program = True
+		elif opt == '2':
+			print 'Please type galaxies, separated by commas'
+			res = raw_input('Type here: ')
+			all_gals2 = res.split(',')
+			all_gals = []
+			for g in all_gals2:
+				if g in gal_list:
+					all_gals.append(g)
+				else:
+					print g, "This galaxy does not exist. Did you add it to gal_list.txt?"
+					valid_galname = False
+					while valid_galname == False:
+						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
+						retype = retype.strip()
+						if (retype in gal_list) or retype == "":
+							valid_galname = True
+						else:
+							valid_galname = False
+			
+			if (not sub_com) and (len(all_gals) > 1):
+				print "You have not specified the submission command."
+				print "If you are not submitting scripts to the system you may only run one galaxy at a time."
+				print "I will submit your first galaxy,", all_gals[0]
+				all_gals = [all_gals[0]]		
+			
+			for gal in all_gals:
+				exists = os.path.isdir(workdir  + project_name + '/%s/' %gal)
+				if exists == False:
+					os.system("mkdir " + workdir  + project_name + '/%s/' %gal)
+
+			if len(all_gals) != 0:
+				gsTools.submit_jobs(workdir, project_name, all_gals, sub_com)
+			
+			program = True
+			continue
+		else:
+			print "What's that??? Try again."
+			
+			program = True
+			continue
+			
 		
 	elif option.strip() == "3":
 		print 'The current working directory is ' + workdir
@@ -605,14 +624,29 @@ while program == True:
 				valid_options = False
 				continue
 			valid_options = True
-			
+		
+
+		sub_scripts = open(codedir + "/sub_script.txt", 'r')
+		sub_script = sub_scripts.read()
+		sub_scripts.close()
+	
+		
+
 		valid_opt = False
 		while valid_opt == False:
 			mpi_opt = raw_input("Running on a batch system y or n? " )
 			if mpi_opt == 'y':
-				timevar = float(raw_input("How much time do you need? (in hours) "))
-				timevar = str(datetime.timedelta(hours = timevar))
-				valid_opt = True
+				
+				if not sub_script:
+					print "You do not have anything in the ",codedir+"/sub_script.txt file"
+					print "Will create scripts in no batch submission regime."
+					mpi_opt = 'n'
+					timevar = None
+					valid_opt = True 
+				else:
+					timevar = float(raw_input("How much time do you need? (in hours) "))
+					timevar = str(datetime.timedelta(hours = timevar))
+					valid_opt = True
 			elif mpi_opt == 'n':
 				timevar = None	
 				valid_opt = True
@@ -627,17 +661,20 @@ while program == True:
 
 
 		
-
+		print "You can submit your analysis jobs at any time by going to project_folder/Analysis/Submissions/"
 		opt_sub = raw_input('Would you like to submit a job(s) now? y or n? ')
 		if opt_sub.strip() == 'y':
 
 			sub_command = open(codedir + '/sub_command.txt', 'r')
 			sub_com = sub_command.read()
 
-			if (mpi_opt == 'y') and (sub_com == False):
+			if (mpi_opt == 'y') and (not sub_com) and (sub_script == True):
 				print "You have not specified the submission command in the ", codedir,"/sub_command.txt file."
 				print "Specify the command now? (e.g. sbatch)"
 				sub_com = raw_input("Enter script submission command or leave blank to run on your desktop (single galaxy only): ") 
+
+			
+
 
 
 			gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
@@ -668,13 +705,13 @@ while program == True:
 							else:
 								valid_galname = False
 				
-				if (sub_com == False) and (len(all_gals) > 1):
+				if (not sub_com) and (len(all_gals) > 1):
 					print "You may only submit one galaxy at a time."
 					print "I will run your first galaxy, ", all_gals[0]
 					all_gals = [all_gals[0]]					
 	
 				for galaxy in all_gals:
-					if sub_com == False:
+					if not sub_com:
 			
 						os.system('./' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
 					else:
@@ -682,12 +719,12 @@ while program == True:
 			elif opt_gal.strip() == '2':
 				all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
 				
-				if (sub_com == False) and (len(all_gals) > 1):
+				if (not sub_com) and (len(all_gals) > 1):
 					print "You may only submit one galaxy at a time."
 					print "I will run your first galaxy, ", all_gals[0]
 					all_gals = [all_gals[0]]
 				for galaxy in all_gals:
-					if sub_com == False:
+					if not sub_com:
 						os.system('./' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
 					else:
 						

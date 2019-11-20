@@ -254,7 +254,7 @@ def create_ana_sub(project_name, workdir, codedir, dm_option, beta_option, plumm
 
 def submit_jobs(workdir, project_name, all_gals, sub_com):
 	for galaxy in all_gals:
-		if sub_com == False:		
+		if not sub_com:		
 			os.system('./' + workdir + '/' + project_name + '/Submissions/' + '%s.sh' % galaxy)
 		else:
 			
