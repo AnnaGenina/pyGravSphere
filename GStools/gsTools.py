@@ -6,6 +6,19 @@ import corner
 
 paramname = {r'rho0':r'$\log_{10} \rho_0$','gamma0':r'$\gamma_0$','gamma1':r'$\gamma_1$','gamma2':r'$\gamma_2$','gamma3':r'$\gamma_3$','gamma4':r'$\gamma_4$',r'rhos':r'$\log_{10} \rho_s$', r'rs':r'$\log_{10}r_s$', r'alpha':r'$\alpha$', r'beta':r'$\beta$', r'gamma':r'$\gamma$', r'beta0':r'$\beta_0$', r'betainf':r'$\beta_{\infty}$', r'ra':r'$\log_{10}r_a$', r'eta':r'$\eta$', r'm1':r'$\log_{10}m_1$', r'a1':r'$a_1$', r'm2':r'$\log_{10}m_2$',r'a2':r'$a_2$', r'm3':r'$\log_{10}m_3$', r'a3':r'$a_3$', r'mstar':r'$\log_{10}M_*$' }
 
+
+def check_float(text):
+	isfloat = False
+	
+	while isfloat == False:
+		try: 
+			var = float(raw_input(text))
+			isfloat = True
+		except ValueError:
+			print "Must be a float/integer"
+		 	isfloat = False
+	return float(var)		
+
 def checkdirs(workdir, codedir):
 	kinphot = os.path.isdir(workdir + "/KinPhotDat")
 	if kinphot == False:
