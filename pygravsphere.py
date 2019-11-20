@@ -339,8 +339,8 @@ while program == True:
 		continue
 
 	elif option.strip() == "2":
-		print "You are about to submit jobs through the batch system."
-		print "If you haven't specified the MPI option for you project previously you can only submit one job at a time to run on your desktop."
+		print "You are about to submit jobs."
+		print "If you haven't specified the MPI option for your project previously you can only submit one job at a time to run on your desktop."
 		
 		quitnow = raw_input("Would you like to continue? y or n? ")
 		if quitnow == 'n':
