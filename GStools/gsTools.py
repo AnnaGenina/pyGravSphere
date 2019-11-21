@@ -33,7 +33,8 @@ def check_galdata(all_gals, workdir):
 		if all_good == False:
 			print "Please pre-process the data for galaxy ", gal
 			print "Goodbye!"
-			sys.exit()		
+			sys.exit()
+	return 0		
 		
 
 def check_float(text):
@@ -65,12 +66,13 @@ def checkdirs(workdir, codedir):
 	code = os.path.exists(workdir + "/pygravsphere.py")
 	if code == False:		
 		os.system("cp " + codedir + "/pygravsphere.py " + workdir + "/pygravsphere.py")
+	return 0
 
 def get_cmap(n, name='hsv'):
    
 	return plt.cm.get_cmap(name, n)
 
-def plot_chains(samples, workdir, project_name, galaxy):
+def plot_chains(samples, workdir, project_name, galaxy, walkers_plot):
 	foptions = open(workdir + project_name + '/options.txt', 'r')
 	input_opt = (foptions.readline()).split()
 	
@@ -94,6 +96,8 @@ def plot_chains(samples, workdir, project_name, galaxy):
 
 	sample_new = np.concatenate(np.concatenate(sample_new))
 	
+	mod = int(float(nwalkers)/float(walkers_plot))
+
 	for p in range(0, len(param_names)):
 
 		fig, ax1 = plt.subplots(1,1, figsize = (16,4))
@@ -101,9 +105,11 @@ def plot_chains(samples, workdir, project_name, galaxy):
 		cmap = get_cmap(nwalkers)
 
 		plot_sample = np.array_split(sample_new, nwalkers)
+		
 		for i in range(nwalkers):
-			if i%25 == 0:
+			if i%mod == 0:
 				ax1.plot(plot_sample[i][:,p],  color =cmap(i), lw = 1.0, alpha = 0.5)
+			
 
 		ax1.set_ylabel(paramname.get(param_names[p]), fontsize = 12)	
 		ax1.set_xlabel('Step', fontsize = 12)	
@@ -111,6 +117,7 @@ def plot_chains(samples, workdir, project_name, galaxy):
 		
 		fig.savefig(workdir + project_name + '/%s/' % galaxy + 'Param_%d.png' % p, bbox_inches = "tight")
 		plt.close()
+	return 0
 
 
 def plot_triangle(samples, workdir, project_name, galaxy):
@@ -124,6 +131,7 @@ def plot_triangle(samples, workdir, project_name, galaxy):
 	fig = corner.corner(samples[:,:-1], labels=np.vectorize(paramname.get)(param_names), quantiles=[0.16, 0.5, 0.84],title_kwargs={"fontsize": 14})
 	fig.savefig(workdir + project_name + '/%s/' % galaxy + 'Triangle.png')
 	plt.close()
+	return 0
 	
 		
 		
@@ -242,7 +250,8 @@ def create_sub(project_name, num_cores, timevar, workdir,codedir, anis, darkmatt
 				f.write("python " + codedir + '/write_script.py' + " %s"%(workdir) + " %s"%(codedir) + " %s" %(project_name) +  " %s"%(galaxy)  + " %s"%(num_walkers) + " %s"%(burn_in) + " %s"%(steps)  + " %s"%(int_points) + " %s"%(darkmatter) + " %s"%(anis) +  " %s"%(vsps) + " %s"%(plummer) + " standard" )
 				f.close()
 				os.system("chmod u+x " + prestr1 + '%s.sh' % galaxy)
-	
+
+	return 0	
 	
 def create_ana_sub(project_name, workdir, codedir, dm_option, beta_option, plummer_option, samples, mpi_opt, cut_off, chi_cut, min_rad, max_rad, points,timevar):
 
@@ -280,6 +289,7 @@ def create_ana_sub(project_name, workdir, codedir, dm_option, beta_option, plumm
 				f.close()		
 				os.system("chmod u+x " + prestr1 + '%s.sh' %galaxy)
 
+	return 0
 
 def submit_jobs(workdir, project_name, all_gals, sub_com):
 	sub_com = sub_com.strip()
@@ -299,6 +309,7 @@ def submit_jobs(workdir, project_name, all_gals, sub_com):
 			else:
 				os.system(sub_com.strip() + ' ' + workdir + '/' + project_name + '/Submissions/' + '%s.sh' % galaxy)
 
+	return 0
 
 def preprocess(workdir, codedir, all_gals):
 	sys.path.append(codedir)

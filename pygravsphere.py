@@ -152,8 +152,13 @@ while program == True:
 					while valid_galname == False:
 						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
 						retype = retype.strip()
-						if (retype in gal_list) or retype == "":
+						if retype in gal_list:
+							all_gals.append(retype)
 							valid_galname = True
+						elif retype == "" :
+							print "Ignoring this incident..."
+							valid_galname = True
+							
 						else:
 							valid_galname = False
 
@@ -503,8 +508,13 @@ while program == True:
 					while valid_galname == False:
 						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
 						retype = retype.strip()
-						if (retype in gal_list) or retype == "":
+						if retype in gal_list:
+							all_gals.append(retype)
 							valid_galname = True
+						elif retype == "" :
+							print "Ignoring this incident..."
+							valid_galname = True
+							
 						else:
 							valid_galname = False
 			
@@ -736,8 +746,13 @@ while program == True:
 						while valid_galname == False:
 							retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
 							retype = retype.strip()
-							if (retype in gal_list) or retype == "":
+							if retype in gal_list:
+								all_gals.append(retype)
 								valid_galname = True
+							elif retype == "" :
+								print "Ignoring this incident..."
+								valid_galname = True
+								
 							else:
 								valid_galname = False
 				
@@ -844,45 +859,65 @@ while program == True:
 			for it in gal_list:
 				print it
 		print '1) All 	2) Specify'
-		opt = raw_input('Option: ')
-		if opt == '1':
-			all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1, dtype = 'str')
-						
-						
-						
-						
-		elif opt == '2':
-			print 'Please type galaxies, separated by commas'
-			res = raw_input('Type here: ')
 
+		valid_option= False
 
-		
-			all_gals2 = res.split(',')
-			all_gals = []
-			for g in all_gals2:
-				if g in gal_list:
-					all_gals.append(g)
-				else:
-					print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
-					valid_galname = False
-					while valid_galname == False:
-						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
-						retype = retype.strip()
-						if (retype in gal_list) or retype == "":
-							valid_galname = True
-						else:
-							valid_galname = False
-					
+		while valid_option == False:
+			opt = raw_input('Option: ')
+			if opt == '1':
+				all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1, dtype = 'str')
+				valid_option = True			
+				
+			elif opt == '2':
+				print 'Please type galaxies, separated by commas'
+				res = raw_input('Type here: ')
+
+				all_gals2 = res.split(',')
+				all_gals = []
+				for g in all_gals2:
+					if g in gal_list:
+						all_gals.append(g)
+					else:
+						print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
+						valid_galname = False
+						while valid_galname == False:
+							retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
+							retype = retype.strip()
+							if retype in gal_list:
+								all_gals.append(retype)
+								valid_galname = True
+							elif retype == "" :
+								print "Ignoring this incident..."
+								valid_galname = True
+								
+							else:
+								valid_galname = False
+				all_gals = np.array(all_gals)
+				valid_option = True
+			else:
+				print "What was that?"
+				valid_option = False
+			
 		prestr1 = workdir + project_name + '/Submissions/'	
 		foptions = open(workdir + project_name + '/options.txt', 'r')
 		input_opt = (foptions.readline()).split()
 		dm_option = input_opt[0] 
 		beta_option = input_opt[1]
 		plummer_option = input_opt[2]
+		nwalkers = int(input_opt[5])
 
+		valid_walkers = False
+		while valid_walkers == False:
+			num_chains = int(gsTools.check_float("How many walkers to plot (out of %d)? " %nwalkers))
+			if num_chains <= nwalkers:
+				valid_walkers = True
+			else:
+				print "Must be less than number of walkers"
+				valid_walkers = False		
+		
 		for galaxy in all_gals:
 			data = np.loadtxt(workdir + project_name + '/%s/' %galaxy + '%s_Chains' % galaxy + project_name + '.txt')
-			gsTools.plot_chains(data, workdir, project_name, galaxy)
+			gsTools.plot_chains(data, workdir, project_name, galaxy, num_chains)
 			
 
 		program = True
@@ -951,29 +986,41 @@ while program == True:
 			for it in gal_list:
 				print it
 		print '1) All 	2) Specify'
-		opt = raw_input('Option: ')
-		if opt == '1':
-			all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		valid_option = False
+		while valid_option == False:
+			opt = raw_input('Option: ')
+			if opt == '1':
+				all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+				valid_option = True
+			elif opt == '2':
+				print 'Please type galaxies, separated by commas'
+				res = raw_input('Type here: ')
 			
-		elif opt == '2':
-			print 'Please type galaxies, separated by commas'
-			res = raw_input('Type here: ')
-		
-			all_gals2 = res.split(',')
-			all_gals = []
-			for g in all_gals2:
-				if g in gal_list:
-					all_gals.append(g)
-				else:
-					print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
-					valid_galname = False
-					while valid_galname == False:
-						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
-						retype = retype.strip()
-						if (retype in gal_list) or retype == "":
-							valid_galname = True
-						else:
-							valid_galname = False
+				all_gals2 = res.split(',')
+				all_gals = []
+				for g in all_gals2:
+					if g in gal_list:
+						all_gals.append(g)
+					else:
+						print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
+						valid_galname = False
+						while valid_galname == False:
+							retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
+							retype = retype.strip()
+							if retype in gal_list:
+								all_gals.append(retype)
+								valid_galname = True
+							elif retype == "" :
+								print "Ignoring this incident..."
+								valid_galname = True
+								
+							else:
+								valid_galname = False
+				all_gals = np.array(all_gals)
+				valid_option = True
+			else:
+				print "What's that?"
+				valid_option = False
 					
 		prestr1 = workdir + project_name + '/Submissions/'	
 		foptions = open(workdir + project_name + '/options.txt', 'r')
@@ -1076,35 +1123,46 @@ while program == True:
 		
 		print 'Which galaxies would you like to submit?'
 		print '1) All 	2) Specify'
-		opt = raw_input('Option: ')
-		if opt == '1':
-			all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
+		valid_option = False
+		while valid_option == False:
+			opt = raw_input('Option: ')
+			if opt == '1':
+				all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
+				
+				valid_option = True			
+			elif opt == '2':
+				print 'Please type galaxies, separated by commas'
+				res = raw_input('Type here: ')
+
+
 			
+				all_gals2 = res.split(',')
+				all_gals = []
+				for g in all_gals2:
+					if g in gal_list:
+						all_gals.append(g)
+					else:
+						print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
+						valid_galname = False
+						while valid_galname == False:
+							retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
+							retype = retype.strip()
+							if retype in gal_list:
+								all_gals.append(retype)
+								valid_galname = True
+							elif retype == "" :
+								print "Ignoring this incident..."
+								valid_galname = True
+								
+							else:
+								valid_galname = False
 						
-		elif opt == '2':
-			print 'Please type galaxies, separated by commas'
-			res = raw_input('Type here: ')
-
-
-		
-			all_gals2 = res.split(',')
-			all_gals = []
-			for g in all_gals2:
-				if g in gal_list:
-					all_gals.append(g)
-				else:
-					print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
-					valid_galname = False
-					while valid_galname == False:
-						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
-						retype = retype.strip()
-						if (retype in gal_list) or retype == "":
-							valid_galname = True
-						else:
-							valid_galname = False
-					
-			all_gals = np.array(all_gals)
-		
+				all_gals = np.array(all_gals)
+				valid_option = True
+			else:
+				print "What's that?"
+				valid_option = False
+	
 		prestr1 = workdir + project_name + '/Submissions/'	
 			
 		min_rad = gsTools.check_float("Minimum radius = ")
