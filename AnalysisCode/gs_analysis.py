@@ -11,6 +11,8 @@ import os
 import analysis_func
 
 
+
+
 workdir = sys.argv[1]
 codedir = sys.argv[2]
 project_name = sys.argv[3]
@@ -22,6 +24,8 @@ min_r = float(sys.argv[8])
 max_r = float(sys.argv[9])
 points = int(sys.argv[10])
 
+
+print 'Starting'
 
 foptions = open(workdir + project_name + '/options.txt', 'r')
 input_opt = (foptions.readline()).split()

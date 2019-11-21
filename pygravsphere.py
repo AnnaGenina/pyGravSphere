@@ -121,7 +121,7 @@ while program == True:
 
 		print 'Which galaxies would you like to preprocess?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-		if not gal_list:
+		if np.size(gal_list) == 0:
 			print "There are no galaxies in galaxy_list, Quitting."
 			break
 		else:
@@ -464,7 +464,7 @@ while program == True:
 
 		print 'Which galaxies would you like to submit?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-		if not gal_list:
+		if np.size(gal_list) == 0:
 			print "There are no galaxies, Quitting."
 			break
 		else:
@@ -604,7 +604,7 @@ while program == True:
 			os.system("mkdir " + workdir  + project_name + '/Analysis/Submissions')
 			os.system("mkdir " + workdir  + project_name + '/Analysis/Output')
 			os.system("mkdir " + workdir  + project_name + '/Analysis/Limits')
-
+			os.system("mkdir " + workdir  + project_name + '/Analysis/OutErr')
 
 		
 		foptions = open(workdir + project_name + '/options.txt', 'r')
@@ -713,7 +713,7 @@ while program == True:
 
 
 			gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-			if not gal_list:
+			if np.size(gal_list) == 0:
 				print "There are no galaxies, Quitting."
 				break
 			else:
@@ -836,7 +836,7 @@ while program == True:
 
 		print 'Which galaxies would you like to plot?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-		if not gal_list:
+		if np.size(gal_list) == 0:
 			print "There are no galaxies, Quitting."
 			break
 		else:
@@ -943,7 +943,7 @@ while program == True:
 			
 		print 'Which galaxies would you like to plot?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-		if not gal_list:
+		if np.size(gal_list) == 0:
 			print "There are no galaxies, Quitting."
 			break
 		else:
@@ -1066,7 +1066,7 @@ while program == True:
 		
 		print 'Which galaxies would you like to plot?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
-		if not gal_list:
+		if np.size(gal_list) == 0:
 			print "There are no galaxies, Quitting."
 			break
 		else:
@@ -1153,7 +1153,7 @@ while program == True:
 			except IOError:
 				print 'Beta output not found'
 
-			print 'Galaxy', galaxy, 'Mass done'
+			print 'Galaxy', galaxy, 'Done'
 
 		program = True
 		continue			

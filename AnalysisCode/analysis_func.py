@@ -394,6 +394,8 @@ def return_plummer(chains, options, priors, min_r, max_r, points,codedir,workdir
 	
 	fixed_params, = np.where(priors[:,6] == 'True')
 
+	effective = 0
+
 	if dark_opt == 'PL':
 		fixed, = np.where(priors[0:6, 6] == 'True')
 		effective = 6 - np.size(fixed)
@@ -405,11 +407,12 @@ def return_plummer(chains, options, priors, min_r, max_r, points,codedir,workdir
 	if beta_opt == 'Baes':
 		fixed, = np.where(priors[starter:starter+4, 6] == 'True')
 		starter = starter + 4
-		effective = effective + starter - np.size(fixed)
+		effective = effective + 4 - np.size(fixed)
 	elif beta_opt == 'Constant':	
 		fixed, = np.where(priors[starter:starter+1, 6] == 'True')
-		effective = effective + starter - np.size(fixed)
 		starter = starter + 1
+		effective = effective + 1 - np.size(fixed)
+		
 	if plummer_opt == 'Plummer3':
 		plummer_priors = priors[starter:starter + 6,:]
 		fixed_plummer_params, = np.where(plummer_priors[:, 6] == 'True')
