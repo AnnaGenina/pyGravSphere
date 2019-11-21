@@ -254,19 +254,20 @@ Alright! Your project has been created and your jobs are ready for submission. N
 you will find your submission scripts as well as the *priors.txt* file. This is full of default **pyGravSphere** priors. Now you might want to change those. To do so, simply edit the lower and upper priors on each parameter. If you decide you want to keep any of the parameters constant, simply edit the last column and make sure "min" and "max" values are the same. So, for example, if I want to keep the inner slope *gamma* at 1, I will edit the priors:
 
 ```
-rhomin  rhomax  rhoconst                5.	10. False
-rsmin   rsmax   rsconst             np.log10(r_c)   1.5 False
-alphamin  alphamax  alphaconst        0.5     3. False
-betamin betamax betaconst               3 	7 False
-gammamin  gammamax  gammaconst       1.	1.  True
-beta0min  beta0max  beta0const      -1.	1.  False
-m1min   m1max  m1const            np.log10(0.5*lightpower[0])     np.log10(1.5*lightpower[0])  False
-a1min   a1max  a1const        0.5*lightpower[3]	1.5*lightpower[3] False
-m2min   m2max  m2const         np.log10(0.5*lightpower[1])     np.log10(1.5*lightpower[1])  False
-a2min   a2max  a2const          0.5*lightpower[4]	1.5*lightpower[4] False
-m3min   m3max  m3const          np.log10(0.5*lightpower[2])     np.log10(1.5*lightpower[2]) False
-a3min   a3max  a3const            0.5*lightpower[5]	1.5*lightpower[5] False
-mstarmin  mstarmax mstarconst       np.log10(0.75*stellar_mass)     np.log10(1.25*stellar_mass) False
+rhos rhosmin rhosmax rhosconst 5 10. False VAR
+rs rsmin rsmax rsconst -2 1.5 False VAR
+alpha alphamin alphamax alphaconst 0.5 3. False VAR
+beta betamin betamax betaconst 3. 7. False VAR
+gamma gammamin gammamax gammaconst 1. 1. True VAR
+beta0 beta0min beta0max beta0const -1. 1. False VAR
+m1 m1min m1max m1const 0.5 1.5 False np.log10(VAR*lightpower[0])
+a1 a1min a1max a1const 0.5 1.5 False VAR*lightpower[3]
+m2 m2min m2max m2const 0.5 1.5 False np.log10(VAR*lightpower[1])
+a2 a2min a2max m2const 0.5 1.5 False VAR*lightpower[4]
+m3 m3min m3max m3const 0.5 1.5 False np.log10(VAR*lightpower[2])
+a3 a3min a3max a3const 0.5 1.5 False VAR*lightpower[5]
+mstar mstarmin mstarmax mstarconst 0.75 1.25 False np.log10(VAR*stellar_mass)
+
 
 ```
 
