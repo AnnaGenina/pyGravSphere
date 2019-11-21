@@ -282,19 +282,20 @@ def create_ana_sub(project_name, workdir, codedir, dm_option, beta_option, plumm
 
 
 def submit_jobs(workdir, project_name, all_gals, sub_com):
+	sub_com = sub_com.strip()
 	for galaxy in all_gals:
 		if not sub_com:	
-			sub_script = open(workdir + '/' + project_name + '/Submissions/' + '%s.sh', 'r')
+			sub_script = open(workdir + '/' + project_name + '/Submissions/' + '%s.sh' %galaxy, 'r')
 			first = sub_script.readline()
 			first = first.split()
 			if first[0] == 'python':	
-				os.system('./' + workdir + '/' + project_name + '/Submissions/' + '%s.sh' % galaxy)
+				os.system('. ' + workdir + '/' + project_name + '/Submissions/' + '%s.sh' % galaxy)
 		else:
-			sub_script = open(workdir + '/' + project_name + '/Submissions/' + '%s.sh', 'r')
+			sub_script = open(workdir + '/' + project_name + '/Submissions/' + '%s.sh' % galaxy, 'r')
 			first = sub_script.readline()
 			first = first.split()
 			if first[0] == 'python':	
-				os.system('./' + workdir + '/' + project_name + '/Submissions/' + '%s.sh' % galaxy)
+				os.system('. ' + workdir + '/' + project_name + '/Submissions/' + '%s.sh' % galaxy)
 			else:
 				os.system(sub_com.strip() + ' ' + workdir + '/' + project_name + '/Submissions/' + '%s.sh' % galaxy)
 

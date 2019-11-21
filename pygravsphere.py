@@ -215,11 +215,11 @@ while program == True:
 		mpi_opt = raw_input("1) Serial 	2) Multiprocessing  3) MPI (if you're running on a cluster) ")
 		if mpi_opt == '3':
 			num_cores = int(raw_input('How many cores? '))
-			timevar = float(raw_input('How much time do you need (in hours)? '))
+			timevar = float(gsTools.check_float('How much time do you need (in hours)? '))
 			timevar = str(datetime.timedelta(hours = timevar))
 		elif mpi_opt == '2':
 			ncpu = cpu_count()
-			num_cores = int(raw_input('How many processes out of %d that you have? ' %ncpu))
+			num_cores = int(gsTools.check_float('How many processes out of %d that you have? ' %ncpu))
 			timevar = None
 			
 
@@ -229,6 +229,7 @@ while program == True:
 
 		sub_scripts = open(codedir + "/sub_script.txt", 'r')
 		sub_script = sub_scripts.read()
+		sub_script = sub_script.strip()
 		sub_scripts.close()
 		if (not sub_script) and (mpi_opt == '3'):
 			print "You submission script template is empty. Cannot submit to the queue."
@@ -241,15 +242,11 @@ while program == True:
 		valid_params = False
 		while valid_params == False:
 
-			plzh = raw_input('1) PowerLaw or 2) Zhao ? ')
-			anis = raw_input('1) Baes or 2) Constant ? ')
-			vsps = raw_input('VSP ? y or n? ')
-			plummer = raw_input('1) Plummer  2) ThreePlummers ')
-
 			valid_params = True
 
 			param_list = []
 
+			plzh = raw_input('1) PowerLaw or 2) Zhao ? ')
 			if (plzh == '1') or (plzh == 'PowerLaw'):
 				plzh = 'PL'
 				param_list.extend(['rho0', 'gamma0', 'gamma1', 'gamma2', 'gamma3', 'gamma4'])
@@ -259,7 +256,9 @@ while program == True:
 			else:
 				print "Option %s does not exist" %plzh
 				valid_params = False
+				continue
 
+			anis = raw_input('1) Baes or 2) Constant ? ')
 			if (anis == '1') or (anis == 'Baes'):
 				anis = 'Baes'
 				param_list.extend(['beta0', 'betainf', 'ra','eta'])
@@ -269,6 +268,9 @@ while program == True:
 			else:
 				print "Option %s does not exist" %anis
 				valid_params = False
+				continue
+
+			vsps = raw_input('VSP ? y or n? ')
 			if vsps == 'y':
 				vsps = 'VSP'
 			elif vsps == 'n':
@@ -276,6 +278,9 @@ while program == True:
 			else:
 				print "Option %s for vsps does not exist" %vsps
 				valid_params = False
+				continue
+
+			plummer = raw_input('1) Plummer  2) ThreePlummers ')
 
 			if (plummer == '1') or (plummer == 'Plummer'):
 				plummer = 'Plummer'
@@ -284,7 +289,8 @@ while program == True:
 				param_list.extend(['m1','a1','m2','a2','m3','a3'])
 			else:
 				print "Option %s does not exist" 
-				valid_params = False
+				valid_params = False	
+				continue
 
 			param_list.extend(['mstar'])
 
@@ -294,10 +300,10 @@ while program == True:
 			if len(param_list)*2 >= num_walkers:
 				print "Number of walkers needs to be more than twice the number of dimensions (i.e more than %d)" %2*len(param_list)
 				correct_walkers = False
-				num_walkers = str(num_walkers)
+				
 			else:
 				correct_walkers = True	
-
+		num_walkers = str(num_walkers)
 
 		
 		burn_in = str(int(gsTools.check_float('Burn-in? ')))
@@ -408,7 +414,7 @@ while program == True:
 				d_file = open(workdir + pl + '/ReadMe.txt', 'r')
 				description = d_file.read()
 				print pl
-				print description
+				print "Project description: ", description
 			except IOError:
 				print "Something weird with project ", pl
 			
@@ -449,6 +455,7 @@ while program == True:
 
 		sub_command = open(codedir + '/sub_command.txt', 'r')
 		sub_com = sub_command.read()
+		sub_com = sub_com.strip()
 		if not sub_com:
 			print "You have not specified the submission command in the ", codedir,"/sub_command.txt file."
 			print "Specify the command now? (e.g. sbatch)"
@@ -461,6 +468,7 @@ while program == True:
 			print "There are no galaxies, Quitting."
 			break
 		else:
+			print "List of galaxies:"
 			for it in gal_list:
 				print it
 		print '1) All 	2) Specify'
@@ -468,7 +476,7 @@ while program == True:
 		if opt == '1':
 	
 			all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
-			if (not sub_com) and (len(all_gals) > 1):
+			if (not sub_com) and (len(all_gals) > 0):
 				print "You have not specified the submission command."
 				print "If you are not submitting scripts to the system you may only run one galaxy at a time."
 				print "I will submit your first galaxy."
@@ -490,7 +498,7 @@ while program == True:
 				if g in gal_list:
 					all_gals.append(g)
 				else:
-					print g, "This galaxy does not exist. Did you add it to gal_list.txt?"
+					print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
 					valid_galname = False
 					while valid_galname == False:
 						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
@@ -500,7 +508,7 @@ while program == True:
 						else:
 							valid_galname = False
 			
-			if (not sub_com) and (len(all_gals) > 1):
+			if (not sub_com) and (len(all_gals) > 0):
 				print "You have not specified the submission command."
 				print "If you are not submitting scripts to the system you may only run one galaxy at a time."
 				print "I will submit your first galaxy,", all_gals[0]
@@ -564,7 +572,7 @@ while program == True:
 					d_file = open(workdir + pl + '/ReadMe.txt', 'r')
 					description = d_file.read()
 					print pl
-					print description
+					print "Project description: ", description
 				except IOError:
 					print "Something weird with project ", pl
 				
@@ -653,6 +661,7 @@ while program == True:
 
 		sub_scripts = open(codedir + "/sub_script.txt", 'r')
 		sub_script = sub_scripts.read()
+		sub_script = sub_script.strip()
 		sub_scripts.close()
 	
 		
@@ -692,6 +701,7 @@ while program == True:
 
 			sub_command = open(codedir + '/sub_command.txt', 'r')
 			sub_com = sub_command.read()
+			sub_com = sub_com.strip()
 
 			if (mpi_opt == 'y') and (not sub_com) and (sub_script == True):
 				print "You have not specified the submission command in the ", codedir,"/sub_command.txt file."
@@ -707,6 +717,7 @@ while program == True:
 				print "There are no galaxies, Quitting."
 				break
 			else:
+				print "Galaxy list:"
 				for it in gal_list:
 					print it
 
@@ -720,7 +731,7 @@ while program == True:
 					if g in gal_list:
 						all_gals.append(g)
 					else:
-						print g, "This galaxy does not exist. Did you add it to gal_list.txt?"
+						print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
 						valid_galname = False
 						while valid_galname == False:
 							retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
@@ -730,7 +741,7 @@ while program == True:
 							else:
 								valid_galname = False
 				
-				if (not sub_com) and (len(all_gals) > 1):
+				if (not sub_com) and (len(all_gals) > 0):
 					print "You may only submit one galaxy at a time."
 					print "I will run your first galaxy, ", all_gals[0]
 					all_gals = [all_gals[0]]					
@@ -738,19 +749,19 @@ while program == True:
 				for galaxy in all_gals:
 					if not sub_com:
 			
-						os.system('./' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
+						os.system('. ' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
 					else:
 						os.system(sub_com.strip() + ' ' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
 			elif opt_gal.strip() == '2':
 				all_gals = np.loadtxt(workdir + '/galaxy_list.txt', ndmin = 1, dtype = 'str')
 				
-				if (not sub_com) and (len(all_gals) > 1):
+				if (not sub_com) and (len(all_gals) > 0):
 					print "You may only submit one galaxy at a time."
 					print "I will run your first galaxy, ", all_gals[0]
 					all_gals = [all_gals[0]]
 				for galaxy in all_gals:
 					if not sub_com:
-						os.system('./' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
+						os.system('. ' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
 					else:
 						
 						os.system(sub_com.strip() + ' ' + workdir + project_name + '/Analysis/Submissions/' + '%s.sh' % galaxy)
@@ -795,7 +806,7 @@ while program == True:
 					d_file = open(workdir + pl + '/ReadMe.txt', 'r')
 					description = d_file.read()
 					print pl
-					print description
+					print "Project description: ", description
 				except IOError:
 					print "Something weird with project ", pl
 				
@@ -829,6 +840,7 @@ while program == True:
 			print "There are no galaxies, Quitting."
 			break
 		else:
+			print "Galaxy list:"
 			for it in gal_list:
 				print it
 		print '1) All 	2) Specify'
@@ -851,7 +863,7 @@ while program == True:
 				if g in gal_list:
 					all_gals.append(g)
 				else:
-					print g, "This galaxy does not exist. Did you add it to gal_list.txt?"
+					print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
 					valid_galname = False
 					while valid_galname == False:
 						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
@@ -901,7 +913,7 @@ while program == True:
 					d_file = open(workdir + pl + '/ReadMe.txt', 'r')
 					description = d_file.read()
 					print pl
-					print description
+					print "Project description: ", description
 				except IOError:
 					print "Something weird with project ", pl
 				
@@ -935,6 +947,7 @@ while program == True:
 			print "There are no galaxies, Quitting."
 			break
 		else:
+			print "Galaxy list:"
 			for it in gal_list:
 				print it
 		print '1) All 	2) Specify'
@@ -952,7 +965,7 @@ while program == True:
 				if g in gal_list:
 					all_gals.append(g)
 				else:
-					print g, "This galaxy does not exist. Did you add it to gal_list.txt?"
+					print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
 					valid_galname = False
 					while valid_galname == False:
 						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
@@ -1024,7 +1037,7 @@ while program == True:
 					d_file = open(workdir + pl + '/ReadMe.txt', 'r')
 					description = d_file.read()
 					print pl
-					print description
+					print "Project description: ", description
 				except IOError:
 					print "Something weird with project ", pl
 				
@@ -1051,7 +1064,15 @@ while program == True:
 			valid = True
 
 		
-		
+		print 'Which galaxies would you like to plot?'
+		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if not gal_list:
+			print "There are no galaxies, Quitting."
+			break
+		else:
+			print "Galaxy list:"
+			for it in gal_list:
+				print it
 		
 		print 'Which galaxies would you like to submit?'
 		print '1) All 	2) Specify'

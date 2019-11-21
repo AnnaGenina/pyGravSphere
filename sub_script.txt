@@ -1,12 +1,1 @@
-#!/bin/bash -l
-#SBATCH --ntasks=CORENUM
-#SBATCH -J GALID
-#SBATCH -e GALID.err
-#SBATCH -o GALID.out
-#SBATCH -p cosma
-#SBATCH -A durham
-#SBATCH --time=TIME
-module purge
-module load python
-module load gnu_comp/7.3.0 openmpi/3.0.1
-module load gsl
+
