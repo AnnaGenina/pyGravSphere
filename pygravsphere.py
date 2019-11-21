@@ -147,7 +147,7 @@ while program == True:
 				if g in gal_list:
 					all_gals.append(g)
 				else:
-					print g, "This galaxy does not exist. Did you add it to gal_list.txt?"					
+					print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"					
 					valid_galname = False
 					while valid_galname == False:
 						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
@@ -983,7 +983,9 @@ while program == True:
 		program = False		
 
 
-	elif option.strip() == '10':
+	elif option.strip() == '6':
+		print "This will generate 0-100 percentile locations for mass, density and anisotropy at N log-spaced distance intervals."
+		print "Make sure you run Analysis before using option."
 		print 'The current working directory is ' + workdir
 		print 'Would you like to change that?  y or n?'
 		yon = raw_input("y or n : ")
@@ -1070,7 +1072,7 @@ while program == True:
 				if g in gal_list:
 					all_gals.append(g)
 				else:
-					print g, "This galaxy does not exist. Did you add it to gal_list.txt?"
+					print g, "This galaxy does not exist. Did you add it to galaxy_list.txt?"
 					valid_galname = False
 					while valid_galname == False:
 						retype = raw_input("This galaxy does not exist. Retype the name of this galaxy or leave blank: ")
@@ -1084,34 +1086,51 @@ while program == True:
 		
 		prestr1 = workdir + project_name + '/Submissions/'	
 			
-		foptions = open(workdir + project_name + '/options.txt', 'r')
-		input_opt = (foptions.readline()).split()
-		dm_option = input_opt[0] 
-		beta_option = input_opt[1]
-		plummer_option = input_opt[2]
+		min_rad = gsTools.check_float("Minimum radius = ")
+		if float(min_rad) == 0:
+			print "Can't do log of zero, setting minimum radius to 0.01"
+			min_rad = "0.01"
+		max_rad = gsTools.check_float("Maximum radius = ")
+		if (float(min_rad) < 0) or (float(max_rad) < 0):
+			print "Distances can't be negative. Starting again. \n"
+			valid_options = False
+			continue
+		if (float(max_rad) < float(min_rad)):
+			print "Maximum distance cannot be smaller than minimum. Starting again. \n"
+			valid_options = False
+			continue
+		points = gsTools.check_float("How many log-spaced intervals? ")
+		if int(points) <= 1:
+			print "Need at least two distnaces. Starting again. \n"
+			valid_options = False
+			continue
+
+		r = np.logspace(np.log10(min_rad),np.log10(max_rad), points)
+		
 
 		for galaxy in all_gals:
-			rhs = np.loadtxt(workdir + '/GalaxyData/%s_Rhalf.txt' %int(galaxy))
-			#rsel, = np.where(rhs[:,0] == int(galaxy))
-			rh = rhs
-
-			bin_edges = np.array([0.125, 0.25, 0.50, 1, 2 , 4 , 8])*rh
-			mid_bin = (np.log10(bin_edges[1:]) + np.log10(bin_edges[:-1]))/2.
-			mid_bin = 10**mid_bin
-
-			tot_bins = np.array([bin_edges[0], mid_bin[0], bin_edges[1], bin_edges[1], mid_bin[1], bin_edges[2],bin_edges[2], mid_bin[2], bin_edges[3], bin_edges[3], mid_bin[3], bin_edges[4], bin_edges[4], mid_bin[4], bin_edges[5]])
-
-			r = np.logspace(-2,1.5, 25)
-
 			
-			
-			
+	
 			try:
 				f = np.genfromtxt(workdir + project_name + '/Analysis/Output/' + '%s_Mass'%galaxy + '.txt', invalid_raise = False)
 				res = gsTools.get_lims_all(f,r)
 				np.savetxt(workdir + project_name + '/Analysis/Limits/'+ '%s_Mass'% galaxy + 'LimsAll.txt', res)
 			except IOError:
 				print 'Mass output not found'
+
+			try:
+				f = np.genfromtxt(workdir + project_name + '/Analysis/Output/' + '%s_Density'%galaxy + '.txt', invalid_raise = False)
+				res = gsTools.get_lims_all(f,r)
+				np.savetxt(workdir + project_name + '/Analysis/Limits/'+ '%s_Density'% galaxy + 'LimsAll.txt', res)
+			except IOError:
+				print 'Density output not found'
+
+			try:
+				f = np.genfromtxt(workdir + project_name + '/Analysis/Output/' + '%s_Beta'%galaxy + '.txt', invalid_raise = False)
+				res = gsTools.get_lims_all(f,r)
+				np.savetxt(workdir + project_name + '/Analysis/Limits/'+ '%s_Beta'% galaxy + 'LimsAll.txt', res)
+			except IOError:
+				print 'Beta output not found'
 
 			print 'Galaxy', galaxy, 'Mass done'
 
