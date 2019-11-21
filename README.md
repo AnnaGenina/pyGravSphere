@@ -58,6 +58,7 @@ This is a good time to decide where you want to keep all of your **GravSphere** 
 ```
 /Users/Nerd/Desktop/MyWorkDir/
 ```
+Do make sure that you've previously created MyWorkDir. 
 
 Good job!
 
@@ -75,7 +76,7 @@ This will generate all the necessary folders and files you need at this step. Qu
 
 You may have two data sets: one for photometry (positions) of the stars and one for kinematics (positions and velocities). In the following we'll assume that these are the same two datasets.
 
-So suppose you have a 3-column data file with x,y positions (***in parsecs***) on the sky and line-of-sight velocities with their errors. 
+So suppose you have a 5-column data file with x,y positions (***in parsecs***) on the sky, line-of-sight velocities with their errors and relative weights of each star. 
 
 For the purposes of testing, we recommend you try out one of the Gaia Challenge datasets http://astrowiki.ph.surrey.ac.uk/dokuwiki/doku.php?id=tests:sphtri:spherical
 
@@ -117,7 +118,7 @@ f_new.close()
 ```
 Obviously, change the contents of each data set as appropriate. The *Photometry* dataset will be used exclusively for calculating the best fit 3-component Plummer profile. The *Kinematics* dataset will be used for calculation of the binned velocity dispersion profile and the virial shape parameters. If the mass in stars is assumed to significantly contribute to your system, put in your best estimate of mass **in solar masses** in to *[StellarMass3R]* set. In the above example, each star contributes equal weight to your system. This is a good approximation for real-life galaxies. If you're applying GravSphere to a cosmological simulation and you know the masses of your stellar particles, you can use those. This will be useful in the **Pre-processing** step, where **pyGravSphere** calculates the binned velocity dispersion and stellar density profiles. If you calculate those things using your own method, then don't worry about this.
 
-Now you have an *NewDataFile.hdf5* dataset. Perhaps you want to name it as something more identifiable, let's say *Galaxy_1.hdf5*, or you might even have three data sets: *Galaxy_1.hdf5*, *Galaxy_2.hdf5* and *Galaxy_3.hdf5*. At this point, please open the *galaxy_list.txt* file in your working directory and type in: 
+Now you have an *GaiaPlumCuspIso.hdf5* dataset. You might even have three data sets: *Galaxy_1.hdf5*, *Galaxy_2.hdf5* and *Galaxy_3.hdf5*. At this point, please open the *galaxy_list.txt* file in your working directory and type in the galaxy names: 
 
 ```
 Galaxy_1
@@ -146,17 +147,23 @@ You will see a list of your available options. We begin with pre-processing. Typ
 You will be prompted to check if the working directory is correct. If you actually followed this tutorial, it should be.
 
 ```
-y
+n
 ```
 
 Now you will be asked which datesets you would like to pre-procces. You can pick *All*, which will do all three, or you can specify particular one you want.
 
-So pick *Specify* and type:
+So pick *Specify* 
+
+```
+2
+```
+
+and type your galaxy names:
 
 ```
 Galaxy_3, Galaxy_1
 ```
-Bingo! Cogs are turning and your data will be pre-processed in no time. The output files will make their way to the *GalaxyData* directory inside your working directory.
+Bingo! Cogs are turning and your data will be pre-processed in no time. The output files will make their way to the *GalaxyData* directory inside your working directory. If you would like to process your data yourself, make sure the format is the same what we do here.
 
 ### Preparing submission scripts
 
@@ -178,7 +185,6 @@ In your working directory, open *sub_script.txt* file. Fill the file with what y
 module purge
 module load python
 module load gnu_comp/7.3.0 openmpi/3.0.1
-module load gsl
 ```
 
 For the name of the job, output file, error file, number of cores and time please keep the same names (i.e. CORENUM, GALID) so that **pyGravSphere** can replace those for you automatically. If your input scripts are vastly different to this, you might need to fiddle with the *gsTools.py* **create_sub** and **create_ana_sub** functions. Let's hope it doesn't come to that.
@@ -193,6 +199,9 @@ Leave the *sub_script.txt* file empty.
 OK, we're definitely getting closer to the good stuff.
 
 So suppose now you want to run a model with the Zhao et al. (1996) dark matter distribution, a constant anisotropy profile, 3-component Plummer fit and no virial shape parameters. And, very conveniently, you have 8 cores to run it on.
+
+Note: if you're running on one node, or your desktop, use the multiprocessing option for faster results. Use MPI if you're running on more than one node. 
+
 
 Now run **pyGravSphere** 
 ```
@@ -232,7 +241,7 @@ Think long and hard about how many walkers you want. One thousand is good number
 
 *Integration points* sets the accuracy of your integrator: how many logarithmic bins will the integrand be divided into? 100 is fine.
 
-Consider the amount of time you will need for the job to run. The above configuration runs in just under 1 hour on 8 cores. It will take 7-8 hours on two cores.
+Consider the amount of time you will need for the job to run. The above configuration runs in just under 1 hour on 8 cores.
 
 ## Priors
 
@@ -328,24 +337,28 @@ At this point you can do what you like with the output.
 
 **pyGravSphere** comes with some built-in functionality to get you started.
 
+### Get median, 68, 95 percentiles
 
-### Corner plots
-
-For example, you might want to output a corner plot of your posteriors.
+These will be output into */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Analysis/Limits/* after yo've ran the Analysis option (option 3)
 
 
 ### Plot the evolution of your chains
 
-This might be useful for visual evaluation of convergence. 
+This might be useful for visual evaluation of convergence. (option 4)
 Note that you cannot use this when you've used multiprocessing, as the chains are not output in any particular order.
 
 
-### Output the percentiles of your mass/density models
+### Corner plots
+
+You might want to output a corner plot of your posteriors. This will make a corner plot of all of your free parameters. (option 5)
 
 
+### Output the percentiles of your mass/density/anisotropy models
+
+Use option 6. Make sure you've ran analysis previously.
 
 
-## Publications using GravSphere 
+## Publications using pyGravSphere 
 
 So you got an awesome result? Great! ***You're welcome!*** Please don't foget to cite the original **GravSphere** paper:
 
