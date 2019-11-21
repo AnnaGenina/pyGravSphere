@@ -116,10 +116,13 @@ while program == True:
 			continue
 			
 		print 'Current working directory is', workdir
+
+		
+
 		print 'Which galaxies would you like to preprocess?'
 		gal_list = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
 		if not gal_list:
-			print "There are no galaxies, Quitting."
+			print "There are no galaxies in galaxy_list, Quitting."
 			break
 		else:
 			for it in gal_list:
@@ -167,6 +170,7 @@ while program == True:
 
 
 	if option.strip() == "1":
+
 		print 'The current working directory is ' + workdir
 		print 'Would you like to change that?  y or n?'
 		yon = raw_input("y or n : ")
@@ -188,6 +192,12 @@ while program == True:
 		else:	
 			print "I don't know what that means. Quitting."	
 			break	
+		
+		all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if np.size(all_gals) == 0:
+			print "There are no galaxies in galaxy_list"
+			sys.exit()
+		gsTools.check_galdata(all_gals,workdir)
 
 		project_name = raw_input("Please name your new project: " )
 		exists = os.path.isdir(workdir + '/' + project_name)
@@ -339,6 +349,9 @@ while program == True:
 		continue
 
 	elif option.strip() == "2":
+
+		
+
 		print "You are about to submit jobs."
 		print "If you haven't specified the MPI option for your project previously you can only submit one job at a time to run on your desktop."
 		
@@ -372,7 +385,11 @@ while program == True:
 			continue
 		
 		
-
+		all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if np.size(all_gals) == 0:
+			print "There are no galaxies in galaxy_list"
+			sys.exit()
+		gsTools.check_galdata(all_gals,workdir)
 
 
 		
@@ -507,6 +524,7 @@ while program == True:
 			
 		
 	elif option.strip() == "3":
+		
 		print 'The current working directory is ' + workdir
 		print 'Would you like to change that?  y or n?'
 		yon = raw_input("y or n : ")
@@ -523,6 +541,13 @@ while program == True:
 			print "What was that??? Try again."
 			program = True
 			continue
+
+		all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if np.size(all_gals) == 0:
+			print "There are no galaxies in galaxy_list"
+			sys.exit()
+		gsTools.check_galdata(all_gals,workdir)
+
 		while valid == False:
 			print "Current projects:"
 			try:
@@ -746,6 +771,13 @@ while program == True:
 		
 
 	elif (option.strip() == '4'):
+		all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if np.size(all_gals) == 0:
+			print "There are no galaxies in galaxy_list"
+			sys.exit()
+		gsTools.check_galdata(all_gals,workdir)
+
+
 		valid = False
 		while valid == False:
 			print "Current projects:"
@@ -846,6 +878,12 @@ while program == True:
 
 
 	elif (option.strip() == '5'):
+		all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if np.size(all_gals) == 0:
+			print "There are no galaxies in galaxy_list"
+			sys.exit()
+		gsTools.check_galdata(all_gals,workdir)
+
 		valid = False
 		while valid == False:
 			print "Current projects:"
@@ -961,7 +999,11 @@ while program == True:
 			print 'Not valid'
 			continue
 			
-
+		all_gals = np.loadtxt(workdir + '/galaxy_list.txt',  ndmin = 1,dtype = 'str')
+		if np.size(all_gals) == 0:
+			print "There are no galaxies in galaxy_list"
+			sys.exit()
+		gsTools.check_galdata(all_gals,workdir)
 		
 		valid = False
 		while valid == False:

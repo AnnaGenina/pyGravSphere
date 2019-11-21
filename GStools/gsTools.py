@@ -7,6 +7,35 @@ import corner
 paramname = {r'rho0':r'$\log_{10} \rho_0$','gamma0':r'$\gamma_0$','gamma1':r'$\gamma_1$','gamma2':r'$\gamma_2$','gamma3':r'$\gamma_3$','gamma4':r'$\gamma_4$',r'rhos':r'$\log_{10} \rho_s$', r'rs':r'$\log_{10}r_s$', r'alpha':r'$\alpha$', r'beta':r'$\beta$', r'gamma':r'$\gamma$', r'beta0':r'$\beta_0$', r'betainf':r'$\beta_{\infty}$', r'ra':r'$\log_{10}r_a$', r'eta':r'$\eta$', r'm1':r'$\log_{10}m_1$', r'a1':r'$a_1$', r'm2':r'$\log_{10}m_2$',r'a2':r'$a_2$', r'm3':r'$\log_{10}m_3$', r'a3':r'$a_3$', r'mstar':r'$\log_{10}M_*$' }
 
 
+def check_galdata(all_gals, workdir):
+	
+	for gal in all_gals:
+		all_good = True
+		
+		if os.path.exists(workdir + '/GalaxyData/' + gal + '_VSPs.txt') == False:
+			print "No VSP file in GalaxyData for ", gal
+			all_good = False	
+		if os.path.exists(workdir + '/GalaxyData/' + gal + '_Mstar.txt') == False:
+			print "No Mstar file in GalaxyData for ",gal
+			all_good = False
+		if os.path.exists(workdir + '/GalaxyData/' + gal + '_PlumParam.txt') == False:
+			print "No PlumParam file in GalaxyData for ",gal
+			all_good = False
+		if os.path.exists(workdir + '/GalaxyData/' + gal + '_Rhalf.txt') == False:
+			print "No Rhalf file in GalaxyData for ",gal
+			all_good = False
+		if os.path.exists(workdir + '/GalaxyData/' + gal + '_SurfDen.txt') == False:
+			print "No SurfDen file in GalaxyData for ",gal
+			all_good = False
+		if os.path.exists(workdir + '/GalaxyData/' + gal + '_KinDat.txt') == False:
+			print "No KinDat file in GalaxyData for ",gal
+			all_good = False
+		if all_good == False:
+			print "Please pre-process the data for galaxy ", gal
+			print "Goodbye!"
+			sys.exit()		
+		
+
 def check_float(text):
 	isfloat = False
 	
