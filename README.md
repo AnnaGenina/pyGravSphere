@@ -72,7 +72,7 @@ This will generate all the necessary folders and files you need at this step. Qu
 
 ### Preparing a data file
 
-**pyGravSpere** currently pre-processes input data in *.hdf5* format. In just a few short steps *.hd5* files will become your new best friends! 
+**pyGravSpere** currently pre-processes input data in *.hdf5* format. In just a few short steps *.hdf5* files will become your new best friends! 
 
 You may have two data sets: one for photometry (positions) of the stars and one for kinematics (positions and velocities). In the following we'll assume that these are the same two datasets.
 
