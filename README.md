@@ -340,7 +340,7 @@ At this point you can do what you like with the output.
 
 ### Get median, 68, 95 percentiles
 
-These will be output into */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Analysis/Limits/* after yo've ran the Analysis option (option 3)
+These will be output into */Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Analysis/Limits/* after you've ran the Analysis option (option 3)
 
 
 ### Plot the evolution of your chains
@@ -356,7 +356,7 @@ You might want to output a corner plot of your posteriors. This will make a corn
 
 ### Output the percentiles of your mass/density/anisotropy models
 
-Use option 6. Make sure you've ran analysis previously.
+Use option 6. For each radial distance this will output 1-100 percentile masses, densities and anisotropy. Make sure you've run Analysis previously.
 
 
 ## Publications using pyGravSphere 
@@ -370,6 +370,10 @@ as well as the paper that brought you here:
 **Genina et al. (2019) in prep.**
 
 Thanks!
+
+## Issues
+
+Contact me at *anna.genina@durham.ac.uk*. If it's wrong, we'll fix it.
 
 ## License
 
@@ -385,6 +389,8 @@ In terms of the functionality, the updates will include:
 * Multiple tracer populations
 * Proper motions data
 * Accounting for rotation
+
+Requests? Let us know.
 
 ## Acknowledgments
 
