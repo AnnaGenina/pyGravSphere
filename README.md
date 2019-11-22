@@ -200,7 +200,7 @@ OK, we're definitely getting closer to the good stuff.
 
 So suppose now you want to run a model with the Zhao et al. (1996) dark matter distribution, a constant anisotropy profile, 3-component Plummer fit and no virial shape parameters. And, very conveniently, you have 8 cores to run it on.
 
-Note: if you're running on one node, or your desktop, use the multiprocessing option for faster results. Use MPI if you're running on more than one node. 
+Note: if you're running on your desktop/laptop, use the multiprocessing option for faster results. Use MPI if you're running on more than one node. 
 
 
 Now run **pyGravSphere** 
@@ -300,7 +300,7 @@ or
 bsub Galaxy_1.sh
 ```
 
-Alternatively you can run **pyGravSphere** from your working directory. Type *pygravsphere.py* and select option 2 -- Submit jobs. Now pick if you want to run all of your galaxies, or specify which ones you'd like to run.
+Alternatively you can run **pyGravSphere** from your working directory. Type *pygravsphere.py* and select option 2 -- Submit jobs. 
 
 #### On your laptop
 
