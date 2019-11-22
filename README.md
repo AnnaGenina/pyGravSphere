@@ -366,7 +366,7 @@ So you got an awesome result? Great! ***You're welcome!*** Please don't foget to
 
 as well as the paper that brought you here:
 
-**Genina et al. (2019) in prep.**
+**http://arxiv.org/abs/1911.09124**
 
 Thanks!
 
