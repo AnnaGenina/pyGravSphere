@@ -8,4 +8,4 @@
 						v.1.0.0	-- the infant version
 J.I.Read & P.Sterger MNRAS, 471, 4541  
 
-A.Genina, J.I.Read et al. arXiv:XXXX.XXXXX
+A.Genina, J.I.Read et al. arXiv:1911.09124
