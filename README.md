@@ -1,6 +1,6 @@
 # pyGravSphere
 
-**pyGravSphere** is a non-parametric spherical Jeans analysis code. In essence, it is a wrap for **EmCee** designed for Jeans analysis with a convenient (I hope) user interface.
+**pyGravSphere** is a non-parametric spherical Jeans analysis code. In essence, it is a wrapper for **EmCee**, designed for Jeans analysis, with a frienly and easy-to-use interface (I hope).
 
 Below is my attempt at a tutorial. If any questions or suggestions arise, do feel free to contact *anna.genina@durham.ac.uk*.
 
@@ -30,7 +30,7 @@ Before you begin using **pyGravSphere** please make sure you have downloaded and
 If you will be using multiple processors
 
 * schwimmbad https://github.com/adrn/schwimmbad  
-* OpenMP (if you're using a cluster)
+* gnucomp & OpenMPI or similar, if you're running on a cluster
 
 ## Installing
 
@@ -234,7 +234,7 @@ Steps? 10000
 Integration points? 100
 ```
 
-Think long and hard about how many walkers you want. One thousand is good number, just saying.
+Think long and hard about how many walkers you want. About 600 is good.
 *Burn-in* is the number of steps for which you want to run each of your walkers before **pyGravSphere** starts outputting the chains.
 
 *Steps* is the total steps for which you want to run your walkers. So in the example above, you will get an output of the last 5000 steps per walker.
@@ -267,7 +267,6 @@ a2 a2min a2max m2const 0.5 1.5 False VAR*lightpower[4]
 m3 m3min m3max m3const 0.5 1.5 False np.log10(VAR*lightpower[2])
 a3 a3min a3max a3const 0.5 1.5 False VAR*lightpower[5]
 mstar mstarmin mstarmax mstarconst 0.75 1.25 False np.log10(VAR*stellar_mass)
-
 
 ```
 
