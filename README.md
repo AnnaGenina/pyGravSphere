@@ -167,7 +167,7 @@ The output files will make their way to the *GalaxyData* directory inside your w
 
 ### Preparing submission scripts
 
-Ok, so this is the point where I re-iterate that your life will be easier if you have a few cores to run **pyGravSphere** on. Like, much easier. 
+Ok, so this is the point where I emphasize that your life will be easier if you have a few cores to run **pyGravSphere** on. Like, much easier. 
 
 #### If your institution has a cluster you can run GravSphere on
 
@@ -234,8 +234,8 @@ Steps? 10000
 Integration points? 100
 ```
 
-Think long and hard about how many walkers you want. About 600 is good.
-*Burn-in* is the number of steps for which you want to run each of your walkers before **pyGravSphere** starts outputting the chains.
+Think long and hard about how many *walkers* you want. About 600 is good.
+*Burn-in* is the number of steps for which you want to run each of your walkers before **pyGravSphere** starts outputting the chains. This is approximately the number of steps needed for the result to converge.
 
 *Steps* is the total steps for which you want to run your walkers. So in the example above, you will get an output of the last 5000 steps per walker.
 
