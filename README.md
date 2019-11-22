@@ -1,8 +1,8 @@
 # pyGravSphere
 
-**pyGravSphere** is a non-parametric spherical Jeans analysis code, ideal for applications to dwarf spheroidal kinematic data.
+**pyGravSphere** is a non-parametric spherical Jeans analysis code. In essence, it is a wrap for **EmCee** designed for Jeans analysis with a convenient (I hope) user interface.
 
-We've tried our best to design a user-friendly interface for **pyGravSphere** and below we include a full tutorial, however, if any questions or suggestions arise, do feel free to contact *anna.genina@durham.ac.uk*.
+Below is my attempt at a tutorial. If any questions or suggestions arise, do feel free to contact *anna.genina@durham.ac.uk*.
 
 
 
@@ -42,7 +42,7 @@ python setup.py build_ext --inplace
 
 If you don't get any error messages, congratulations! 
 
-Now go to your system's *.bashrc* file, or an equivalent, and define your GravSphere install directory
+Now go to your system's *.bashrc* file, or an equivalent, and define your GravSphere path as the install directory
 
 ```
 export GravSpherePath=/Users/Nerd/Desktop/pyGravSphere/
@@ -116,7 +116,7 @@ f_new.close()
 
 
 ```
-Obviously, change the contents of each data set as appropriate. The *Photometry* dataset will be used exclusively for calculating the best fit 3-component Plummer profile. The *Kinematics* dataset will be used for calculation of the binned velocity dispersion profile and the virial shape parameters. If the mass in stars is assumed to significantly contribute to your system, put in your best estimate of mass **in solar masses** in to *[StellarMass3R]* set. In the above example, each star contributes equal weight to your system. This is a good approximation for real-life galaxies. If you're applying GravSphere to a cosmological simulation and you know the masses of your stellar particles, you can use those. This will be useful in the **Pre-processing** step, where **pyGravSphere** calculates the binned velocity dispersion and stellar density profiles. If you calculate those things using your own method, then don't worry about this.
+Change the contents of each data set as appropriate. The *Photometry* dataset will be used exclusively for calculating the best fit 3-component Plummer profile. The *Kinematics* dataset will be used for calculation of the binned velocity dispersion profile and the virial shape parameters. If the mass in stars is assumed to significantly contribute to your system, put in your best estimate of mass **in solar masses** in to *[StellarMass3R]* set. In the above example, each star contributes equal weight to your system. This is a good approximation for real-life galaxies. If you're applying GravSphere to a cosmological simulation and you know the masses of your stellar particles, you can use those. This will be useful in the **Pre-processing** step, where **pyGravSphere** calculates the binned velocity dispersion and stellar density profiles. If you calculate those things using your own method, then don't worry about this.
 
 Now you have an *GaiaPlumCuspIso.hdf5* dataset. You might even have three data sets: *Galaxy_1.hdf5*, *Galaxy_2.hdf5* and *Galaxy_3.hdf5*. At this point, please open the *galaxy_list.txt* file in your working directory and type in the galaxy names: 
 
@@ -130,7 +130,7 @@ Please deposit you new data files into the *KinPhotDat* directory that is now in
 
 ### Pre-processing your data
 
-Excellent! Now you're ready to create your MCMC input files. This includes binned velocity dispersion, surface brightness, half-light radius and two virial shape parameters. You might even have a different way of computing these, in which case I would advise to output your pre-processed data in the same format as we do here.
+Excellent! Now you're ready to create your MCMC input files. This includes binned velocity dispersion, surface brightness, half-light radius and two virial shape parameters. You might even have a different way of computing these, in which case you should output your pre-processed data in the same format as we do here.
 
 *Note that, after the pre-processing, the positions of the stars are now in **kiloparsecs** .*
 
@@ -144,7 +144,7 @@ You will see a list of your available options. We begin with pre-processing. Typ
 ```
 0
 ```
-You will be prompted to check if the working directory is correct. If you actually followed this tutorial, it should be.
+You will be prompted to check if the working directory is correct. 
 
 ```
 n
@@ -163,7 +163,7 @@ and type your galaxy names:
 ```
 Galaxy_3, Galaxy_1
 ```
-Bingo! Cogs are turning and your data will be pre-processed in no time. The output files will make their way to the *GalaxyData* directory inside your working directory. If you would like to process your data yourself, make sure the format is the same what we do here.
+The output files will make their way to the *GalaxyData* directory inside your working directory. If you would like to process your data yourself, make sure the format is the same as here.
 
 ### Preparing submission scripts
 
