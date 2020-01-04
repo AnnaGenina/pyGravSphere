@@ -1,6 +1,6 @@
 # pyGravSphere
 
-**pyGravSphere** is a non-parametric spherical Jeans analysis code. In essence, it is a wrapper for **EmCee**, designed for Jeans analysis, with a frienly and easy-to-use interface (I hope).
+**pyGravSphere** is a non-parametric spherical Jeans analysis code. In essence, it is a wrapper for **EmCee**, designed for Jeans analysis, with a friendly and easy-to-use interface (I hope).
 
 Below is my attempt at a tutorial. If any questions or suggestions arise, do feel free to contact *anna.genina@durham.ac.uk*.
 
@@ -147,7 +147,7 @@ You will see a list of your available options. We begin with pre-processing. Typ
 You will be prompted to check if the working directory is correct. 
 
 ```
-n
+y
 ```
 
 Now you will be asked which datesets you would like to pre-procces. You can pick *All*, which will do all three, or you can specify particular one you want.
@@ -169,7 +169,7 @@ The output files will make their way to the *GalaxyData* directory inside your w
 
 Ok, so this is the point where I emphasize that your life will be easier if you have a few cores to run **pyGravSphere** on. Like, much easier. 
 
-#### If your institution has a cluster you can run GravSphere on
+#### If your institution has a cluster you can run pyGravSphere on
 
 In your working directory, open *sub_script.txt* file. Fill the file with what your batch system submission script looks like. For example, my institution uses *slurm* and my *sub_script.txt* file looks like:
 
@@ -251,7 +251,7 @@ Alright! Your project has been created and your jobs are ready for submission. N
 /Users/Nerd/Desktop/MyWorkDir/ZhaoConst3Plum/Submissions/
 ```
 
-you will find your submission scripts as well as the *priors.txt* file. This is full of default **pyGravSphere** priors. Now you might want to change those. To do so, simply edit the lower and upper priors on each parameter. If you decide you want to keep any of the parameters constant, simply edit the last column and make sure "min" and "max" values are the same. So, for example, if I want to keep the inner slope *gamma* at 1, I will edit the priors:
+you will find your submission scripts as well as the *priors.txt* file. This is full of default **pyGravSphere** priors. Now you might want to change those. To do so, simply edit the lower and upper priors on each parameter. If you decide you want to keep any of the parameters constant, simply edit the second last column and make sure "min" and "max" values are the same. So, for example, if I want to keep the inner slope *gamma* at 1, I will edit the priors:
 
 ```
 rhos rhosmin rhosmax rhosconst 5 10. False VAR
@@ -384,6 +384,7 @@ The era of *Python 2* is coming to an end and we will be soon upgrading to *Pyth
 
 In terms of the functionality, the updates will include:
 
+* UnFix the number of stars per bin (currently constant at 15 stars per bin. In my first ever paper I did Jeans analysis based on 13 stars. Not ideal.)
 * Flexible number of power law bins
 * Multiple tracer populations
 * Proper motions data
