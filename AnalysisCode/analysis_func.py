@@ -494,7 +494,7 @@ def return_sigma_vsp(chains, options, priors, min_r, max_r, points,codedir,workd
 		nparams = nparams + 5
 	if beta_opt == 'Baes':
 		nparams = nparams + 4
-	elif beta_opt == 'Constant':
+	elif beta_opt == 'Const':
 		nparams = nparams + 1
 	if plummer_opt == 'Plummer3':
 		nparams = nparams + 6
