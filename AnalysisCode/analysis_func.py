@@ -180,7 +180,7 @@ def return_beta(chains, options, priors, min_r, max_r, points,codedir,workdir, p
 		np.savetxt(workdir + project_name + '/Analysis/Limits/'+ '%s_Beta'% galaxy +  'Lims.txt', res)
 
 
-	elif beta_opt == 'Constant':
+	elif beta_opt == 'Const':
 		beta_priors = priors[starter: starter + 1, :]
 		fixed_beta_params, = np.where(beta_priors[:, 6] == 'True')
 		free_beta_params, = np.where(beta_priors[:, 6] == 'False')
@@ -339,12 +339,12 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 
 			big_j = np.log10(big_j)
 
-			c = c+1
+			
 			
 
 			for b in range(0, len(big_j)):
 
-				lin = np.logspace(np.minimum([np.log10(min_rad)-1], [-3]),np.log10(r[b]),2000)
+				lin = np.logspace(np.minimum([np.log10(min_r)-1], [-3]),np.log10(r[b]),2000)
 				mass_try = simps(mass_zhao(lin,rhos,rs,alpha,beta,gamma), lin, even = 'avg')
 				js[b].append(float(big_j[b]))
 				masses[b].append(float(np.log10(mass_try)))
@@ -408,7 +408,7 @@ def return_plummer(chains, options, priors, min_r, max_r, points,codedir,workdir
 		fixed, = np.where(priors[starter:starter+4, 6] == 'True')
 		starter = starter + 4
 		effective = effective + 4 - np.size(fixed)
-	elif beta_opt == 'Constant':	
+	elif beta_opt == 'Const':	
 		fixed, = np.where(priors[starter:starter+1, 6] == 'True')
 		starter = starter + 1
 		effective = effective + 1 - np.size(fixed)

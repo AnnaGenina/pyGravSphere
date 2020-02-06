@@ -66,7 +66,7 @@ chains = chains[fin]
 if len(chains) < samples:
 	print 'Less finite likelihood chains than required samples.'
 	print 'There are %d' %len(chains) + ' finite chains. Proceeding.'
-	samples = chains
+	samples = len(chains)
 
 print 'Selecting random sample of chains'
 np.random.shuffle(chains)
