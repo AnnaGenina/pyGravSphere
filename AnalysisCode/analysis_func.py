@@ -300,7 +300,7 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 
 
 	if dark_opt == 'Zhao':
-		huge_scale = np.logspace(-3.01,1.6, 10000)
+		huge_scale = np.logspace(np.log10(min_r)-0.01,np.log10(max_r)+0.01, 10000)
 		inter_zhao = (huge_scale[1:] + huge_scale[:-1])/2.
 		diff_zhao_dist = huge_scale[1:] - huge_scale[:-1]
 
@@ -344,8 +344,8 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 
 			for b in range(0, len(big_j)):
 
-				lin = np.logspace(np.minimum([np.log10(min_r)-1], [-3]),np.log10(r[b]),2000)
-				mass_try = simps(mass_zhao(lin,rhos,rs,alpha,beta,gamma), lin, even = 'avg')
+				lin = np.logspace(np.minimum([np.log10(min_r)-1], [-3]),np.log10(r[b]),1000)
+				mass_try = simps(np.log(10) * lin * mass_zhao(lin,rhos,rs,alpha,beta,gamma), np.log10(lin), even = 'avg')
 				js[b].append(float(big_j[b]))
 				masses[b].append(float(np.log10(mass_try)))
 				grad_rho[b].append(float(spec_loglog[b]))
