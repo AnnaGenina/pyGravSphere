@@ -5,7 +5,7 @@
  / .___/\__, /\____/_/ |_/_/  |_|___//____/_/   /_/ /_/_____/_/ |_/_____/   
 /_/    /____/                                                               
 
-					v.1.0.1	-- first bug complaints fixed
+					v.1.0.2	-- first bug complaints fixed
 J.I.Read & P.Sterger MNRAS, 471, 4541  
 
 A.Genina, J.I.Read et al. arXiv:1911.09124

@@ -7,6 +7,7 @@ import glob
 import datetime
 from multiprocessing import cpu_count
 import warnings
+import math
 
 cwd = str(os.getcwd())
 
@@ -630,7 +631,9 @@ while program == True:
 		while valid_options == False:
 			print "Do you need to cut chains? "
 			print "It looks like you ran %d, excluding burn-in." %(int(steps)-int(burn_in))
-			cut_off = gsTools.check_float("How many first steps fould you like to discard for each chain? ")
+			cut_off = gsTools.check_float("How many first steps would you like to discard for each chain? (this will be rounded up to nearest 100) ")
+			cut_off = int(math.ceil(cut_off / 100.0)) * 100
+			
 			if (int(cut_off) >= (int(steps)-int(burn_in))):
 				print "Cut off can't be more than total chains. Starting again. \n"
 				valid_options = False
@@ -646,7 +649,7 @@ while program == True:
 			min_rad = gsTools.check_float("Minimum radius = ")
 			if float(min_rad) == 0:
 				print "Can't do log of zero, setting minimum radius to 0.01"
-				min_rad = "0.01"
+				min_rad = 0.01
 			max_rad = gsTools.check_float("Maximum radius = ")
 			if (float(min_rad) < 0) or (float(max_rad) < 0):
 				print "Distances can't be negative. Starting again. \n"
