@@ -6,8 +6,7 @@ import profiles
 
 def galaxy_data(gal_num, outdir, data_loc):
 
-    Nbinin_phot = 15
-    Nbinin_kin = 15
+    
     Mstar_rlim = 50.0
 
     
@@ -50,10 +49,8 @@ def galaxy_data(gal_num, outdir, data_loc):
     Mstar = data['StellarMass3R'].value  # mass within 3 Rhalf
     Mstar_err = Mstar*0.25 # assume some error ~25% of value
 
-    if (Nbinin_phot < 0):
-        Nbin = np.sqrt(np.sum(ms_phot))
-    else:
-        Nbin = Nbinin_phot
+    Nbin = int(len(ms_phot)/np.sqrt(len(ms_phot)))   
+
     print 'Number of photometric data points:', len(ms_phot)
     print 'Number of stars per photometric bin:', Nbin
 
@@ -67,10 +64,7 @@ def galaxy_data(gal_num, outdir, data_loc):
  
    # And calculate the velocity disperison profile, vs1 and vs2:
 
-    if (Nbinin_kin < 0):
-        Nbin = np.sqrt(np.sum(ms_kin))
-    else:
-        Nbin = Nbinin_kin
+    Nbin = int(len(ms_kin)/np.sqrt(len(ms_kin)))
 
     print 'Number of kinematic data points:', len(ms_kin)
     print 'Number of stars per kinematic bin:', Nbin
