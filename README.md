@@ -5,6 +5,8 @@
 Below is my attempt at a tutorial. If any questions or suggestions arise, do feel free to contact *anna.genina@durham.ac.uk*.
 
 
+**Note from 26/05/2020: when using the in-built preprocessing functionality pyGravsphere now defaults to $`N/\sqrt{N}`$ stars per bin.**
+
 
 ## Getting Started
 
@@ -384,7 +386,6 @@ The era of *Python 2* is coming to an end and we will be soon upgrading to *Pyth
 
 In terms of the functionality, the updates will include:
 
-* UnFix the number of stars per bin (currently constant at 15 stars per bin. In my first ever paper I did Jeans analysis based on 13 stars. Not ideal.)
 * Flexible number of power law bins
 * Multiple tracer populations
 * Proper motions data
