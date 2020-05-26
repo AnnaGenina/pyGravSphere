@@ -5,7 +5,7 @@
 Below is my attempt at a tutorial. If any questions or suggestions arise, do feel free to contact *anna.genina@durham.ac.uk*.
 
 
-**Note from 26/05/2020: when using the in-built preprocessing functionality pyGravsphere now defaults to $`N/\sqrt{N}`$ stars per bin.**
+**Note from 26/05/2020: when using the in-built preprocessing functionality pyGravsphere now defaults to <img src="https://render.githubusercontent.com/render/math?math=N/\sqrt{N}"> stars per bin.**
 
 
 ## Getting Started
