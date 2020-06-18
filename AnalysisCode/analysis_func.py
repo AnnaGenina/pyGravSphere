@@ -300,6 +300,9 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 
 
 	if dark_opt == 'Zhao':
+
+
+
 		huge_scale = np.logspace(np.log10(min_r)-0.01,np.log10(max_r)+0.01, 10000)
 		inter_zhao = (huge_scale[1:] + huge_scale[:-1])/2.
 		diff_zhao_dist = huge_scale[1:] - huge_scale[:-1]

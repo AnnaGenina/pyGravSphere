@@ -36,7 +36,7 @@ def get_surfden_bins(R,ms,Nbin,maxdatrad,maxdatfitrad,p0in,p0in_min,p0in_max, Ms
             surfden_t[cnt] = surfden_t[cnt] + ms[index[i]] # add masses to bin
             jsum = jsum + ms[index[i]] # add masses to get one number
             rbin_phot_t[cnt] = R[index[i]] # update max position
-        else: # gone above Nbin
+        if (jsum >= Nbin): # gone above Nbin
             norm[cnt] = jsum # total number in bin
             if (cnt == 0):
                 area = np.pi*rbin_phot_t[cnt]**2.0 # if this is bin zero
@@ -118,7 +118,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
                 (vz[index[i]]-vzmean)**2.*ms[index[i]]    # number weighted 2nd moment
             rbin_tmp[cnt] = R[index[i]]                        # where is the furthest star in bin?
             jsum = jsum + ms[index[i]]
-        else:
+        if (jsum >= Nbin):
             norm[cnt] = jsum
             jsum = 0.0
             cnt = cnt + 1
@@ -152,7 +152,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
                 vlos2_pureerr[k,cnt] = vlos2_pureerr[k,cnt] + \
                     vz_pure_err**2.*ms[index[i]]
                 jsum = jsum + ms[index[i]]
-            else:
+            if (jsum >= Nbin):
                 norm[cnt] = jsum
                 jsum = 0.0
                 cnt = cnt + 1
