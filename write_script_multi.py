@@ -109,8 +109,8 @@ for i in range(0, len(const_var)):
 	f.write("const_gam, = np.where((const_var > 0) & (const_var < 6))" + "\n")
 
 	if darkmatter == 'PL':
-		f.write("min_gammas0 = np.array([gamma0min,gamma1min,gamma2min,gamma3min,gamma4min])" + "\n")
-		f.write("max_gammas0 = np.array([gamma0max,gamma1max,gamma2max,gamma3max,gamma4max])" + "\n")
+		f.write("min_gammas0 = np.array([gamma0min,gamma1min,gamma2min,gamma3min,gamma4min], dtype = np.float32)" + "\n")
+		f.write("max_gammas0 = np.array([gamma0max,gamma1max,gamma2max,gamma3max,gamma4max], dtype = np.float32)" + "\n")
 
 
 	f.write(r"""data = (kindat, lightpower,vir_shape,r_c, surfden,stellar_mass)
@@ -279,9 +279,9 @@ def plummer_proj_sum(args, x_data, n_comp):
 	f.write("\t" + "max_vals = np.array([" + "".join("{},".format(i) for i in max_vals) + "])" + "\n")
 
 	if darkmatter == 'PL':
-		f.write("\t" + "gammas = np.array([gamma0,gamma1,gamma2,gamma3,gamma4])" + '\n')
-		f.write("\t" + "min_gammas = np.array([gamma0min,gamma1min,gamma2min,gamma3min,gamma4min])" + '\n')
-		f.write("\t" + "max_gammas = np.array([gamma0max,gamma1max,gamma2max,gamma3max,gamma4max])" + '\n')
+		f.write("\t" + "gammas = np.array([gamma0,gamma1,gamma2,gamma3,gamma4], dtype = np.float32)" + '\n')
+		f.write("\t" + "min_gammas = np.array([gamma0min,gamma1min,gamma2min,gamma3min,gamma4min], dtype = np.float32)" + '\n')
+		f.write("\t" + "max_gammas = np.array([gamma0max,gamma1max,gamma2max,gamma3max,gamma4max], dtype = np.float32)" + '\n')
 		f.write("\t" + "min_gammas[1:] =  gammas[0:4] - 0.01" + "\n")
 		f.write("\t" + "max_gammas[1:] =  gammas[0:4] + gamsmooth" + "\n")
 		f.write("\t" + "min_gammas[min_gammas < min_gammas0] = min_gammas0[min_gammas < min_gammas0]" + "\n")
