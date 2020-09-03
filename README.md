@@ -368,7 +368,7 @@ So you got an awesome result? Great! ***You're welcome!*** Please don't foget to
 
 as well as the paper that brought you here:
 
-**http://arxiv.org/abs/1911.09124**
+**https://ui.adsabs.harvard.edu/abs/2020MNRAS.tmp.2435G/abstract**
 
 Thanks!
 
