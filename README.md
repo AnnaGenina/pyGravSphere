@@ -374,7 +374,7 @@ Thanks!
 
 ## Issues
 
-Contact me at *anna.genina@durham.ac.uk*. If it's wrong, we'll fix it.
+Contact me at *agenina@mpa-garching.mpg.de*. If it's wrong, we'll fix it.
 
 ## License
 
