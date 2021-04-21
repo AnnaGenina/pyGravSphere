@@ -8,7 +8,8 @@ Below is my attempt at a tutorial. If any questions or suggestions arise, do fee
 **Note from 26/05/2020: when using the in-built preprocessing functionality pyGravsphere now defaults to <img src="https://render.githubusercontent.com/render/math?math=N/\sqrt{N}"> stars per bin.**
 
 
-**A pyGravSphere-based binning routine for the second velocity moments has been introduced in Zoutendijk et al. 2021 (https://arxiv.org/abs/2101.00253)**
+**A more sophisticated pyGravSphere-based binning routine for the second velocity moments has been introduced in Zoutendijk et al. 2021(https://arxiv.org/abs/2101.00253)**
+
 **This can be found here: https://github.com/slzoutendijk/hkbin**
 
 ## Getting Started
@@ -171,7 +172,8 @@ Galaxy_3, Galaxy_1
 The output files will make their way to the *GalaxyData* directory inside your working directory. If you would like to process your data yourself, make sure the format is the same as here.
 
 
-**Note that a more sophisticated pyGravSphere-based binning routine for the second moments has been introduced in Zoutendijk et al. 2021**
+**Note that a more sophisticated pyGravSphere-based binning routine for the second velocity moments has been introduced in Zoutendijk et al. 2021**
+
 **This can be found here: https://github.com/slzoutendijk/hkbin**
 
 ### Preparing submission scripts
