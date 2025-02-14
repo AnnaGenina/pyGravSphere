@@ -447,7 +447,9 @@ while runtime == True:
 			chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
 			last_chains = chains[-nwalkers*100:]
 			split_ch = np.array_split(last_chains, nwalkers)
-			options = np.loadtxt(workdir + '/' + project_name + '/options.txt')
+			options = []
+			with open(workdir + '/' + project_name + '/options.txt', 'r') as file:
+				options = file.readline().split()
 			walk_org = int(options[5])
 			if walk_org != nwalkers:
 				print "This is a different number of walkers to before! Quitting!"
@@ -458,6 +460,7 @@ while runtime == True:
 			pos,prob,state =  sampler.run_mcmc(pos, 1)
 
 			if restart == 'restart':
+				print 'restarting!'
 				completed = int(float(len(chains))/float(nwalkers))		
 			elif restart == 'continue':	
 				completed = 0
@@ -502,7 +505,7 @@ while runtime == True:
 
 		
 
-
+	print "total iterations left: ", (tot_iter)100
 	for i in range(0, (tot_iter)/100):
 		print 'Starting', i
 		pos, prob, state = sampler.run_mcmc(pos, 100, lnprob0 = prob, rstate0 = state)

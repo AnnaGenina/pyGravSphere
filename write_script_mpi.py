@@ -65,7 +65,6 @@ def check_beta(beta):
 
 """)
 	f.write(r"galaxy_number = '%s'" % (galaxy_number) + "\n")
-	
 	f.write(r"burn_in = %d" %burn_in + "\n")
 	f.write(r"steps = %d" %steps + "\n")
 	f.write(r"bins = %d" %bins + "\n")
@@ -73,20 +72,14 @@ def check_beta(beta):
 	f.write(r"project_name = '%s'" % project_name + "\n")
 	f.write("restart = '%s'" %restart + "\n")
 	f.write(r"completed = 0" +  "\n")
-        f.write(r"""kindat,lightpower,vir_shape,surfden,r_c, stellar_mass = gal_input.galaxy_data_read(galaxy_number, workdir + '/GalaxyData/')
-
-
+	f.write(r"""kindat,lightpower,vir_shape,surfden,r_c, stellar_mass = gal_input.galaxy_data_read(galaxy_number, workdir + '/GalaxyData/')
 r_bins = np.array([0.25,0.5,1,2,4]) * r_c
-
 min_rad = np.log10(r_c/100)
 max_rad = np.log10(r_c*50)
-
 gamsmooth = np.loadtxt(workdir + '/' + project_name + '/Submissions/gamsmooth.txt')
 if np.size(gamsmooth) not in [1,4]:
 	print "Gamsmooth needs to be either one fixed value or 4 diffent values. Quitting."
 	quit()
-
-
 """)
 	priors = np.loadtxt(workdir + "/" + project_name + "/Submissions/priors.txt", dtype = "str")
 	for p in range(0, len(priors)):
@@ -450,8 +443,11 @@ with MPIPool() as pool:
 			chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
 			last_chains = chains[-nwalkers*100:]
 			split_ch = np.array_split(last_chains, nwalkers)
-			options = np.loadtxt(workdir + '/' + project_name + '/options.txt')
+			options = []
+			with open(workdir + '/' + project_name + '/options.txt', 'r') as file:
+				options = file.readline().split()
 			walk_org = int(options[5])
+			
 			if walk_org != nwalkers:
 				print "This is a different number of walkers to before! Quitting!"
 				sys.exit(0)
@@ -463,6 +459,7 @@ with MPIPool() as pool:
 				
 
 			if restart == 'restart':
+				print 'restarting!'
 				completed = int(float(len(chains))/float(nwalkers))		
 			elif restart == 'continue':	
 				completed = 0
@@ -484,7 +481,7 @@ with MPIPool() as pool:
 
 			
 			pos, prob,state = sampler.run_mcmc(pos, 1)
-		        tot_iter = steps
+		    	tot_iter = steps
 			
 		 		
 
@@ -500,7 +497,7 @@ with MPIPool() as pool:
 	sampler.reset()	
 
 
-
+	print "total iterations left: ", (tot_iter)/100
 	for i in range(0, (tot_iter)/100):
 		print 'Starting', i
 		pos, prob, state = sampler.run_mcmc(pos, 100, lnprob0 = prob, rstate0 = state)
@@ -512,7 +509,7 @@ with MPIPool() as pool:
 			out = np.zeros((len(samples), ndim + 1))
 			out[:,0:ndim] = samples
 			out[:,ndim] = pp.reshape((len(samples)))
-			f_handle = file(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_Chains' %galaxy_number + project_name + ".txt", 'a+')
+			f_handle = open(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_Chains' %galaxy_number + project_name + ".txt", 'a+')
 			np.savetxt(f_handle,out)
 			f_handle.close()
 		sampler.reset()
