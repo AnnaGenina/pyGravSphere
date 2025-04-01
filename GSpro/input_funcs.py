@@ -265,7 +265,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
     if (len(rbin_tmp_full) > 1):
         #Calculate sigLOS(Rhalf) and output:
         if (np.max(rbin_tmp_full) > Rhalf):
-            j=0L
+            j=0
             while (rbin_tmp_full[j] < Rhalf):
                 j=j+1
             print('sigLOS(Rhalf) [km/s]:', np.sqrt(vlos2med_full[j]))
