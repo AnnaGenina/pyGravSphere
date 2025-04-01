@@ -472,7 +472,7 @@ def return_plummer(chains, options, priors, min_r, max_r, points,codedir,workdir
 		
 	else:
 		
-		print 'No limits for single Plummer profile'
+		print('No limits for single Plummer profile')
 
 def return_sigma_vsp(chains, options, priors, min_r, max_r, points,codedir,workdir,project_name, galaxy):
 

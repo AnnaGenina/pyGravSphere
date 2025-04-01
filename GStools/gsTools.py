@@ -13,26 +13,26 @@ def check_galdata(all_gals, workdir):
 		all_good = True
 		
 		if os.path.exists(workdir + '/GalaxyData/' + gal + '_VSPs.txt') == False:
-			print "No VSP file in GalaxyData for ", gal
+			print("No VSP file in GalaxyData for ", gal)
 			all_good = False	
 		if os.path.exists(workdir + '/GalaxyData/' + gal + '_Mstar.txt') == False:
-			print "No Mstar file in GalaxyData for ",gal
+			print("No Mstar file in GalaxyData for ",gal)
 			all_good = False
 		if os.path.exists(workdir + '/GalaxyData/' + gal + '_PlumParam.txt') == False:
-			print "No PlumParam file in GalaxyData for ",gal
+			print("No PlumParam file in GalaxyData for ",gal)
 			all_good = False
 		if os.path.exists(workdir + '/GalaxyData/' + gal + '_Rhalf.txt') == False:
-			print "No Rhalf file in GalaxyData for ",gal
+			print("No Rhalf file in GalaxyData for ",gal)
 			all_good = False
 		if os.path.exists(workdir + '/GalaxyData/' + gal + '_SurfDen.txt') == False:
-			print "No SurfDen file in GalaxyData for ",gal
+			print("No SurfDen file in GalaxyData for ",gal)
 			all_good = False
 		if os.path.exists(workdir + '/GalaxyData/' + gal + '_KinDat.txt') == False:
-			print "No KinDat file in GalaxyData for ",gal
+			print("No KinDat file in GalaxyData for ",gal)
 			all_good = False
 		if all_good == False:
-			print "Please pre-process the data for galaxy ", gal
-			print "Goodbye!"
+			print("Please pre-process the data for galaxy ", gal)
+			print("Goodbye!")
 			sys.exit()
 	return 0		
 		
@@ -42,11 +42,11 @@ def check_float(text):
 	
 	while isfloat == False:
 		try: 
-			var = float(raw_input(text))
+			var = float(input(text))
 			isfloat = True
 		except ValueError:
-			print "Must be a float/integer"
-		 	isfloat = False
+			print("Must be a float/integer")
+			isfloat = False
 	return float(var)		
 
 def checkdirs(workdir, codedir):

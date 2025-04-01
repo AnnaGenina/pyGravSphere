@@ -32,8 +32,8 @@ def galaxy_data(gal_num, outdir, data_loc):
     try:
 	    vzerr_kin = data['KinVelErr'].value  # errors are all 2 km/s
     except KeyError:
-            print 'Velocity error dataset does not exist :('
-            print 'I will assume 2 km/s errors'
+            print('Velocity error dataset does not exist :(')
+            print('I will assume 2 km/s errors')
     ms_kin = data['KinematicsMasses'].value
     ms_kin = (ms_kin / np.sum(ms_kin) ) * len(ms_kin) # number relative contribution  ni/mi ~ ntot/mtot
 
@@ -51,8 +51,8 @@ def galaxy_data(gal_num, outdir, data_loc):
 
     Nbin = int(len(ms_phot)/np.sqrt(len(ms_phot)))   
 
-    print 'Number of photometric data points:', len(ms_phot)
-    print 'Number of stars per photometric bin:', Nbin
+    print('Number of photometric data points:', len(ms_phot))
+    print('Number of stars per photometric bin:', Nbin)
 
     # Calculate the surface density
 
@@ -66,12 +66,12 @@ def galaxy_data(gal_num, outdir, data_loc):
 
     Nbin = int(len(ms_kin)/np.sqrt(len(ms_kin)))
 
-    print 'Number of kinematic data points:', len(ms_kin)
-    print 'Number of stars per kinematic bin:', Nbin
+    print('Number of kinematic data points:', len(ms_kin))
+    print('Number of stars per kinematic bin:', Nbin)
 
     nmonte = 1000  # Sampling iterations
 
-    print 'Calculating the velocity dispersion with Nbin:', Nbin
+    print('Calculating the velocity dispersion with Nbin:', Nbin)
     rbin_kin, sigpmean, sigperr, \
         vs1bin, vs2bin, vs1err, vs2err = \
         funcs.calc_virial_moments(Rhalf,nmonte,R_kin,vz_kin,vzerr_kin,ms_kin,\
