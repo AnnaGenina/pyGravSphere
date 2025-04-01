@@ -96,7 +96,7 @@ def residual_powline(params, x, data, eps_data):
 
 def fit_powline(rbin_tmp,vlos4med,vlos4err,Rhalf):
     max_r = np.max(rbin_tmp)
-    j=0L
+    j=0
     if (max_r > Rhalf):
         while(rbin_tmp[j] < Rhalf):
             j=j+1
