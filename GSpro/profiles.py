@@ -2,8 +2,8 @@ import numpy as np
 
 def multiplumsurf(r,pars):
 
-    Mpars = pars[0:len(pars)/2]  #first half are Mi
-    apars = pars[len(pars)/2:len(pars)] #second half is ai
+    Mpars = pars[0:int(len(pars)/2)]  #first half are Mi
+    apars = pars[int(len(pars)/2):int(len(pars))] #second half is ai
     nplum = len(Mpars) #number of plummer components
     multplum = np.zeros(len(r))
     for i in range(len(Mpars)):
