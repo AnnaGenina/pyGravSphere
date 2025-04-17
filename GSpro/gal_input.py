@@ -74,7 +74,7 @@ def galaxy_data(gal_num, outdir, data_loc):
 
     print('Calculating the velocity dispersion with Nbin:', Nbin)
     rbin_kin, sigpmean, sigperr, \
-        vs1bin, vs2bin, vs1err, vs2err = \
+        vs1bin, vs2bin, vs1err, vs2err, v4, v4_err = \
         funcs.calc_virial_moments(Rhalf,nmonte,R_kin,vz_kin,vzerr_kin,ms_kin,\
                             pfits, maxdatrad,Nbin, outdir, gal_num)
 
@@ -88,13 +88,18 @@ def galaxy_data(gal_num, outdir, data_loc):
     kin_dat[:,1] = sigpmean
     kin_dat[:,2] = sigperr
 
+    v4_prof = np.zeros((len(rbin_kin), 3))
+    v4_prof[:,0] = rbin_kin
+    v4_prof[:,1] = v4
+    v4_prof[:,2] = v4_err
+
     np.savetxt(outdir + "/%s_KinDat.txt" %gal_num, kin_dat)
     np.savetxt(outdir + "/%s_PlumParam.txt" %gal_num, pfits)
     np.savetxt(outdir + "/%s_VSPs.txt" %gal_num, np.array([vs1bin,vs1err,vs2bin, vs2err]))
     np.savetxt(outdir + "/%s_SurfDen.txt" %gal_num, surfden_dat)
     np.savetxt(outdir + "/%s_Rhalf.txt" %gal_num, [Rhalf])
     np.savetxt(outdir + "/%s_Mstar.txt" %gal_num, Mstar)
-
+    np.savetxt(outdir + "/%s_v4profile.txt" %gal_num, v4_prof)
     return 0
 #galaxy =0
 def galaxy_data_read(gal_num, outdir):
