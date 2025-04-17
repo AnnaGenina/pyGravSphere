@@ -17,8 +17,8 @@ def threeplumsurf(r,M1,M2,M3,a1,a2,a3):
 
 def multiplummass(r,pars):
     
-    Mpars = pars[0:len(pars)/2]
-    apars = pars[len(pars)/2:len(pars)]
+    Mpars = pars[0:int(len(pars)/2)]
+    apars = pars[int(len(pars)/2):len(pars)]
     nplum = len(Mpars)
     multplum = np.zeros(len(r))
     for i in range(len(Mpars)):
