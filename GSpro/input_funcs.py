@@ -227,7 +227,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
     p0in_min = np.zeros(3)
     p0in_max = np.array([1e5,1.0,1e5])
 
-    fitmin = len(rbin_tmp)/2   # half of data range, not quite rhalf
+    fitmin = int(len(rbin_tmp)/2)   # half of data range, not quite rhalf
     pfitmed = fits.v4fit(p0in,p0in_min,p0in_max,\
                         rbin_tmp[fitmin:],vlos4med[fitmin:],\
                         vlos4err[fitmin:])    #not used

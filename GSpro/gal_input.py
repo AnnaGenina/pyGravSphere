@@ -13,7 +13,7 @@ def galaxy_data(gal_num, outdir, data_loc):
     
     p0in = np.array([100,100,100,0.1,0.5,0.75])
     p0in_min = np.array([10,10,10,0.005,0.005,0.005])
-    p0in_max = np.array([1e6,1e6,1e6,5.0,5.0,5.0])
+    p0in_max = np.array([1e6,1e6,1e6,10.0,10.0,10.0])
 
     tracertol = 0.5
     maxdatrad = 50.0
