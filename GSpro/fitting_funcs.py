@@ -1,6 +1,6 @@
 import numpy as np
 import lmfit as lm
-import profiles
+from GSpro import profiles
 
 def calcmedquartnine(array):
     index = np.argsort(array,axis=0)

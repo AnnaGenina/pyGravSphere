@@ -1,8 +1,9 @@
 import numpy as np
-import input_funcs as funcs
+import sys
+from GSpro import input_funcs as funcs
 import h5py
 import matplotlib.pyplot as plt
-import profiles
+from GSpro import profiles
 
 def galaxy_data(gal_num, outdir, data_loc):
 

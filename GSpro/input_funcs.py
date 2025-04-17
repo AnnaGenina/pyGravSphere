@@ -1,6 +1,6 @@
 import profiles
-from scipy.integrate.quadrature import simps as integrator
-import fitting_funcs as fits
+from scipy.integrate import simps
+from GSpro import fitting_funcs as fits
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -82,7 +82,7 @@ def get_surfden_bins(R,ms,Nbin,maxdatrad,maxdatfitrad,p0in,p0in_min,p0in_max, Ms
     Mcum_surf = 0.0
     i = 1
 
-    print 'Norm ::', norm,pfits[0]+pfits[1]+pfits[2]
+    print('Norm ::', norm,pfits[0]+pfits[1]+pfits[2])
 
     while (Mcum_surf < (pfits[0]+pfits[1]+pfits[2])/2.0/norm): #  cum_mass/tot_mass = 0.5  compute the half-mass radius
 
@@ -91,7 +91,7 @@ def get_surfden_bins(R,ms,Nbin,maxdatrad,maxdatfitrad,p0in,p0in_min,p0in_max, Ms
         #Alternatively : use Simpson's rule  Mcum_surf =  Mcum_surf + integrator(Mstar_surf[:i] * 2 * np.pi * ranal[:i],ranal[:i])
         i = i + 1
     Rhalf = ranal[i-1]
-    print 'Rhalf calculated: ', Rhalf
+    print('Rhalf calculated: ', Rhalf)
 
     return rbin_phot, surfden, surfdenerr, \
         rbin_photfit, surfdenfit, surfdenerrfit, \
@@ -212,7 +212,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
 
     #Demand positive:
 
-    print 'Dispersion profile:', np.sqrt(vlos2med)
+    print('Dispersion profile:', np.sqrt(vlos2med))
 
 
     vlos2med = vlos2med[vlos4med > 0]
@@ -276,10 +276,10 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
     if (len(rbin_tmp_full) > 1):
         #Calculate sigLOS(Rhalf) and output:
         if (np.max(rbin_tmp_full) > Rhalf):
-            j=0L
+            j=0.0
             while (rbin_tmp_full[j] < Rhalf):
                 j=j+1
-            print 'sigLOS(Rhalf) [km/s]:', np.sqrt(vlos2med_full[j])
+            print('sigLOS(Rhalf) [km/s]:', np.sqrt(vlos2med_full[j]))
 
         fig = plt.figure(figsize=(figx,figy))
         ax = fig.add_subplot(111)
@@ -333,8 +333,8 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
                     pfits_powline[2],router,gamout)
     test_surfden = profiles.threeplumsurf(rint,pfits[0],pfits[1],pfits[2],\
                                      pfits[3],pfits[4],pfits[5])
-    vs1imp = integrator(tvl4*test_surfden*rint,rint)
-    vs2imp = integrator(tvl4*test_surfden*rint**3.0,rint)
+    vs1imp = simps(tvl4*test_surfden*rint,rint)
+    vs2imp = simps(tvl4*test_surfden*rint**3.0,rint)
 
     #Monte-Carlo to calculate the ~1sigma errors:
     vs1_samp = np.zeros(nmonte)
@@ -355,8 +355,8 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
         tvl4 = fits.tvl4func(rint,rbin_tmp,vlos4_samp,\
                         pfits_powline[0],pfits_powline[1],\
                         pfits_powline[2],router,gamout)
-        vs1_samp[i] = integrator(tvl4*test_surfden*rint,rint)
-        vs2_samp[i] = integrator(tvl4*test_surfden*rint**3.0,rint)
+        vs1_samp[i] = simps(tvl4*test_surfden*rint,rint)
+        vs2_samp[i] = simps(tvl4*test_surfden*rint**3.0,rint)
 
     median, sixlow, sixhigh, ninelow, ninehigh,\
         nineninehigh, nineninelow = fits.calcmedquartnine(vs1_samp)
@@ -365,8 +365,8 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
         nineninehigh, nineninelow = fits.calcmedquartnine(vs2_samp)
     vs2imperr = (sixhigh-sixlow)/2.0
 
-    print 'VirialShape vs1:', vs1imp,vs1imperr
-    print 'VirialShape vs2:', vs2imp,vs2imperr
+    print('VirialShape vs1:', vs1imp,vs1imperr)
+    print('VirialShape vs2:', vs2imp,vs2imperr)
 
     vs1bin = vs1imp
     vs2bin = vs2imp
@@ -384,18 +384,18 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
     zeta_A = np.float(len(R))*np.sum(vz**4.0)/np.sum(vz**2.0)**2.0
     zeta_B = np.float(len(R))**2.0*np.sum(vz**4.0*R**2.0)/\
         (np.sum(vz**2.0)**2.0*np.sum(R**2.0))
-    print 'Richardson+Fairbairn estimators:'
-    print 'Nstars, zeta_A, zeta_B', len(R), zeta_A, zeta_B
+    print('Richardson+Fairbairn estimators:')
+    print('Nstars, zeta_A, zeta_B', len(R), zeta_A, zeta_B)
 
     mean_disp = np.sum(sigpmean)/np.float(len(sigpmean))
-    print 'Mean dispersion:', mean_disp
-    print 'Mean dispersion error:', np.sqrt(np.sum((sigpmean-mean_disp)**2.0)/\
-        np.float(len(sigpmean)-1))/np.sqrt(len(sigpmean))
+    print('Mean dispersion:', mean_disp)
+    print('Mean dispersion error:', np.sqrt(np.sum((sigpmean-mean_disp)**2.0)/\
+        np.float(len(sigpmean)-1))/np.sqrt(len(sigpmean)))
 
     #plt.errorbar(rbin_kin,sigpmean, sigperr)
     #plt.show()
 
-    print 'Started plotting'
+    print('Started plotting')
 
     plt.figure(figsize = (5,5))
     plt.hist(vs1_samp,bins = 50, histtype = 'step')
@@ -415,7 +415,7 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
     plt.savefig(outdir+'Galaxy_%s_v2hist.pdf' % gal_num,bbox_inches='tight')
     plt.close()
     	
-    print 'Finished plotting'
+    print('Finished plotting')
 
     return rbin_kin, sigpmean, sigperr, \
         vs1bin, vs2bin, vs1err, vs2err
