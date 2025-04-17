@@ -1,6 +1,7 @@
 import profiles
 from scipy.integrate import simps
 from GSpro import fitting_funcs as fits
+from GSpro import profiles
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
