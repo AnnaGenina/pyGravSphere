@@ -27,27 +27,27 @@ def galaxy_data(gal_num, outdir, data_loc):
 
 
     data = h5py.File(data_loc + "/%s.hdf5" %gal_num, 'r')
-    pos_kin = data['KinematicsPositions'].value
+    pos_kin = data['KinematicsPositions'][:]
     R_kin = np.sqrt(np.sum(pos_kin**2, axis = 1))/1000.0 # in kpc
-    vz_kin = data['KinematicsVelocities'].value
+    vz_kin = data['KinematicsVelocities'][:]
     try:
-	    vzerr_kin = data['KinVelErr'].value  # errors are all 2 km/s
+	    vzerr_kin = data['KinVelErr'][:]  # errors are all 2 km/s
     except KeyError:
             print('Velocity error dataset does not exist :(')
             print('I will assume 2 km/s errors')
-    ms_kin = data['KinematicsMasses'].value
+    ms_kin = data['KinematicsMasses'][:]
     ms_kin = (ms_kin / np.sum(ms_kin) ) * len(ms_kin) # number relative contribution  ni/mi ~ ntot/mtot
 
 
     #Subtract space velocity:
     vz_kin = vz_kin - np.sum(ms_kin*vz_kin)/np.sum(ms_kin)  # com velocity subtracted
 
-    pos_phot = data['PhotometryPositions'].value
+    pos_phot = data['PhotometryPositions'][:]
     R_phot = np.sqrt(np.sum(pos_phot**2, axis = 1))/1000.0 # kpc
-    ms_phot = data['PhotometryMasses'].value
+    ms_phot = data['PhotometryMasses'][:]
     ms_phot = ms_phot / np.sum(ms_phot)*len(ms_phot)
 
-    Mstar = data['StellarMass3R'].value  # mass within 3 Rhalf
+    Mstar = data['StellarMass3R'][:]  # mass within 3 Rhalf
     Mstar_err = Mstar*0.25 # assume some error ~25% of value
 
     Nbin = int(len(ms_phot)/np.sqrt(len(ms_phot)))   
