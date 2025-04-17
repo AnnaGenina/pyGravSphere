@@ -505,8 +505,8 @@ while runtime == True:
 
 		
 
-	print("total iterations left: ", (tot_iter)100)
-	for i in range(0, (tot_iter)/100):
+	print("total iterations left: ", int((tot_iter)/100))
+	for i in range(0, int((tot_iter)/100)):
 		print('Starting', i)
 		pos, prob, state = sampler.run_mcmc(pos, 100, lnprob0 = prob, rstate0 = state)
 		print('Finished', i )
