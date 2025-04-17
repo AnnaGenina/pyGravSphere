@@ -73,7 +73,7 @@ np.random.shuffle(chains)
 num_ch = np.random.choice(np.arange(len(chains)),samples, replace = False)
 chains = chains[num_ch]
 ch_org = len(chains)
-print('Selected %d samples' %ch_org
+print('Selected %d samples' %ch_org)
 
 print('Running beta')
 analysis_func.return_beta(chains, options, priors, min_r, max_r, points,codedir,workdir,project_name, galaxy)
