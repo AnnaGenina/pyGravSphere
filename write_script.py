@@ -483,7 +483,7 @@ while runtime == True:
 
 			
 			pos, prob,state = sampler.run_mcmc(pos, 1)
-		        tot_iter = steps
+			tot_iter = steps
 			
 		 		
 
