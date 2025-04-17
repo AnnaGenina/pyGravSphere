@@ -381,16 +381,16 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
 
     #And finally calculate (for comparison only) the
     #Richardson & Fairbairn estimators:
-    zeta_A = np.float(len(R))*np.sum(vz**4.0)/np.sum(vz**2.0)**2.0
-    zeta_B = np.float(len(R))**2.0*np.sum(vz**4.0*R**2.0)/\
+    zeta_A = float(len(R))*np.sum(vz**4.0)/np.sum(vz**2.0)**2.0
+    zeta_B = float(len(R))**2.0*np.sum(vz**4.0*R**2.0)/\
         (np.sum(vz**2.0)**2.0*np.sum(R**2.0))
     print('Richardson+Fairbairn estimators:')
     print('Nstars, zeta_A, zeta_B', len(R), zeta_A, zeta_B)
 
-    mean_disp = np.sum(sigpmean)/np.float(len(sigpmean))
+    mean_disp = np.sum(sigpmean)/float(len(sigpmean))
     print('Mean dispersion:', mean_disp)
     print('Mean dispersion error:', np.sqrt(np.sum((sigpmean-mean_disp)**2.0)/\
-        np.float(len(sigpmean)-1))/np.sqrt(len(sigpmean)))
+        float(len(sigpmean)-1))/np.sqrt(len(sigpmean)))
 
     #plt.errorbar(rbin_kin,sigpmean, sigperr)
     #plt.show()
