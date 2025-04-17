@@ -78,7 +78,7 @@ min_rad = np.log10(r_c/100)
 max_rad = np.log10(r_c*50)
 gamsmooth = np.loadtxt(workdir + '/' + project_name + '/Submissions/gamsmooth.txt')
 if np.size(gamsmooth) not in [1,4]:
-	print "Gamsmooth needs to be either one fixed value or 4 diffent values. Quitting."
+	print("Gamsmooth needs to be either one fixed value or 4 diffent values. Quitting.")
 	quit()
 """)
 	priors = np.loadtxt(workdir + "/" + project_name + "/Submissions/priors.txt", dtype = "str")
@@ -93,7 +93,7 @@ if np.size(gamsmooth) not in [1,4]:
 	f.write("""
 for i in range(0, len(const_var)):
 	if priors[const_var[i],4] != priors[const_var[i],5]:
-		print "Min must be equal to Max for the fixed parameter %s" %priors[const_var[i], 0]
+		print("Min must be equal to Max for the fixed parameter %s" %priors[const_var[i], 0])
 """)
 
 
@@ -192,7 +192,7 @@ def plummer_proj_sum(args, x_data, n_comp):
 
 		f.write("res = minimize(min_plummer, [np.log10(np.amax(surfden[:,1])),0.5], args=(surfden[:,0], surfden[:,1],surfden[:,2],), bounds = ((0, 10),(0.1,5),))" + '\n')
 		f.write("m1,a1 = res.x" + '\n')
-		f.write("print 'Plummer fit', m1, a1" + '\n')
+		f.write("print('Plummer fit', m1, a1)" + '\n')
 		
 	f.write(r'def lnlike(params):' + '\n')
 	for i in range(0, len(const_var)):
@@ -314,7 +314,7 @@ with MPIPool() as pool:
 
 
 	size = pool.size
-	print size + 1
+	print(size + 1)
 
 
 	t_org = time.time()
@@ -369,7 +369,7 @@ with MPIPool() as pool:
 
 	partrack = partrack + 1
 
-	print 'Initialising positions' """ + '\n' + '\n')
+	print('Initialising positions') """ + '\n' + '\n')
 
 	else:
 		f.write("\t" + "pos[:,-1] = np.random.uniform(np.log10(mstarmin*stellar_mass), np.log10(mstarmax*stellar_mass), nwalkers)" + "\n" + "\t" + "partrack = partrack + 1" + "\n")	
@@ -401,11 +401,11 @@ with MPIPool() as pool:
 	pos = pos[:,noconst_var]
 	
 	
-	print "Pos selected"
-	print pos	
+	print("Pos selected")
+	print(pos)	
 
-	print "Positions initialised"
-	print "Starting sampler"
+	print("Positions initialised")
+	print("Starting sampler")
 
 
 """)
@@ -415,9 +415,9 @@ with MPIPool() as pool:
 
 	try:
 		pos = np.loadtxt(workdir  + project_name + '/%s' % galaxy_number +'/%s_LastWalkerPos' % galaxy_number + project_name + ".txt" )
-		print 'Got last walker positions'
+		print('Got last walker positions')
 		if len(pos) != nwalkers:
-			print "This is a different number of walkers to before! Quitting!"
+			print("This is a different number of walkers to before! Quitting!")
 			sys.exit(0)
 		pos,prob,state =  sampler.run_mcmc(pos, 1)
 			
@@ -433,7 +433,7 @@ with MPIPool() as pool:
 			if exists == False:
 				completed = 0
 			else:
-				print "File already exists! Either configure pyGravSphere to continue or start a new project."
+				print("File already exists! Either configure pyGravSphere to continue or start a new project.")
 				sys.exit(0)
 
 		tot_iter = steps -  completed	
@@ -449,7 +449,7 @@ with MPIPool() as pool:
 			walk_org = int(options[5])
 			
 			if walk_org != nwalkers:
-				print "This is a different number of walkers to before! Quitting!"
+				print("This is a different number of walkers to before! Quitting!")
 				sys.exit(0)
 
 			pos = np.zeros((nwalkers,ndim))
@@ -459,7 +459,7 @@ with MPIPool() as pool:
 				
 
 			if restart == 'restart':
-				print 'restarting!'
+				print('restarting!')
 				completed = int(float(len(chains))/float(nwalkers))		
 			elif restart == 'continue':	
 				completed = 0
@@ -468,7 +468,7 @@ with MPIPool() as pool:
 				if exists == False:
 					completed = 0
 				else:
-					print "File already exists! Either configure pyGravSphere to continue or start a new project."
+					print("File already exists! Either configure pyGravSphere to continue or start a new project.")
 					sys.exit(0)
 
 			tot_iter = steps -  completed	
@@ -488,7 +488,7 @@ with MPIPool() as pool:
 				
 		except IOError:
 			
-			print "Begin starter run"
+			print("Begin starter run")
 			pos, prob,state = sampler.run_mcmc(pos, 1)
 			tot_iter = steps
 			
@@ -497,11 +497,11 @@ with MPIPool() as pool:
 	sampler.reset()	
 
 
-	print "total iterations left: ", (tot_iter)/100
+	print("total iterations left: ", (tot_iter)/100)
 	for i in range(0, (tot_iter)/100):
-		print 'Starting', i
+		print('Starting', i)
 		pos, prob, state = sampler.run_mcmc(pos, 100, lnprob0 = prob, rstate0 = state)
-		print 'Finished', i 
+		print('Finished', i) 
 		samples = sampler.flatchain
 		pp = sampler.lnprobability
 
@@ -522,7 +522,7 @@ with MPIPool() as pool:
 		
 		
 	dt = time.time() - t_org
-	print 'Finished running chains in %f seconds ' %(dt)
+	print('Finished running chains in %f seconds ' %(dt))
 
 	
 

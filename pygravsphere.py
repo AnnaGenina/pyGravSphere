@@ -45,6 +45,7 @@ if codedir[-1] != '/':
 		codedir  = codedir + '/'
 	
 sys.path.append(codedir)
+
 from GStools import gsTools
 
 
@@ -371,7 +372,7 @@ while program == True:
 		
 
 		print("You are about to submit jobs.")
-		prin("If you haven't specified the MPI option for your project previously you can only submit one job at a time to run on your desktop.")
+		print("If you haven't specified the MPI option for your project previously you can only submit one job at a time to run on your desktop.")
 		
 		quitnow = input("Would you like to continue? y or n? ")
 		if quitnow == 'n':
