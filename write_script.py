@@ -76,7 +76,7 @@ def check_beta(beta):
 	f.write(r"completed = 0" +  "\n")
 
 
-        f.write(r"""kindat,lightpower,vir_shape,surfden,r_c, stellar_mass = gal_input.galaxy_data_read(galaxy_number, workdir + '/GalaxyData/')
+	f.write(r"""kindat,lightpower,vir_shape,surfden,r_c, stellar_mass = gal_input.galaxy_data_read(galaxy_number, workdir + '/GalaxyData/')
 
 
 r_bins = np.array([0.25,0.5,1,2,4]) * r_c
@@ -423,7 +423,7 @@ while runtime == True:
 			print("This is a different number of walkers to before! Quitting!")
 			sys.exit(0)
 
-		pos,prob,state =  sampler.run_mcmc(pos, 1)
+		pos =  sampler.run_mcmc(pos, 1)
 
 		chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
 
@@ -457,7 +457,7 @@ while runtime == True:
 			pos = np.zeros((nwalkers,ndim))
 			for c in range(0, nwalkers):
 				pos[c] = split_ch[c][-1,0:ndim]
-			pos,prob,state =  sampler.run_mcmc(pos, 1)
+			pos =  sampler.run_mcmc(pos, 1)
 
 			if restart == 'restart':
 				print('restarting!')
@@ -482,7 +482,7 @@ while runtime == True:
 			f_chains.close()
 
 			
-			pos, prob,state = sampler.run_mcmc(pos, 1)
+			pos = sampler.run_mcmc(pos, 1)
 			tot_iter = steps
 			
 		 		
@@ -491,7 +491,7 @@ while runtime == True:
 		except IOError:
 			
 			print("Begin starter run")
-			pos, prob,state = sampler.run_mcmc(pos, 1)
+			pos = sampler.run_mcmc(pos, 1)
 			tot_iter = steps
 			
 				
@@ -508,16 +508,18 @@ while runtime == True:
 	print("total iterations left: ", int((tot_iter)/100))
 	for i in range(0, int((tot_iter)/100)):
 		print('Starting', i)
-		pos, prob, state = sampler.run_mcmc(pos, 100, lnprob0 = prob, rstate0 = state)
-		print('Finished', i )
-		samples = sampler.flatchain
-		pp = sampler.lnprobability
+		pos = sampler.run_mcmc(pos, 100)
+		print('Finished', i)
+		
+		samples = sampler.get_chain(flat=True)
+		pp = sampler.get_log_prob(flat=True)
 
 		if completed + i*100 >= burn_in:
 			out = np.zeros((len(samples), ndim + 1))
 			out[:,0:ndim] = samples
 			out[:,ndim] = pp.reshape((len(samples)))
 			f_handle = file(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_Chains' %galaxy_number + project_name + ".txt", 'a+')
+			print(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_Chains' %galaxy_number + project_name + ".txt")
 			np.savetxt(f_handle,out)
 			f_handle.close()
 		sampler.reset()

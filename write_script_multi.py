@@ -75,7 +75,7 @@ def check_beta(beta):
 	f.write(r"completed = 0" +  "\n")
 	f.write(r"processes = %d" % num_cores + "\n")
 	f.write("restart = '%s'" %restart + "\n")
-        f.write(r"""kindat,lightpower,vir_shape,surfden,r_c, stellar_mass = gal_input.galaxy_data_read(galaxy_number, workdir + '/GalaxyData/')
+	f.write(r"""kindat,lightpower,vir_shape,surfden,r_c, stellar_mass = gal_input.galaxy_data_read(galaxy_number, workdir + '/GalaxyData/')
 
 
 r_bins = np.array([0.25,0.5,1,2,4]) * r_c
@@ -416,7 +416,7 @@ try:
 		if len(pos) != nwalkers:
 			print("This is a different number of walkers to before! Quitting!")
 			sys.exit(0)
-		pos,prob,state =  sampler.run_mcmc(pos, 1)
+		pos =  sampler.run_mcmc(pos, 1)
 
 
 		chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
@@ -450,7 +450,7 @@ try:
 			pos = np.zeros((nwalkers,ndim))
 			for c in range(0, nwalkers):
 				pos[c] = split_ch[c][-1,0:ndim]
-			pos,prob,state = sampler.run_mcmc(pos, 1)
+			pos = sampler.run_mcmc(pos, 1)
 
 
 			if restart == 'restart':
@@ -474,7 +474,7 @@ try:
 			f_chains.close()
 
 
-			pos, prob,state = sampler.run_mcmc(pos, 1)
+			pos = sampler.run_mcmc(pos, 1)
 			tot_iter = steps
 
 
@@ -483,7 +483,7 @@ try:
 		except IOError:
 
 			print("Begin starter run")
-			pos, prob,state = sampler.run_mcmc(pos, 1)
+			pos = sampler.run_mcmc(pos, 1)
 			tot_iter = steps
 
 
@@ -495,11 +495,11 @@ try:
 	for i in range(0, int((tot_iter)/100)):
 		print('Starting', i)
 		t0 = time.time()
-		pos, prob, state = sampler.run_mcmc(pos, 100, lnprob0 = prob, rstate0 = state)
+		pos = sampler.run_mcmc(pos, 100)
 		print('Finished', i)
 		
-		samples = sampler.flatchain
-		pp = sampler.lnprobability
+		samples = sampler.get_chain(flat=True)
+		pp = sampler.get_log_prob(flat=True)
 
 		if completed + i*100 >= burn_in:
 			out = np.zeros((len(samples), ndim + 1))
