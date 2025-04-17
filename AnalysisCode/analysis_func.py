@@ -172,7 +172,7 @@ def return_beta(chains, options, priors, min_r, max_r, points,codedir,workdir, p
 
 		betas = np.concatenate([betas])
 		betas = betas.T
-		f_handle = file(workdir + project_name + '/Analysis/Output/' + '%s_Beta'%galaxy + '.txt' , 'w')
+		f_handle = open(workdir + project_name + '/Analysis/Output/' + '%s_Beta'%galaxy + '.txt' , 'w')
 		np.savetxt(f_handle,betas, delimiter = '\t')
 		f_handle.close()
 
@@ -207,7 +207,7 @@ def return_beta(chains, options, priors, min_r, max_r, points,codedir,workdir, p
 
 		betas = np.concatenate([betas])
 		betas = betas.T
-		f_handle = file(workdir + project_name + '/Analysis/Output/' + '%s_Beta'%galaxy + '.txt' , 'w')
+		f_handle = open(workdir + project_name + '/Analysis/Output/' + '%s_Beta'%galaxy + '.txt' , 'w')
 		np.savetxt(f_handle,betas, delimiter = '\t')
 		f_handle.close()
 
