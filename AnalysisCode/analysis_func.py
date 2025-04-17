@@ -174,7 +174,7 @@ def return_beta(chains, options, priors, min_r, max_r, points,codedir,workdir, p
 		betas = betas.T
 		f_handle = file(workdir + project_name + '/Analysis/Output/' + '%s_Beta'%galaxy + '.txt' , 'w')
 		np.savetxt(f_handle,betas, delimiter = '\t')
-	       	f_handle.close()
+		f_handle.close()
 
 		res = gsTools.get_lims(betas,r)
 		np.savetxt(workdir + project_name + '/Analysis/Limits/'+ '%s_Beta'% galaxy +  'Lims.txt', res)
@@ -209,7 +209,7 @@ def return_beta(chains, options, priors, min_r, max_r, points,codedir,workdir, p
 		betas = betas.T
 		f_handle = file(workdir + project_name + '/Analysis/Output/' + '%s_Beta'%galaxy + '.txt' , 'w')
 		np.savetxt(f_handle,betas, delimiter = '\t')
-	       	f_handle.close()
+		f_handle.close()
 
 		res = gsTools.get_lims(betas,r)
 		np.savetxt(workdir + project_name + '/Analysis/Limits/'+ '%s_Beta'% galaxy +  'Lims.txt', res)
@@ -256,8 +256,8 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 		for sample in samples:
 
 			rho0,gamma0,gamma1,gamma2,gamma3,gamma4= sample
-		    	gammas = [gamma0,gamma1,gamma2,gamma3,gamma4]
-		    	big_j = dens(r, rho0, bins, gammas,r_c)
+			gammas = [gamma0,gamma1,gamma2,gamma3,gamma4]
+			big_j = dens(r, rho0, bins, gammas,r_c)
 			big_j = np.log10(big_j)
 
 			for b in range(0, len(big_j)):
@@ -265,8 +265,8 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 				mass_try = mass_dens(np.array([r[b]]),rho0, bins, gammas,r_c)
 				js[b].append(float(big_j[b]))
 				masses[b].append(float(np.log10(mass_try)))
-			    	count = 0
-			    	for b in range(0, len(mid_bin)):
+				count = 0
+				for b in range(0, len(mid_bin)):
 			    		for b2 in range(0,3):
 			    			grad_rho[3*b + b2].append(-gammas[b])
 
