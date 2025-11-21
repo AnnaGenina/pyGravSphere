@@ -2,7 +2,7 @@
 
 **pyGravSphere** is a non-parametric spherical Jeans analysis code. In essence, it is a wrapper for **EmCee**, designed for Jeans analysis, with a friendly and easy-to-use interface (I hope).
 
-Below is my attempt at a tutorial. If any questions or suggestions arise, do feel free to contact *agenina@mpa-garching.mpg.de*.
+Below is my attempt at a tutorial. If any questions or suggestions arise, do feel free to contact *agenina@ed.ac.uk*.
 
 
 **Note from 26/05/2020: when using the in-built preprocessing functionality pyGravsphere now defaults to <img src="https://render.githubusercontent.com/render/math?math=N/\sqrt{N}"> stars per bin.**
