@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import time
 import h5py
 import sys
-from scipy.integrate import simps
+from scipy.integrate import simpson
 from scipy.interpolate import interp1d
 import os
 import analysis_func

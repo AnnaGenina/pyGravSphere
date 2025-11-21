@@ -1,4 +1,4 @@
-from scipy.integrate import simps
+from scipy.integrate import simpson
 from GSpro import fitting_funcs as fits
 from GSpro import profiles
 import numpy as np
@@ -333,8 +333,8 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
                     pfits_powline[2],router,gamout)
     test_surfden = profiles.threeplumsurf(rint,pfits[0],pfits[1],pfits[2],\
                                      pfits[3],pfits[4],pfits[5])
-    vs1imp = simps(tvl4*test_surfden*rint,rint)
-    vs2imp = simps(tvl4*test_surfden*rint**3.0,rint)
+    vs1imp = simpson(tvl4*test_surfden*rint,rint)
+    vs2imp = simpson(tvl4*test_surfden*rint**3.0,rint)
 
     #Monte-Carlo to calculate the ~1sigma errors:
     vs1_samp = np.zeros(nmonte)
@@ -355,8 +355,8 @@ def calc_virial_moments(Rhalf,nmonte,R,vz,vzerr,ms,pfits,maxdatrad,Nbin, outdir,
         tvl4 = fits.tvl4func(rint,rbin_tmp,vlos4_samp,\
                         pfits_powline[0],pfits_powline[1],\
                         pfits_powline[2],router,gamout)
-        vs1_samp[i] = simps(tvl4*test_surfden*rint,rint)
-        vs2_samp[i] = simps(tvl4*test_surfden*rint**3.0,rint)
+        vs1_samp[i] = simpson(tvl4*test_surfden*rint,rint)
+        vs2_samp[i] = simpson(tvl4*test_surfden*rint**3.0,rint)
 
     median, sixlow, sixhigh, ninelow, ninehigh,\
         nineninehigh, nineninelow = fits.calcmedquartnine(vs1_samp)

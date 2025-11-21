@@ -3,7 +3,7 @@ import time
 import sys
 import numpy as np
 import signal
-
+import subprocess  
 
 os.environ["OMP_NUM_THREADS"] = "1"
 
@@ -26,6 +26,9 @@ out_exists = os.path.isdir(workdir + '/' + project_name + '/%s' % galaxy_number)
 if out_exists == False:
 	os.system("mkdir {}/{}/{}".format(workdir, project_name, galaxy_number))
 
+
+
+
 with open(workdir + "/" + project_name + "/Submissions/" + "script_bin_%s" %project_name + "_%s" %(galaxy_number) +  ".py", "w") as f:
 	f.write(r"""import os
 import sys
@@ -38,7 +41,7 @@ import emcee
 import corner
 from scipy import special
 import time
-from multiprocessing import Pool
+import multiprocessing as mp  
 import signal
 """)
 
@@ -135,7 +138,6 @@ def plummer_proj_sum(args, x_data, n_comp):
 	num_params = 0
 	free_param_list = ''
 
-
 	ptrack = 0
 	if darkmatter == 'PL':
 		priors_dark = priors[ptrack:ptrack+6]
@@ -161,7 +163,7 @@ def plummer_proj_sum(args, x_data, n_comp):
 			params_anis = params_anis + priors_anis[notconst[i],0] + ','
 			num_params = num_params + 1
 		ptrack = ptrack + 4
-	elif anisotropy	== 'Const':
+	elif anisotropy == 'Const':
 		priors_anis = priors[ptrack:ptrack+1].reshape(8)
 
 		params_anis = ''
@@ -210,12 +212,9 @@ def plummer_proj_sum(args, x_data, n_comp):
 		f.write("\t" + """beta_t0 = check_beta(beta0)
 
 """)
-
-
 	else:
 		f.write("\t" + "beta_t0 = check_beta(beta0)" + '\n')
 		f.write("\t" + "beta_t1 = check_beta(betainf)" + '\n')
-
 
 	if anisotropy == 'Const':
 		f.write("\t" + "beta_t0 = (2. * beta_t0)/(1. + beta_t0)"  + '\n')
@@ -256,26 +255,18 @@ def plummer_proj_sum(args, x_data, n_comp):
 	f.write("\t" + "\t" + "return -np.inf" + "\n")
 	f.write("\t" + "return like" + "\n" + "\n" + "\n")
 
-
-
 	f.write("def lnprior(params):" + '\n')
 	for i in range(0, len(const_var)):
 		f.write("\t" + str(priors[const_var[i],0]) + '=' + str(priors[const_var[i],7]).replace('VAR', priors[const_var[i],4]) + '\n')
 	f.write("\t" + params_dark + params_anis + params_plummer + params_mass + " = params" + '\n')
 
-
-
-	
 	min_vals = []
-	
-	for m in range(0, len(noconst_var)):		
+	for m in range(0, len(noconst_var)):
 		min_vals.append(priors[noconst_var[m],7].replace('VAR', priors[noconst_var[m],1]))
-		
 	f.write("\t" + "min_vals = np.array([" + "".join("{},".format(i) for i in min_vals) + "])" + "\n")
 	max_vals = []
 	for m in range(0, len(noconst_var)):
 		max_vals.append(priors[noconst_var[m],7].replace('VAR', priors[noconst_var[m],2]))
-	
 	f.write("\t" + "max_vals = np.array([" + "".join("{},".format(i) for i in max_vals) + "])" + "\n")
 
 	if darkmatter == 'PL':
@@ -289,20 +280,14 @@ def plummer_proj_sum(args, x_data, n_comp):
 		f.write("\t" + "min_vals[noconst_gam] = min_gammas[priors[1:6, 6] == 'False']" + "\n")
 		f.write("\t" + "max_vals[noconst_gam] = max_gammas[priors[1:6, 6] == 'False']" + "\n")
 
-
-
 	prior_all = "all(minarr < thetau < maxarr for minarr,thetau,maxarr in zip({},{},{}))".format("min_vals","params","max_vals")
-
-
 
 	f.write("\t" + "if " + prior_all  +  ":" + "\n")
 	f.write("\t" + "\t" + "return 0.0" + "\n")
 	f.write("\t" + "return -np.inf" + '\n')
 
-
 	f.write("""def logprob(params):
 	lp = lnprior(params)
-
 
 	if not np.isfinite(lp):
 		return -np.inf
@@ -310,8 +295,6 @@ def plummer_proj_sum(args, x_data, n_comp):
 	like = lnlike(params)
 
 	return like + lp""" + '\n')
-
-
 
 	all_params = params_dark + params_anis + params_plummer + params_mass
 
@@ -401,62 +384,33 @@ print(pos)
 print("Positions initialised")
 print("Starting sampler")
 
-original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
-pool =  Pool(processes)
-signal.signal(signal.SIGINT, original_sigint_handler)
-try:
+if __name__ == "__main__":  
+   
+	ctx = mp.get_context("spawn") 
+
+	original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
+	pool = ctx.Pool(processes)  
+	signal.signal(signal.SIGINT, original_sigint_handler)
+	try:
 """)
 
 
-	f.write("\t"+ """sampler = emcee.EnsembleSampler(nwalkers, ndim, logprob, pool = pool)
+	f.write("\t\t"+ """sampler = emcee.EnsembleSampler(nwalkers, ndim, logprob, pool = pool)
 
-	try:
-		pos = np.loadtxt(workdir  + project_name + '/%s' % galaxy_number +'/%s_LastWalkerPos' % galaxy_number + project_name + ".txt" )
-		print('Got last walker positions')
-		if len(pos) != nwalkers:
-			print("This is a different number of walkers to before! Quitting!")
-			sys.exit(0)
-		pos =  sampler.run_mcmc(pos, 1)
-
-
-		chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
-
-		if restart == 'restart':
-			completed = int(float(len(chains))/float(nwalkers))		
-		elif restart == 'continue':	
-			completed = 0
-		else:
-			exists = os.path.isfile(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
-			if exists == False:
-				completed = 0
-			else:
-				print("File already exists! Either configure pyGravSphere to continue or start a new project.")
-				sys.exit(0)
-		tot_iter = steps -  completed
-
-
-	except IOError:
 		try:
-			chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
-			last_chains = chains[-nwalkers*100:]
-			split_ch = np.array_split(last_chains, nwalkers)
-			options = []
-			with open(workdir + '/' + project_name + '/options.txt', 'r') as file:
-				options = file.readline().split()
-			walk_org = int(options[5])
-			if walk_org != nwalkers:
+			pos = np.loadtxt(workdir + '/' + project_name + '/%s' % galaxy_number + '/%s_LastWalkerPos' % galaxy_number + project_name + ".txt" )
+			print('Got last walker positions')
+			if len(pos) != nwalkers:
 				print("This is a different number of walkers to before! Quitting!")
 				sys.exit(0)
-			pos = np.zeros((nwalkers,ndim))
-			for c in range(0, nwalkers):
-				pos[c] = split_ch[c][-1,0:ndim]
-			pos = sampler.run_mcmc(pos, 1)
+			pos =  sampler.run_mcmc(pos, 1)
 
+
+			chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
 
 			if restart == 'restart':
-				print('restarting!')
-				completed = int(float(len(chains))/float(nwalkers))		
-			elif restart == 'continue':	
+				completed = int(float(len(chains))/float(nwalkers))        
+			elif restart == 'continue':    
 				completed = 0
 			else:
 				exists = os.path.isfile(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
@@ -468,69 +422,96 @@ try:
 			tot_iter = steps -  completed
 
 
-
-		except ValueError:
-			f_chains = open(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt", "w")
-			f_chains.close()
-
-
-			pos = sampler.run_mcmc(pos, 1)
-			tot_iter = steps
-
-
-
-
 		except IOError:
+			try:
+				chains = np.genfromtxt(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
+				last_chains = chains[-nwalkers*100:]
+				split_ch = np.array_split(last_chains, nwalkers)
+				options = []
+				with open(workdir + '/' + project_name + '/options.txt', 'r') as file:
+					options = file.readline().split()
+				walk_org = int(options[5])
+				if walk_org != nwalkers:
+					print("This is a different number of walkers to before! Quitting!")
+					sys.exit(0)
+				pos = np.zeros((nwalkers,ndim))
+				for c in range(0, nwalkers):
+					pos[c] = split_ch[c][-1,0:ndim]
+				pos = sampler.run_mcmc(pos, 1)
 
-			print("Begin starter run")
-			pos = sampler.run_mcmc(pos, 1)
-			tot_iter = steps
+
+				if restart == 'restart':
+					print('restarting!')
+					completed = int(float(len(chains))/float(nwalkers))        
+				elif restart == 'continue':    
+					completed = 0
+				else:
+					exists = os.path.isfile(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt")
+					if exists == False:
+						completed = 0
+					else:
+						print("File already exists! Either configure pyGravSphere to continue or start a new project.")
+						sys.exit(0)
+				tot_iter = steps -  completed
 
 
 
-	sampler.reset()
+			except ValueError:
+				f_chains = open(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_' %galaxy_number + "Chains" + project_name + ".txt", "w")
+				f_chains.close()
 
-	t_org = time.time()
-	print("total iterations left: ", int((tot_iter)/100))
-	for i in range(0, int((tot_iter)/100)):
-		print('Starting', i)
-		t0 = time.time()
-		pos = sampler.run_mcmc(pos, 100)
-		print('Finished', i)
-		
-		samples = sampler.get_chain(flat=True)
-		pp = sampler.get_log_prob(flat=True)
 
-		if completed + i*100 >= burn_in:
-			out = np.zeros((len(samples), ndim + 1))
-			out[:,0:ndim] = samples
-			out[:,ndim] = pp.reshape((len(samples)))
-			f_handle = file(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_Chains' %galaxy_number + project_name + ".txt", 'a+')
-			np.savetxt(f_handle,out)
-			f_handle.close()
+				pos = sampler.run_mcmc(pos, 1)
+				tot_iter = steps
+
+
+
+
+			except IOError:
+
+				print("Begin starter run")
+				pos = sampler.run_mcmc(pos, 1)
+				tot_iter = steps
+
+
+
 		sampler.reset()
 
+		t_org = time.time()
+		print("total iterations left: ", int((tot_iter)/100))
+		for i in range(0, int((tot_iter)/100)):
+			print('Starting', i)
+			t0 = time.time()
+			pos = sampler.run_mcmc(pos, 100)
+			print('Finished', i)
+			
+			samples = sampler.get_chain(flat=True)
+			pp = sampler.get_log_prob(flat=True)
 
+			if completed + i*100 >= burn_in:
+				out = np.zeros((len(samples), ndim + 1))
+				out[:,0:ndim] = samples
+				out[:,ndim] = pp.reshape((len(samples)))
+				f_handle = open(workdir + '/' + project_name + '/%s' % galaxy_number +'/%s_Chains' %galaxy_number + project_name + ".txt", 'a+')
+				np.savetxt(f_handle,out)
+				f_handle.close()
+			sampler.reset()
 
+		np.savetxt(workdir + '/' + project_name + '/%s' % galaxy_number + '/%s_LastWalkerPos' % galaxy_number + project_name + ".txt" , pos)
 
+		dt = time.time() - t_org
+		print('Finished running chains in %f seconds ' %(dt))
 
-	np.savetxt(workdir + '/' + project_name + '/%s' % galaxy_number + '/%s_LastWalkerPos' % galaxy_number + project_name + ".txt" , pos)
+		pool.close()
+		pool.join()
+		sys.exit()
 
-
-	dt = time.time() - t_org
-	print('Finished running chains in %f seconds ' %(dt))
-
-	pool.close()
-	pool.join()
-	sys.exit()
-
-except KeyboardInterrupt:
-	pool.terminate()
-	pool.join()
-	sys.exit()
-
+	except KeyboardInterrupt:
+		pool.terminate()
+		pool.join()
+		sys.exit()
 """)
 
-
-proc_time = os.system("python " + workdir + "/" + project_name + "/Submissions/" + "script_bin_%s" %project_name + "_%s" %(galaxy_number) +  ".py")
-
+child_script = workdir + "/" + project_name + "/Submissions/" + "script_bin_%s" %project_name + "_%s" %(galaxy_number) +  ".py"
+proc = subprocess.run([sys.executable, child_script])  
+proc_time = proc.returncode  

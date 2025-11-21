@@ -340,7 +340,7 @@ while program == True:
 		
 		os.system("cp " + codedir + '/priors.txt ' + workdir + project_name + '/Submissions/')
 		priors = np.loadtxt(workdir + project_name + '/Submissions/priors.txt', dtype = 'str', ndmin = 1)
-		my_params = np.where(np.in1d(priors[:,0], np.array(param_list, dtype = 'str')))		
+		my_params = np.where(np.isin(priors[:,0], np.array(param_list, dtype = 'str')))		
 		priors = np.savetxt(workdir + project_name + '/Submissions/priors.txt', priors[my_params], fmt = "%s")
 		np.savetxt(workdir + project_name + '/Submissions/gamsmooth.txt', np.array([1.]))
 		print('Creating OutErr directory')

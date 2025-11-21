@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import time
 import h5py
 import sys
-from scipy.integrate import simps
+from scipy.integrate import simpson
 from scipy.interpolate import interp1d
 import os
 from scipy.optimize import minimize
@@ -348,7 +348,7 @@ def return_mass(chains, options, priors, min_r, max_r, points,codedir,workdir,pr
 			for b in range(0, len(big_j)):
 
 				lin = np.logspace(np.minimum(np.log10(min_r)-1, -3),np.log10(r[b]),1000)
-				mass_try = simps(np.log(10) * lin * mass_zhao(lin,rhos,rs,alpha,beta,gamma), np.log10(lin), even = 'avg')
+				mass_try = simpson(np.log(10) * lin * mass_zhao(lin,rhos,rs,alpha,beta,gamma), np.log10(lin), even = 'avg')
 				js[b].append(float(big_j[b]))
 				masses[b].append(float(np.log10(mass_try)))
 				grad_rho[b].append(float(spec_loglog[b]))
