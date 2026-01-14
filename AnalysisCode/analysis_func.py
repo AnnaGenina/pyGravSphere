@@ -48,12 +48,12 @@ def dens(r,rho0, bins, gammas,r_c):
     bins = bins*r_c
     rho0 = float(10**rho0)
 
-    x1 = [(r < bins[0])]
-    x2 = [((r >= bins[0])& (r < bins[1]))]
-    x3 = [((r >= bins[1])& (r < bins[2]))]
-    x4 = [((r >= bins[2])& (r < bins[3]))]
-    x5 = [((r >= bins[3])& (r < bins[4]))]
-    x6 = [(r >= bins[4])]
+    x1 = (r < bins[0])
+    x2 = ((r >= bins[0])& (r < bins[1]))
+    x3 = ((r >= bins[1])& (r < bins[2]))
+    x4 = ((r >= bins[2])& (r < bins[3]))
+    x5 = ((r >= bins[3])& (r < bins[4]))
+    x6 = (r >= bins[4])
 
     output[x1] =  rho0 * (r[x1]/bins[0])**(-gammas[0])
 
@@ -80,12 +80,12 @@ def mass_dens(x,rho0, bins, gammas,r_c):
 
     rho0 = pow(10, rho0)* 4 * np.pi
 
-    x1 = [(x < bins[0])]
-    x2 = [((x >= bins[0])& (x < bins[1]))]
-    x3 = [((x >= bins[1])& (x < bins[2]))]
-    x4 = [((x >= bins[2])& (x < bins[3]))]
-    x5 = [((x >= bins[3])& (x < bins[4]))]
-    x6 = [(x >= bins[4])]
+    x1 = (x < bins[0])
+    x2 = ((x >= bins[0])& (x < bins[1]))
+    x3 = ((x >= bins[1])& (x < bins[2]))
+    x4 = ((x >= bins[2])& (x < bins[3]))
+    x5 = ((x >= bins[3])& (x < bins[4]))
+    x6 = (x >= bins[4])
 
 
     first_integral = rho0 * pow(bins[0], gammas[0]) * pow(bins[0], 3 - gammas[0])/(3 - gammas[0])
